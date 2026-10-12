@@ -87,7 +87,7 @@ export function ProductCard({
   );
 }
 
-/** Grille de cartes : 2 colonnes mobile, 3 tablette, 4 desktop (ou 3 avec la colonne de filtres). */
+/** Grille de cartes : 2 colonnes sur mobile, puis 4 (ou 3 à côté de la colonne de filtres). */
 export function GrilleProduits({
   produits,
   colonnes = 4,
@@ -100,8 +100,9 @@ export function GrilleProduits({
   return (
     <ul
       className={cn(
-        "grid grid-cols-2 gap-x-4 gap-y-12 md:grid-cols-3 md:gap-x-6",
-        colonnes === 4 && "lg:grid-cols-4",
+        "grid grid-cols-2 gap-x-4 gap-y-12 md:gap-x-6",
+        // Une grille de 4 passe directement à 4 colonnes : en 3, la quatrième carte resterait seule.
+        colonnes === 4 ? "md:grid-cols-4" : "md:grid-cols-3",
       )}
     >
       {produits.map((produit, i) => (
