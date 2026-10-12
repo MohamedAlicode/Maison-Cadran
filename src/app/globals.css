@@ -1,0 +1,117 @@
+@import "tailwindcss";
+
+/*
+ * Charte graphique Maison Cadran.
+ * Les couleurs sont exposées en utilitaires Tailwind : bg-creme, text-encre, border-sable…
+ * Règle d'usage : 90 % crème/ivoire/blanc, 8 % encre/nuit, 2 % laiton.
+ */
+@theme {
+  /* Fonds */
+  --color-creme: #f7f3ec;
+  --color-ivoire: #fffdf9;
+  --color-blanc: #ffffff;
+  --color-nuit: #14161a;
+  --color-nuit-2: #1f2228;
+
+  /* Texte */
+  --color-encre: #1c1b19;
+  --color-graphite: #5e5a53;
+  --color-sable: #e4ddd1;
+  --color-sable-fonce: #cfc6b6;
+
+  /* Accent laiton : décoratif uniquement, sauf « laiton-fonce » (AA sur crème) */
+  --color-laiton: #b08d57;
+  --color-laiton-fonce: #7a5c26;
+  --color-laiton-clair: #c9a86a;
+
+  /* États */
+  --color-sauge: #3e6b4f;
+  --color-ambre: #9a5b13;
+  --color-bordeaux: #9b2c2c;
+
+  /* Typographies (variables posées par next/font dans le layout) */
+  --font-serif: var(--font-cormorant), "Times New Roman", serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+
+  /* Sur-titres en capitales espacées */
+  --tracking-surtitre: 0.14em;
+
+  /* Coins quasi droits, esprit joaillerie */
+  --radius-xs: 2px;
+
+  /* Mouvement */
+  --ease-maison: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Grille */
+  --container-site: 1440px;
+
+  /* Animations */
+  --animate-fondu: fondu 400ms var(--ease-maison) both;
+  --animate-glisse-droite: glisse-droite 300ms var(--ease-maison) both;
+
+  @keyframes fondu {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes glisse-droite {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: none;
+    }
+  }
+}
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    @apply bg-creme font-sans text-encre antialiased;
+    font-feature-settings: "tnum" 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-serif font-medium tracking-[-0.01em] text-balance;
+  }
+
+  /* Focus visible au clavier uniquement : anneau laiton bien visible */
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-laiton;
+  }
+
+  ::selection {
+    @apply bg-laiton/25;
+  }
+}
+
+@layer utilities {
+  /* Chiffres tabulaires pour les prix et caractéristiques */
+  .chiffres {
+    font-variant-numeric: tabular-nums lining-nums;
+  }
+}
+
+/* Accessibilité : aucune animation si l'utilisateur l'a demandé */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
