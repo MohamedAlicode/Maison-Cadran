@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
-import { WatchPlaceholder } from "@/components/brand/watch-placeholder";
-import { ProductCard } from "@/components/catalogue/product-card";
+import { GrilleProduits } from "@/components/catalogue/product-card";
 import { ReassuranceBar } from "@/components/layout/reassurance-bar";
 import {
   Accordion,
@@ -18,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Price } from "@/components/ui/price";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { TextLink } from "@/components/ui/text-link";
-import { produitsDemo } from "@/lib/demo";
+import { indexCatalogue } from "@/lib/catalogue";
 import { DemoMiniPanier } from "./demo-mini-panier";
 
 // Page interne de référence du design system. Non indexée par les moteurs de recherche.
@@ -72,7 +71,8 @@ function Bloc({ titre, children }: { titre: string; children: React.ReactNode })
   );
 }
 
-export default function DesignSystem() {
+export default async function DesignSystem() {
+  const exemples = (await indexCatalogue()).slice(0, 4);
   return (
     <Container className="py-16">
       <SectionHeading
@@ -198,26 +198,7 @@ export default function DesignSystem() {
       </Bloc>
 
       <Bloc titre="Cartes produit">
-        <div className="grid grid-cols-2 gap-x-4 gap-y-12 md:gap-x-6 lg:grid-cols-4">
-          {produitsDemo.map((produit) => (
-            <ProductCard
-              key={produit.slug}
-              produit={produit}
-              visuel={
-                <WatchPlaceholder
-                  {...produit.couleurs}
-                  label={`${produit.marque} ${produit.nom}`}
-                />
-              }
-              visuelSurvol={
-                <WatchPlaceholder
-                  {...produit.couleurs}
-                  label={`${produit.marque} ${produit.nom}, détail`}
-                />
-              }
-            />
-          ))}
-        </div>
+        <GrilleProduits produits={exemples} />
       </Bloc>
 
       <Bloc titre="Réassurance">

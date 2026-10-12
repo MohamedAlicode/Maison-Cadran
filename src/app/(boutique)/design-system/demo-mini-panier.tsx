@@ -1,6 +1,6 @@
 "use client";
 
-import { WatchPlaceholder } from "@/components/brand/watch-placeholder";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { Price } from "@/components/ui/price";
@@ -9,7 +9,7 @@ import { boutique } from "@/config/boutique";
 import { formatPrixCourt, resteAvantLivraisonOfferte } from "@/lib/prix";
 
 // Démonstration du mini-panier en tiroir (le vrai panier arrive en phase 3).
-const sousTotal = 11_800;
+const sousTotal = 18_900;
 
 export function DemoMiniPanier() {
   const reste = resteAvantLivraisonOfferte(sousTotal);
@@ -31,8 +31,14 @@ export function DemoMiniPanier() {
         }
       >
         <p className="text-sm">
-          Plus que <strong className="chiffres">{formatPrixCourt(reste)}</strong> pour la livraison
-          offerte.
+          {reste > 0 ? (
+            <>
+              Plus que <strong className="chiffres">{formatPrixCourt(reste)}</strong> pour la
+              livraison offerte.
+            </>
+          ) : (
+            "Votre livraison assurée est offerte."
+          )}
         </p>
         <Progress
           className="mt-3"
@@ -41,8 +47,14 @@ export function DemoMiniPanier() {
           label="Progression vers la livraison offerte"
         />
         <div className="mt-8 flex gap-4">
-          <div className="w-24 shrink-0 bg-blanc p-3">
-            <WatchPlaceholder cadran="#f2efe8" boitier="#c8c4bc" bracelet="#2a2d33" />
+          <div className="relative aspect-square w-24 shrink-0 bg-blanc">
+            <Image
+              src="/images/montres/orient-bambino-version-2-creme-face.svg"
+              alt=""
+              fill
+              sizes="96px"
+              className="object-contain p-2"
+            />
           </div>
           <div className="flex-1 text-sm">
             <p className="text-[11px] font-medium tracking-surtitre text-graphite uppercase">

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="800" height="800" role="img" aria-label="Frederique Constant Classics Index Automatic, vue de profil"><rect x="-10" y="-10" width="220" height="220" fill="#ffffff"/>
+  <path d="M30 112 C 30 150, 60 172, 100 172 C 140 172, 170 150, 170 112" fill="none" stroke="#5a3a24" stroke-width="14" stroke-linecap="round"/>
+  <rect x="40" y="88" width="120" height="26" rx="8" fill="#cfcac1"/>
+  <rect x="40" y="88" width="120" height="26" rx="8" fill="none" stroke="#000" stroke-opacity=".1"/>
+  <path d="M48 88 Q100 72 152 88 Z" fill="#dfe7ee" fill-opacity=".7" stroke="#000" stroke-opacity=".1"/>
+  <rect x="160" y="94" width="12" height="14" rx="2" fill="#cfcac1"/>
+  <line x1="162" y1="96" x2="162" y2="106" stroke="#000" stroke-opacity=".2"/>
+  <line x1="166" y1="96" x2="166" y2="106" stroke="#000" stroke-opacity=".2"/>
+  <rect x="40" y="110" width="120" height="4" fill="#000" fill-opacity=".06"/></svg>
