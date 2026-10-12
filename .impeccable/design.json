@@ -1,0 +1,239 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-12T18:15:38Z",
+  "title": "Design System: Maison Cadran",
+  "extensions": {
+    "colorMeta": {
+      "cadran": {
+        "role": "primary",
+        "displayName": "Bleu cadran"
+      },
+      "cadran-fonce": {
+        "role": "primary",
+        "displayName": "Bleu cadran profond"
+      },
+      "cadran-clair": {
+        "role": "primary",
+        "displayName": "Bleu cadran pâle"
+      },
+      "acier": {
+        "role": "neutral",
+        "displayName": "Acier brossé"
+      },
+      "blanc": {
+        "role": "neutral",
+        "displayName": "Blanc photo"
+      },
+      "nuit": {
+        "role": "neutral",
+        "displayName": "Nuit bleutée"
+      },
+      "encre": {
+        "role": "neutral",
+        "displayName": "Encre"
+      },
+      "graphite": {
+        "role": "neutral",
+        "displayName": "Graphite"
+      },
+      "filet": {
+        "role": "neutral",
+        "displayName": "Filet"
+      },
+      "filet-fort": {
+        "role": "neutral",
+        "displayName": "Filet fort"
+      },
+      "sauge": {
+        "role": "tertiary",
+        "displayName": "Sauge"
+      },
+      "ambre": {
+        "role": "tertiary",
+        "displayName": "Ambre"
+      },
+      "bordeaux": {
+        "role": "tertiary",
+        "displayName": "Bordeaux"
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Titre du hero et nom du modèle sur la fiche produit."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Titres de section."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Nom du modèle sur une carte produit."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Texte courant."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Boutons et navigation, en capitales."
+      },
+      "eyebrow": {
+        "displayName": "Eyebrow",
+        "purpose": "Marque au-dessus du modèle, sur-titres."
+      },
+      "price": {
+        "displayName": "Price",
+        "purpose": "Prix, en chiffres tabulaires."
+      }
+    },
+    "shadows": [
+      {
+        "name": "tiroir",
+        "value": "0 24px 48px -12px rgb(17 27 41 / 0.28)",
+        "purpose": "Tiroirs latéraux."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-maison",
+        "value": "cubic-bezier(0.2, 0, 0, 1)",
+        "purpose": "Courbe unique de toutes les transitions."
+      },
+      {
+        "name": "duree-courte",
+        "value": "180ms",
+        "purpose": "Couleurs, survols."
+      },
+      {
+        "name": "duree-moyenne",
+        "value": "300ms",
+        "purpose": "Filets, icônes, tiroirs."
+      },
+      {
+        "name": "duree-longue",
+        "value": "500ms",
+        "purpose": "Fondus d'images et d'apparition."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      },
+      {
+        "name": "xl",
+        "value": "1280px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Bouton principal",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Action principale : ajouter au panier, découvrir.",
+      "html": "<button class=\"ds-btn-primary\">Ajouter au panier</button>",
+      "css": ".ds-btn-primary{background:var(--color-cadran);color:var(--color-blanc);height:48px;padding:0 28px;border:0;border-radius:2px;font:500 0.8125rem/1.4 var(--font-sans);letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background-color 180ms cubic-bezier(.2,0,0,1)}.ds-btn-primary:hover{background:var(--color-cadran-fonce)}.ds-btn-primary:focus-visible{outline:2px solid var(--color-cadran);outline-offset:2px}"
+    },
+    {
+      "name": "Bouton secondaire",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Action secondaire à côté d'un bouton principal.",
+      "html": "<button class=\"ds-btn-secondary\">Voir les détails</button>",
+      "css": ".ds-btn-secondary{background:transparent;color:var(--color-encre);height:48px;padding:0 28px;border:1px solid var(--color-encre);border-radius:2px;font:500 0.8125rem/1.4 var(--font-sans);letter-spacing:.14em;text-transform:uppercase;cursor:pointer;transition:background-color 180ms cubic-bezier(.2,0,0,1),color 180ms cubic-bezier(.2,0,0,1)}.ds-btn-secondary:hover{background:var(--color-encre);color:var(--color-acier)}.ds-btn-secondary:focus-visible{outline:2px solid var(--color-cadran);outline-offset:2px}"
+    },
+    {
+      "name": "Champ de saisie",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Champ texte des formulaires.",
+      "html": "<input class=\"ds-input\" placeholder=\"Adresse e-mail\">",
+      "css": ".ds-input{background:var(--color-blanc);color:var(--color-encre);height:48px;padding:0 16px;border:1px solid var(--color-filet);border-radius:2px;font:400 1rem/1.5 var(--font-sans)}.ds-input:hover{border-color:var(--color-filet-fort)}.ds-input:focus-visible{border-color:var(--color-encre);outline:2px solid var(--color-cadran);outline-offset:2px}"
+    },
+    {
+      "name": "Badge Nouveau",
+      "kind": "chip",
+      "refersTo": "badge-new",
+      "description": "Pastille posée sur la photo d'une nouveauté.",
+      "html": "<span class=\"ds-badge\">Nouveau</span>",
+      "css": ".ds-badge{display:inline-flex;background:var(--color-encre);color:var(--color-acier);padding:4px 8px;border-radius:2px;font:500 .75rem/1.333 var(--font-sans);letter-spacing:.14em;text-transform:uppercase}"
+    },
+    {
+      "name": "Carte produit",
+      "kind": "card",
+      "refersTo": "product-photo",
+      "description": "Vignette du catalogue : photo sur blanc, puis marque, modèle, prix.",
+      "html": "<article class=\"ds-card\"><div class=\"ds-card-photo\"></div><p class=\"ds-card-brand\">Tissot</p><h3 class=\"ds-card-model\">PRX Powermatic 80</h3><p class=\"ds-card-price\">725 €</p></article>",
+      "css": ".ds-card{width:240px;font-family:var(--font-sans);color:var(--color-encre)}.ds-card-photo{aspect-ratio:1;background:var(--color-blanc)}.ds-card-brand{margin:16px 0 0;font-size:.75rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--color-graphite)}.ds-card-model{margin:4px 0 0;font:400 1.25rem/1.375 var(--font-serif)}.ds-card-price{margin:8px 0 0;font-weight:500;font-variant-numeric:tabular-nums lining-nums}"
+    },
+    {
+      "name": "En-tête en verre",
+      "kind": "nav",
+      "description": "En-tête collant, acier translucide flouté.",
+      "html": "<nav class=\"ds-nav\"><span class=\"ds-nav-logo\">Maison Cadran</span><a class=\"ds-nav-link\" href=\"#\">Montres</a></nav>",
+      "css": ".ds-nav{display:flex;align-items:center;justify-content:space-between;height:80px;padding:0 16px;background:rgb(241 241 238 / .85);backdrop-filter:blur(16px)}.ds-nav-logo{font:400 1.5rem var(--font-serif);letter-spacing:.08em;text-transform:uppercase}.ds-nav-link{font:500 .8125rem var(--font-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--color-encre);text-decoration:none;transition:color 180ms cubic-bezier(.2,0,0,1)}.ds-nav-link:hover{color:var(--color-cadran)}.ds-nav-link:focus-visible{outline:2px solid var(--color-cadran);outline-offset:2px}"
+    }
+  ],
+  "narrative": {
+    "northStar": "L'établi de l'horloger",
+    "overview": "Un plan de travail en acier, une lumière franche, et la montre posée au centre. Tout le reste s'efface : la page est d'un blanc légèrement grisé, comme un boîtier brossé, et la seule couleur vive est le bleu soleillé des cadrans. Ce bleu ne décore pas : il marque ce qu'on peut faire (acheter, suivre un lien, savoir où est le focus).",
+    "keyCharacteristics": [
+      "Fond acier, photos sur blanc pur : la montre flotte, sans cadre.",
+      "Un seul accent, le bleu cadran, réservé aux actions, aux liens et au focus.",
+      "Serif étroit pour nommer, grotesque net pour informer.",
+      "Coins quasi droits (2px), filets fins plutôt que des ombres."
+    ],
+    "rules": [
+      {
+        "name": "La règle du cadran unique",
+        "body": "Le bleu cadran est la seule couleur d'accent. Une deuxième teinte vive n'entre pas sans décision écrite dans ce fichier.",
+        "section": "colors"
+      },
+      {
+        "name": "La règle de l'acier teinté",
+        "body": "Aucun noir ni gris pur : les neutres tirent toujours vers le bleu (encre, graphite, nuit).",
+        "section": "colors"
+      },
+      {
+        "name": "La règle du poids unique",
+        "body": "Instrument Serif n'a qu'une graisse : un titre n'est jamais en font-medium ou plus, sous peine de faux gras.",
+        "section": "typography"
+      },
+      {
+        "name": "La règle marque, modèle, prix",
+        "body": "Sur toute présentation produit, cet ordre et ces trois styles (eyebrow, title ou display, price) ne changent pas.",
+        "section": "typography"
+      },
+      {
+        "name": "La règle du verre utile",
+        "body": "Le flou d'arrière-plan (16px) sert uniquement à garder lisible un élément collant ou posé sur une photo. Il a toujours un fond assez opaque (85% au moins) pour que le texte garde 4.5:1, et jamais de reflet ni de lueur.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "**Do** présenter chaque montre sur blanc pur avec sa marge en pourcentage.",
+      "**Do** utiliser le bleu cadran pour tout ce qui est cliquable, et rien d'autre.",
+      "**Do** écrire les prix en chiffres tabulaires.",
+      "**Do** passer par les tokens de `src/app/globals.css` : aucune couleur, taille ou durée en dur.",
+      "**Do** respecter `prefers-reduced-motion` (géré globalement) et garder un focus visible."
+    ],
+    "donts": [
+      "**Don't** utiliser de dégradés violet ou bleu, de lueurs, de glassmorphism décoratif ou d'easing rebondissant.",
+      "**Don't** mettre une carte dans une carte.",
+      "**Don't** utiliser d'emojis comme icônes : SVG Lucide uniquement.",
+      "**Don't** utiliser de noir ou de gris purs.",
+      "**Don't** utiliser Inter, Arial ou une police système comme police de marque.",
+      "**Don't** afficher de logo officiel de marque ni écrire « garantie constructeur »."
+    ]
+  }
+}

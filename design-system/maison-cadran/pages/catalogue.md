@@ -1,50 +1,9 @@
-# Catalogue Page Overrides
+# Catalogue : règles propres à la page
 
-> **PROJECT:** Maison Cadran
-> **Generated:** 2026-10-12 18:02:59
-> **Page Type:** Search Results
+> Ces règles priment sur `MASTER.md`. Pour le reste, suivre `MASTER.md`.
 
-> ⚠️ **IMPORTANT:** Rules in this file **override** the Master file (`design-system/MASTER.md`).
-> Only deviations from the Master are documented here. For all other rules, refer to the Master.
-
----
-
-## Page-Specific Rules
-
-### Layout Overrides
-
-- **Max Width:** 1200px (standard)
-- **Layout:** Full-width sections, centered content
-
-### Spacing Overrides
-
-- No overrides — use Master spacing
-
-### Typography Overrides
-
-- No overrides — use Master typography
-
-### Color Overrides
-
-- No overrides — use Master colors
-
-### Component Overrides
-
-- Avoid: Icon buttons without labels
-- Avoid: Use a clickable div or reveal the only action on hover
-- Avoid: Block paste or require manual OTP transcription with no alternative
-
----
-
-## Page-Specific Components
-
-- No unique components for this page
-
----
-
-## Recommendations
-
-- Effects: Realistic shadows (layers), depth (perspective), texture details (noise, grain), realistic animations (300-500ms)
-- Accessibility: Add aria-label for icon-only buttons
-- Accessibility: Prefer a button and expose pressed or selected state that matches the visible label
-- Security / Accessibility: Allow password managers and paste; offer passkeys OAuth or another non-cognitive method
+- **Rôle :** comparer et filtrer vite. Mode Operate : la lisibilité passe avant l'expression.
+- **Grille :** 2 colonnes (mobile), 3 (tablette, ou desktop avec filtres), 4 (desktop sans filtres). Même hauteur de photo partout.
+- **Carte :** photo sur `blanc` avec `p-(--marge-photo)`, puis marque (eyebrow), modèle (serif `text-xl`), détail, prix. Aucune bordure ni ombre.
+- **Filtres :** colonne de 260 px en desktop, tiroir en mobile. Le nombre de résultats par option est en `cadran`.
+- **Barre de tri :** peut passer en verre si elle devient collante au-dessus des photos.

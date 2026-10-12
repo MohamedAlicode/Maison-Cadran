@@ -1,50 +1,9 @@
-# Accueil Page Overrides
+# Accueil : règles propres à la page
 
-> **PROJECT:** Maison Cadran
-> **Generated:** 2026-10-12 18:02:59
-> **Page Type:** General
+> Ces règles priment sur `MASTER.md`. Pour le reste, suivre `MASTER.md`.
 
-> ⚠️ **IMPORTANT:** Rules in this file **override** the Master file (`design-system/MASTER.md`).
-> Only deviations from the Master are documented here. For all other rules, refer to the Master.
-
----
-
-## Page-Specific Rules
-
-### Layout Overrides
-
-- **Max Width:** 1200px (standard)
-- **Layout:** Full-width sections, centered content
-
-### Spacing Overrides
-
-- No overrides — use Master spacing
-
-### Typography Overrides
-
-- No overrides — use Master typography
-
-### Color Overrides
-
-- No overrides — use Master colors
-
-### Component Overrides
-
-- Avoid: Icon buttons without labels
-- Avoid: Use a clickable div or reveal the only action on hover
-- Avoid: Block paste or require manual OTP transcription with no alternative
-
----
-
-## Page-Specific Components
-
-- No unique components for this page
-
----
-
-## Recommendations
-
-- Effects: Realistic shadows (layers), depth (perspective), texture details (noise, grain), realistic animations (300-500ms)
-- Accessibility: Add aria-label for icon-only buttons
-- Accessibility: Prefer a button and expose pressed or selected state that matches the visible label
-- Security / Accessibility: Allow password managers and paste; offer passkeys OAuth or another non-cognitive method
+- **Rôle :** séduire un premier acheteur et l'emmener vers le catalogue. Mode Persuade.
+- **Ordre des sections :** hero, nouveautés, collections, plus appréciées, maisons sélectionnées, engagements. Les sections de récit (storytelling) demandées par Boss s'ajouteront entre les collections et les plus appréciées. Le club de membres n'a pas encore de place : son contenu n'est pas défini (voir PRODUCT.md).
+- **Hero :** fond `nuit`, une seule montre en vedette sur blanc, un CTA principal et un secondaire au plus. Accent `cadran-clair` uniquement.
+- **Storytelling :** texte court, 65 caractères de large au plus, toujours relié à une montre ou une maison réelle du catalogue. Aucun chiffre ni témoignage inventé.
+- **Verre :** seulement l'en-tête collant quand il passe sur le hero.

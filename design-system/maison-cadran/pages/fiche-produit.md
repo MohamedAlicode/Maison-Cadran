@@ -1,50 +1,9 @@
-# Fiche Produit Page Overrides
+# Fiche produit : règles propres à la page
 
-> **PROJECT:** Maison Cadran
-> **Generated:** 2026-10-12 18:03:00
-> **Page Type:** General
+> Ces règles priment sur `MASTER.md`. Pour le reste, suivre `MASTER.md`.
 
-> ⚠️ **IMPORTANT:** Rules in this file **override** the Master file (`design-system/MASTER.md`).
-> Only deviations from the Master are documented here. For all other rules, refer to the Master.
-
----
-
-## Page-Specific Rules
-
-### Layout Overrides
-
-- **Max Width:** 1200px (standard)
-- **Layout:** Full-width sections, centered content
-
-### Spacing Overrides
-
-- No overrides — use Master spacing
-
-### Typography Overrides
-
-- No overrides — use Master typography
-
-### Color Overrides
-
-- No overrides — use Master colors
-
-### Component Overrides
-
-- Avoid: Icon buttons without labels
-- Avoid: Use a clickable div or reveal the only action on hover
-- Avoid: Block paste or require manual OTP transcription with no alternative
-
----
-
-## Page-Specific Components
-
-- No unique components for this page
-
----
-
-## Recommendations
-
-- Effects: Realistic shadows (layers), depth (perspective), texture details (noise, grain), realistic animations (300-500ms)
-- Accessibility: Add aria-label for icon-only buttons
-- Accessibility: Prefer a button and expose pressed or selected state that matches the visible label
-- Security / Accessibility: Allow password managers and paste; offer passkeys OAuth or another non-cognitive method
+- **Rôle :** décider d'acheter. La galerie occupe la plus grande colonne.
+- **Hiérarchie :** marque, modèle (`text-4xl` à `text-5xl`, `leading-affiche`), prix, puis le CTA « Ajouter au panier » en bouton principal.
+- **Caractéristiques :** mouvement, diamètre, matériaux, étanchéité visibles sans ouvrir d'accordéon, en chiffres tabulaires, avec une explication courte pour un débutant.
+- **Confiance :** garantie 2 ans, authenticité et retours 14 jours sous le CTA, en `text-sm graphite` avec icône Lucide. Jamais en badge criard.
+- **Verre :** barre d'achat collante en mobile, posée sur la galerie, fond acier à 85 % au moins.
