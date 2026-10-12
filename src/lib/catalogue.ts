@@ -4,7 +4,12 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/lib/db";
 import type { ProduitIndexe } from "@/lib/filtres";
-import { libellesBracelet, libellesMatiere, libellesMouvement } from "@/lib/libelles";
+import {
+  libellesBracelet,
+  libellesCouleur,
+  libellesMatiere,
+  libellesMouvement,
+} from "@/lib/libelles";
 
 const JOURS_NOUVEAUTE = 30;
 const JOUR = 24 * 60 * 60 * 1000;
@@ -46,7 +51,7 @@ export async function indexCatalogue(): Promise<ProduitIndexe[]> {
       marqueSlug: p.brand.slug,
       marqueNom: p.brand.name,
       nom: p.name,
-      detail: `${libellesMouvement[p.movement]}, ${formatMm(diametre)}, ${libellesMatiere[p.caseMaterial].toLowerCase()}${matiere}`,
+      detail: `${libellesMouvement[p.movement]}, ${formatMm(diametre)}, ${libellesMatiere[p.caseMaterial].toLowerCase()}${matiere}, cadran ${(libellesCouleur[p.dialColor] ?? p.dialColor).toLowerCase()}`,
       prixCentimes: p.priceCents,
       prixBarreCentimes: p.compareAtCents,
       genre: p.gender,

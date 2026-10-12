@@ -142,6 +142,13 @@
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
+    /* En-tête collant de 80 px : un élément atteint au clavier ou par ancre reste visible. */
+    @apply scroll-pt-24;
+  }
+
+  /* Sous 1 024 px, le catalogue ajoute sa barre Filtrer / Trier collante sous l'en-tête. */
+  html:has([data-barre-catalogue]) {
+    @apply scroll-pt-40 lg:scroll-pt-24;
   }
 
   body {

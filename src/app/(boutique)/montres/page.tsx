@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { CatalogueSquelette, VueCatalogue } from "@/components/catalogue/vue-catalogue";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Container } from "@/components/ui/container";
+import { boutique } from "@/config/boutique";
 
 export const metadata: Metadata = {
   title: "Toutes les montres",
@@ -19,8 +20,9 @@ export default function PageCatalogue({ searchParams }: PageProps<"/montres">) {
       <div className="mt-6 mb-8 max-w-2xl">
         <h1 className="text-4xl md:text-5xl">Toutes les montres</h1>
         <p className="mt-4 leading-relaxed text-graphite">
-          Chaque montre est neuve, vérifiée et livrée dans son écrin d&apos;origine. Affinez par
-          marque, budget ou mouvement pour trouver celle qui vous ressemble.
+          Toutes neuves, garanties {boutique.garantieMois / 12} ans, avec{" "}
+          {boutique.retours.joursRetractation} jours pour changer d&apos;avis. Affinez par marque,
+          budget ou mouvement pour trouver celle qui vous ressemble.
         </p>
       </div>
       <Suspense fallback={<CatalogueSquelette />}>

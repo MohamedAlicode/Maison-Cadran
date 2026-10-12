@@ -44,7 +44,11 @@ export async function VueCatalogue({ searchParams, chemin, marque, slugs }: Prop
 
   return (
     <NavigationCatalogue>
-      <div className="flex items-center justify-between gap-4 border-y border-filet py-3">
+      {/* Barre collante sous l'en-tête (h-20) : filtrer et trier restent à portée en défilant. */}
+      <div
+        data-barre-catalogue
+        className="sticky top-20 z-20 -mx-6 flex items-center justify-between gap-3 border-y border-filet bg-acier/95 px-6 py-3 backdrop-blur-verre supports-[backdrop-filter]:bg-acier/85 lg:static lg:mx-0 lg:bg-transparent lg:px-0 lg:backdrop-blur-none transparence-reduite:bg-acier"
+      >
         <div className="flex items-center gap-4">
           <MobileFilters
             facettes={facettesUtiles}
@@ -53,18 +57,29 @@ export async function VueCatalogue({ searchParams, chemin, marque, slugs }: Prop
             total={total}
             nombreActifs={actifs}
           />
-          <p className="chiffres text-sm text-graphite" aria-live="polite">
+          {/* Sous 640 px, faute de place dans la barre, le compte s'affiche sous elle (voir plus bas). */}
+          <p
+            className="chiffres sr-only text-sm whitespace-nowrap text-graphite sm:not-sr-only"
+            aria-live="polite"
+          >
             {total} montre{total > 1 ? "s" : ""}
           </p>
         </div>
         <SortSelect filtres={filtres} chemin={chemin} />
       </div>
 
+      <p aria-hidden className="chiffres mt-4 text-sm text-graphite sm:hidden">
+        {total} montre{total > 1 ? "s" : ""}
+      </p>
       <PucesFiltres facettes={facettesUtiles} filtres={filtres} chemin={chemin} />
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[260px_1fr] xl:gap-14">
-        <aside aria-label="Filtres" className="hidden lg:block">
-          <div className="sticky top-36">
+        <aside aria-labelledby="titre-filtres" className="hidden lg:block">
+          {/* Défile seul s'il dépasse l'écran : sinon les derniers filtres restent hors d'atteinte. */}
+          <div className="sticky top-28 max-h-[calc(100dvh-(--spacing(32)))] overflow-y-auto overscroll-contain">
+            <h2 id="titre-filtres" className="sr-only">
+              Filtres
+            </h2>
             <FilterPanel
               facettes={facettesUtiles}
               filtres={filtres}
@@ -80,7 +95,9 @@ export async function VueCatalogue({ searchParams, chemin, marque, slugs }: Prop
           ) : (
             <div className="border border-filet bg-blanc px-6 py-16 text-center">
               <p className="font-serif text-2xl">Aucune montre ne correspond à ces critères</p>
-              <p className="mt-3 text-graphite">Retirez un filtre pour élargir votre recherche.</p>
+              <p className="mt-3 text-graphite">
+                Retirez l&apos;un des filtres ci-dessus, ou repartez de toute la sélection.
+              </p>
               <Button asChild variante="secondaire" className="mt-8">
                 <Link href={chemin}>Effacer les filtres</Link>
               </Button>
@@ -127,7 +144,8 @@ function PucesFiltres({
           <Link
             href={p.href}
             scroll={false}
-            className="inline-flex h-8 items-center gap-2 rounded-xs border border-filet bg-blanc px-3 text-xs text-encre transition-colors hover:border-encre"
+            // Le pseudo-élément porte la zone tactile à 44 px sans grossir la puce.
+            className="relative inline-flex h-8 items-center gap-2 rounded-xs border border-filet bg-blanc px-3 text-xs text-encre transition-colors after:absolute after:inset-x-0 after:-inset-y-1.5 hover:border-encre"
           >
             {p.libelle}
             <X aria-hidden className="size-3.5 text-graphite" />
@@ -139,7 +157,7 @@ function PucesFiltres({
         <Link
           href={chemin + versQueryString({ tri: filtres.tri })}
           scroll={false}
-          className="ml-2 text-xs text-cadran underline underline-offset-4"
+          className="relative ml-2 text-xs text-cadran underline underline-offset-4 after:absolute after:inset-x-0 after:-inset-y-3"
         >
           Tout effacer
         </Link>
@@ -167,7 +185,7 @@ function Pagination({
           href={chemin + versQueryString({ ...filtres, page: n })}
           aria-current={n === page ? "page" : undefined}
           className={cn(
-            "chiffres grid size-10 place-items-center rounded-xs border text-sm",
+            "chiffres grid size-11 place-items-center rounded-xs border text-sm",
             n === page ? "border-encre bg-encre text-acier" : "border-filet hover:border-encre",
           )}
         >
