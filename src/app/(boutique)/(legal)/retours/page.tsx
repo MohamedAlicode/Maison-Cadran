@@ -7,7 +7,7 @@ const jours = boutique.retours.joursRetractation;
 
 export const metadata: Metadata = {
   title: "Retours et rétractation",
-  description: `${jours} jours pour changer d'avis, frais de retour offerts : la marche à suivre pour renvoyer une montre achetée chez ${boutique.nom}.`,
+  description: `${jours} jours pour changer d'avis, frais de retour offerts : la marche à suivre pour renvoyer une montre achetée chez ${boutique.nom}.`,
   alternates: { canonical: "/retours" },
 };
 
@@ -23,8 +23,7 @@ const rubriques = [
           Code de la consommation pour tout achat à distance.
         </p>
         <p>
-          <strong>Le retour est gratuit</strong> : nous vous envoyons une étiquette prépayée, vous
-          n&apos;avancez aucun frais.
+          <strong>Le retour est gratuit</strong> : les frais d&apos;envoi sont à notre charge.
         </p>
       </>
     ),
@@ -36,15 +35,15 @@ const rubriques = [
       <>
         <p>
           Vous pouvez sortir la montre de sa boîte, la regarder, la mettre au poignet pour juger de
-          sa taille : c&apos;est fait pour ça. Pour qu&apos;elle puisse être revendue neuve, nous
-          vous demandons en revanche :
+          sa taille : c&apos;est fait pour ça. Pour qu&apos;elle puisse être revendue neuve, nous
+          vous demandons en revanche :
         </p>
         <ul>
-          <li>de ne pas la porter au quotidien ;</li>
-          <li>de laisser en place les films de protection et les scellés ;</li>
+          <li>de ne pas la porter au quotidien ;</li>
+          <li>de laisser en place les films de protection et les scellés ;</li>
           <li>
-            de la renvoyer complète, dans son écrin, avec la carte de garantie, les notices et les
-            maillons éventuellement retirés.
+            de la renvoyer complète, dans son écrin, avec les papiers, les notices et les maillons
+            éventuellement retirés.
           </li>
         </ul>
         <p>
@@ -63,9 +62,9 @@ const rubriques = [
         <li>
           Écrivez-nous à <a href={`mailto:${boutique.contact.email}`}>{boutique.contact.email}</a>{" "}
           en indiquant votre numéro de commande. Le formulaire type de rétractation n&apos;est pas
-          obligatoire : un simple message suffit.
+          obligatoire : un simple message suffit.
         </li>
-        <li>Nous vous répondons avec une étiquette Colissimo prépayée.</li>
+        <li>Nous vous répondons avec les instructions pour un envoi sans frais.</li>
         <li>
           Emballez la montre dans son écrin, puis dans le carton d&apos;origine ou un carton rigide,
           et déposez le colis en bureau de poste. Gardez la preuve de dépôt.
@@ -83,12 +82,11 @@ const rubriques = [
       <>
         <p>
           Nous vous remboursons au plus tard {jours} jours après avoir été informés de votre
-          rétractation, sur le moyen de paiement utilisé lors de la commande. Si vous avez payé en
-          plusieurs fois, les échéances restantes sont annulées.
+          rétractation, sur le moyen de paiement utilisé lors de la commande.
         </p>
         <p>
           Les frais de livraison payés à la commande vous sont rendus. La loi nous autorise à
-          attendre d&apos;avoir reçu la montre avant de rembourser : c&apos;est ce que nous faisons.
+          attendre d&apos;avoir reçu la montre avant de rembourser : c&apos;est ce que nous faisons.
         </p>
       </>
     ),
@@ -98,21 +96,21 @@ const rubriques = [
     titre: "Un échange plutôt qu'un retour",
     contenu: (
       <p>
-        Une autre taille de boîtier, un autre cadran ? Le plus rapide est de commander la nouvelle
-        montre, puis de nous renvoyer la première selon la marche ci-dessus : le retour reste
+        Une autre taille de boîtier, un autre cadran ? Le plus rapide est de commander la nouvelle
+        montre, puis de nous renvoyer la première selon la marche ci-dessus : le retour reste
         gratuit.
       </p>
     ),
   },
   {
     id: "garantie",
-    titre: `Après ${jours} jours : la garantie`,
+    titre: `Après ${jours} jours : la garantie`,
     contenu: (
       <p>
         Passé le délai de rétractation, une panne ou un défaut relève de la{" "}
-        <Link href="/faq#garantie">garantie de {boutique.garantieMois / 12} ans</Link>, qui couvre
-        le mouvement et les défauts de fabrication. L&apos;usure normale, les chocs et les traces
-        d&apos;eau au-delà de l&apos;étanchéité indiquée n&apos;en font pas partie.
+        <Link href="/faq#garantie">garantie de {boutique.garantieMois / 12} ans</Link>, qui
+        s&apos;ajoute aux garanties légales décrites dans nos{" "}
+        <Link href="/cgv#garanties">conditions générales de vente</Link>.
       </p>
     ),
   },
@@ -137,7 +135,8 @@ export default function PageRetours() {
         </Rubrique>
       ))}
       <Encadre>
-        Les conditions détaillées figurent dans nos{" "}
+        Texte provisoire, à faire relire par un juriste avant l&apos;ouverture. Les conditions
+        détaillées figurent dans nos{" "}
         <Link href="/cgv#retractation" className="text-cadran underline underline-offset-4">
           conditions générales de vente
         </Link>

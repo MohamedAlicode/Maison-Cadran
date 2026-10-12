@@ -38,12 +38,12 @@ const rubriques = [
           {
             terme: "Votre commande",
             detail:
-              "Nom, adresse de livraison, e-mail et téléphone, pour préparer, expédier et suivre la commande, et établir la facture. Base légale : l'exécution du contrat de vente.",
+              "Nom, adresse de livraison, e-mail et téléphone, pour préparer, expédier et suivre la commande, et établir la facture. Base légale : l'exécution du contrat de vente.",
           },
           {
             terme: "Votre compte",
             detail:
-              "E-mail, adresses enregistrées et montres mises en favori, pour vous éviter de tout ressaisir. Base légale : l'exécution du contrat.",
+              "E-mail, adresses enregistrées et montres mises en favori, pour vous éviter de tout ressaisir. Base légale : l'exécution du contrat.",
           },
           {
             terme: "Le paiement",
@@ -53,12 +53,12 @@ const rubriques = [
           {
             terme: "Vos messages",
             detail:
-              "Ce que vous nous écrivez, pour vous répondre. Base légale : notre intérêt légitime à assurer le service client.",
+              "Ce que vous nous écrivez, pour vous répondre. Base légale : notre intérêt légitime à assurer le service client.",
           },
           {
             terme: "Nos e-mails d'information",
             detail:
-              "Uniquement si vous les avez demandés, et vous pouvez vous désinscrire à chaque envoi. Base légale : votre consentement.",
+              "Uniquement si vous les avez demandés, et vous pouvez vous désinscrire à chaque envoi. Base légale : votre consentement.",
           },
         ]}
       />
@@ -70,14 +70,14 @@ const rubriques = [
     contenu: (
       <ul>
         <li>
-          <strong>Commandes et factures :</strong> dix ans, comme l&apos;exige le Code de commerce.
+          <strong>Commandes et factures :</strong> dix ans, comme l&apos;exige le Code de commerce.
         </li>
         <li>
-          <strong>Compte :</strong> jusqu&apos;à sa suppression, ou trois ans après votre dernière
+          <strong>Compte :</strong> jusqu&apos;à sa suppression, ou trois ans après votre dernière
           connexion.
         </li>
         <li>
-          <strong>E-mails d&apos;information :</strong> trois ans après votre dernier contact avec
+          <strong>E-mails d&apos;information :</strong> trois ans après votre dernier contact avec
           nous, ou jusqu&apos;à votre désinscription.
         </li>
       </ul>
@@ -90,13 +90,13 @@ const rubriques = [
       <>
         <p>
           Vos données ne sont jamais vendues. Elles sont transmises uniquement aux prestataires
-          nécessaires au fonctionnement de la boutique, chacun pour sa seule mission : paiement
+          nécessaires au fonctionnement de la boutique, chacun pour sa seule mission : paiement
           (Stripe, et Klarna pour le paiement en plusieurs fois), livraison (Colissimo), hébergement
           du site et de la base de données, envoi des e-mails de commande.
         </p>
         <p>
           Certains de ces prestataires sont établis hors de l&apos;Union européenne. Les transferts
-          sont alors encadrés par les clauses contractuelles types de la Commission européenne.
+          sont alors encadrés par les garanties prévues par le RGPD.
         </p>
       </>
     ),

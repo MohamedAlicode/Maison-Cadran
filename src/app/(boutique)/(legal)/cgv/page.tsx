@@ -11,7 +11,7 @@ import { formatPrix, formatPrixCourt } from "@/lib/prix";
 
 export const metadata: Metadata = {
   title: "Conditions générales de vente",
-  description: `Les conditions qui encadrent vos achats chez ${boutique.nom} : prix, paiement, livraison, rétractation et garanties.`,
+  description: `Les conditions qui encadrent vos achats chez ${boutique.nom} : prix, paiement, livraison, rétractation et garanties.`,
   alternates: { canonical: "/cgv" },
 };
 
@@ -50,7 +50,7 @@ const rubriques = [
       <p>
         Toutes les montres vendues sont neuves. Leurs caractéristiques essentielles (mouvement,
         dimensions, matières, étanchéité) figurent sur chaque fiche. Les visuels sont aussi fidèles
-        que possible ; une légère différence de teinte selon l&apos;écran ne constitue pas un
+        que possible ; une légère différence de teinte selon l&apos;écran ne constitue pas un
         défaut. Les offres valent dans la limite des stocks affichés.
       </p>
     ),
@@ -62,7 +62,7 @@ const rubriques = [
       <p>
         Les prix sont indiqués en euros, toutes taxes comprises (TVA française incluse). Les frais
         de livraison s&apos;y ajoutent, sauf au-delà de{" "}
-        {formatPrixCourt(livraison.seuilGratuitCentimes)} d&apos;achat : ils s&apos;élèvent à{" "}
+        {formatPrixCourt(livraison.seuilGratuitCentimes)} d&apos;achat : ils s&apos;élèvent à{" "}
         {formatPrix(livraison.fraisCentimes)} et sont indiqués avant la validation de la commande.
         Le prix facturé est celui affiché au moment de la commande.
       </p>
@@ -75,7 +75,7 @@ const rubriques = [
       <p>
         Vous choisissez vos montres, vérifiez le récapitulatif de votre panier, renseignez votre
         adresse de livraison puis payez. Vous pouvez corriger chaque étape avant le paiement. La
-        commande est définitive à la confirmation du paiement ; un e-mail récapitulatif vous est
+        commande est définitive à la confirmation du paiement ; un e-mail récapitulatif vous est
         alors envoyé.
       </p>
     ),
@@ -85,10 +85,10 @@ const rubriques = [
     titre: "6. Paiement",
     contenu: (
       <p>
-        Le paiement se fait par carte bancaire, au moyen d&apos;un prestataire de paiement sécurisé
-        : {boutique.nom} n&apos;a jamais accès à vos données de carte. Le paiement en 3 ou 4 fois
-        est proposé par Klarna, selon ses propres conditions, que vous acceptez au moment du
-        paiement.
+        Le paiement se fait par carte bancaire, au moyen d&apos;un prestataire de paiement
+        sécurisé :
+        {boutique.nom} n&apos;a jamais accès à vos données de carte. Le paiement en 3 ou 4 fois est
+        proposé par Klarna, selon ses propres conditions, que vous acceptez au moment du paiement.
       </p>
     ),
   },
@@ -105,7 +105,7 @@ const rubriques = [
         </p>
         <p>
           Vérifiez le colis devant le livreur. S&apos;il est abîmé, notez vos réserves sur le bon de
-          livraison et prévenez-nous sous trois jours.
+          livraison et prévenez-nous au plus vite.
         </p>
       </>
     ),
@@ -119,14 +119,15 @@ const rubriques = [
           Vous disposez de {retours.joursRetractation} jours à compter de la réception de la montre
           pour exercer votre droit de rétractation, sans avoir à le justifier (articles L221-18 et
           suivants du Code de la consommation). Il suffit de nous l&apos;indiquer par e-mail, avec
-          ou sans le formulaire type.
+          ou sans le <a href="#formulaire">formulaire type</a> reproduit ci-dessous.
         </p>
         <p>
           Les frais de retour sont pris en charge par {boutique.nom}. La montre doit revenir
           complète, non portée, films de protection et scellés intacts. Nous vous remboursons
           l&apos;intégralité des sommes versées, frais de livraison inclus, dans les{" "}
-          {retours.joursRetractation} jours suivant votre demande, au plus tard à réception de la
-          montre. La marche à suivre figure sur la page <Link href="/retours">Retours</Link>.
+          {retours.joursRetractation} jours suivant votre demande ; nous pouvons attendre
+          d&apos;avoir reçu la montre pour procéder au remboursement. La marche à suivre figure sur
+          la page <Link href="/retours">Retours</Link>.
         </p>
       </>
     ),
@@ -160,9 +161,39 @@ const rubriques = [
     contenu: (
       <p>
         Ces conditions sont soumises au droit français. En cas de désaccord, écrivez-nous
-        d&apos;abord : nous chercherons une solution amiable. À défaut, vous pouvez recourir
-        gratuitement au médiateur de la consommation : <ValeurLegale valeur={societe.mediateur} />.
+        d&apos;abord : nous chercherons une solution amiable. À défaut, vous pouvez recourir
+        gratuitement au médiateur de la consommation : <ValeurLegale valeur={societe.mediateur} />.
       </p>
+    ),
+  },
+  {
+    id: "formulaire",
+    titre: "Annexe : formulaire de rétractation",
+    contenu: (
+      <>
+        <p>
+          Modèle prévu par l&apos;article R221-1 du Code de la consommation. Copiez-le dans un
+          e-mail à <a href={`mailto:${contact.email}`}>{contact.email}</a>, ou écrivez-nous
+          simplement que vous vous rétractez.
+        </p>
+        <blockquote className="border-y border-filet py-5 text-graphite">
+          <p>
+            À l&apos;attention de <ValeurLegale valeur={societe.raisonSociale} />,{" "}
+            <ValeurLegale valeur={societe.siege} />, {contact.email} :
+          </p>
+          <p className="mt-3">
+            Je vous notifie par la présente ma rétractation du contrat portant sur la vente du bien
+            ci-dessous :
+          </p>
+          <ul className="mt-3">
+            <li>commandé le / reçu le (rayez la mention inutile) :</li>
+            <li>nom du consommateur :</li>
+            <li>adresse du consommateur :</li>
+            <li>signature du consommateur (uniquement en cas d&apos;envoi papier) :</li>
+            <li>date :</li>
+          </ul>
+        </blockquote>
+      </>
     ),
   },
 ];

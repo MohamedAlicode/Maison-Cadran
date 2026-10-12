@@ -1,4 +1,4 @@
-import { Info } from "lucide-react";
+import { ChevronDown, Info } from "lucide-react";
 import type { ReactNode } from "react";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Container } from "@/components/ui/container";
@@ -50,27 +50,39 @@ export function PageEditoriale({
   );
 }
 
-/** Sommaire : liste repliée en tête de texte sur mobile, colonne collante dès 1 024 px. */
+/** Sommaire : replié en tête de texte sous 1 024 px, colonne collante au-dessus. */
 function Sommaire({ rubriques }: { rubriques: EntreeSommaire[] }) {
+  const liste = (
+    <ol className="mt-2 text-sm text-graphite">
+      {rubriques.map((r) => (
+        <li key={r.id}>
+          <a
+            href={`#${r.id}`}
+            className="inline-block py-3 transition-colors duration-(--duree-courte) ease-maison hover:text-cadran"
+          >
+            {r.titre}
+          </a>
+        </li>
+      ))}
+    </ol>
+  );
   return (
-    <nav
-      aria-label="Sommaire"
-      className="mb-12 border-y border-filet py-5 lg:mb-0 lg:border-0 lg:py-0"
-    >
-      <div className="lg:sticky lg:top-28">
+    <nav aria-label="Sommaire">
+      {/* Deux rendus plutôt qu'un seul : un <details> ne peut pas être forcé ouvert en CSS. */}
+      <details className="group mb-12 border-y border-filet lg:hidden">
+        <summary className="flex cursor-pointer list-none items-center justify-between py-4 text-sm font-medium [&::-webkit-details-marker]:hidden">
+          Sur cette page
+          <ChevronDown
+            aria-hidden
+            className="size-4 text-graphite transition-transform duration-(--duree-moyenne) ease-maison group-open:rotate-180"
+            strokeWidth={1.5}
+          />
+        </summary>
+        <div className="pb-4">{liste}</div>
+      </details>
+      <div className="hidden lg:sticky lg:top-28 lg:block">
         <p className="text-sm font-medium">Sur cette page</p>
-        <ol className="mt-3 space-y-1 text-sm text-graphite">
-          {rubriques.map((r) => (
-            <li key={r.id}>
-              <a
-                href={`#${r.id}`}
-                className="inline-block py-1.5 transition-colors duration-(--duree-courte) ease-maison hover:text-cadran"
-              >
-                {r.titre}
-              </a>
-            </li>
-          ))}
-        </ol>
+        {liste}
       </div>
     </nav>
   );
@@ -124,7 +136,7 @@ export function Encadre({ children, className }: { children: ReactNode; classNam
         className,
       )}
     >
-      <Info aria-hidden className="mt-0.5 size-4 shrink-0 text-cadran" strokeWidth={1.5} />
+      <Info aria-hidden className="mt-0.5 size-4 shrink-0 text-graphite" strokeWidth={1.5} />
       <div>{children}</div>
     </aside>
   );
@@ -133,5 +145,5 @@ export function Encadre({ children, className }: { children: ReactNode; classNam
 /** Valeur légale : un « [à compléter] » est surligné pour être repéré avant l'ouverture. */
 export function ValeurLegale({ valeur }: { valeur: string }) {
   if (!valeur.startsWith("[")) return <>{valeur}</>;
-  return <mark className="rounded-xs bg-ambre/10 px-1 text-ambre">{valeur}</mark>;
+  return <mark className="rounded-xs bg-ambre/5 px-1 text-ambre">{valeur}</mark>;
 }

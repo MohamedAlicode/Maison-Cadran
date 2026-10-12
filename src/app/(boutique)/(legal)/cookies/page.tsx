@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { PageEditoriale, Reperes, Rubrique } from "@/components/editorial/page-editoriale";
+import { Encadre, PageEditoriale, Reperes, Rubrique } from "@/components/editorial/page-editoriale";
 import { boutique } from "@/config/boutique";
 
 export const metadata: Metadata = {
@@ -19,10 +19,6 @@ const rubriques = [
           Nous ne déposons aucun cookie publicitaire, aucun cookie de réseau social et aucun cookie
           de mesure d&apos;audience. C&apos;est pourquoi le site ne vous affiche pas de bandeau de
           consentement.
-        </p>
-        <p>
-          Si nous mesurons un jour la fréquentation du site, ce sera avec un outil qui ne dépose
-          aucun cookie et ne vous identifie pas.
         </p>
       </>
     ),
@@ -71,10 +67,13 @@ export default function PageCookies() {
   return (
     <PageEditoriale
       titre="Cookies"
-      introduction={<p>Court, parce qu&apos;il y a peu à dire : nous ne vous suivons pas.</p>}
+      introduction={<p>Court, parce qu&apos;il y a peu à dire : nous ne vous suivons pas.</p>}
       rubriques={rubriques}
       miseAJour="12 octobre 2026"
     >
+      <Encadre className="mb-12">
+        Texte provisoire, à faire relire par un juriste avant l&apos;ouverture de la boutique.
+      </Encadre>
       {rubriques.map(({ contenu, ...r }) => (
         <Rubrique key={r.id} {...r}>
           {contenu}

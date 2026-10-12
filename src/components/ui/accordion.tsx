@@ -32,7 +32,7 @@ export function AccordionTrigger({
         {children}
         <Plus
           aria-hidden
-          className="size-4 text-cadran transition-transform duration-(--duree-moyenne) ease-maison group-data-[state=open]:rotate-45"
+          className="size-4 shrink-0 text-cadran transition-transform duration-(--duree-moyenne) ease-maison group-data-[state=open]:rotate-45"
           strokeWidth={1.5}
         />
       </AccordionPrimitive.Trigger>

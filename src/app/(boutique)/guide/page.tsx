@@ -11,11 +11,12 @@ import {
   tranchesEtancheite,
   tranchesPrix,
 } from "@/lib/filtres";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
   title: "Guide d'achat",
   description:
-    "Budget, mouvement, taille du boîtier, étanchéité, verre, bracelet et entretien : les repères pour choisir sa première vraie montre.",
+    "Budget, mouvement, taille du boîtier, étanchéité, verre, bracelet et entretien : les repères pour choisir sa première vraie montre.",
   alternates: { canonical: "/guide" },
 };
 
@@ -33,15 +34,18 @@ const rubriques = [
 function LienFiltre({
   href,
   nombre,
+  bloc = false,
   children,
 }: {
   href: string;
   nombre: number;
+  /** Sous le texte d'une explication : seul sur sa ligne, pour ne pas se fondre dans la phrase. */
+  bloc?: boolean;
   children: ReactNode;
 }) {
   if (nombre === 0) return null;
   return (
-    <TextLink href={href} className="chiffres">
+    <TextLink href={href} className={cn("chiffres", bloc && "mt-2 table")}>
       {children} ({nombre})
     </TextLink>
   );
@@ -72,7 +76,7 @@ export default async function PageGuide() {
       <Rubrique {...rubriques[0]}>
         <p>
           Fixez un plafond avant de regarder. Entre 100 et 2 000 €, la différence se fait moins sur
-          le nom de la marque que sur le mouvement, le verre et la finition du boîtier : les
+          le nom de la marque que sur le mouvement, le verre et la finition du boîtier : les
           rubriques suivantes vous aident à savoir où mettre votre argent.
         </p>
         <ListeLiens>
@@ -91,8 +95,8 @@ export default async function PageGuide() {
 
       <Rubrique {...rubriques[1]}>
         <p>
-          C&apos;est le choix qui change le plus la vie avec la montre. Il y a deux grandes familles
-          : le quartz, électronique, et la mécanique, qui bat grâce à un ressort.
+          C&apos;est le choix qui change le plus la vie avec la montre. Il y a deux grandes
+          familles : le quartz, électronique, et la mécanique, qui bat grâce à un ressort.
         </p>
         <Reperes
           lignes={[
@@ -100,13 +104,14 @@ export default async function PageGuide() {
               terme: "Quartz",
               detail: (
                 <>
-                  Le plus précis (quelques secondes d&apos;écart par mois) et le plus simple : une
-                  pile à changer tous les deux à cinq ans.{" "}
+                  Le plus précis (quelques secondes d&apos;écart par mois) et le plus simple : une
+                  pile à changer tous les deux à cinq ans.
                   <LienFiltre
+                    bloc
                     href="/montres?mouvement=quartz"
                     nombre={compter((p) => p.mouvement === "QUARTZ")}
                   >
-                    Voir
+                    Les montres à quartz
                   </LienFiltre>
                 </>
               ),
@@ -115,12 +120,13 @@ export default async function PageGuide() {
               terme: "Solaire",
               detail: (
                 <>
-                  Un quartz rechargé par la lumière, sans pile à changer.{" "}
+                  Un quartz rechargé par la lumière, sans pile à changer.
                   <LienFiltre
+                    bloc
                     href="/montres?mouvement=solaire"
                     nombre={compter((p) => p.mouvement === "SOLAIRE")}
                   >
-                    Voir
+                    Les montres solaires
                   </LienFiltre>
                 </>
               ),
@@ -130,12 +136,13 @@ export default async function PageGuide() {
               detail: (
                 <>
                   Mécanique, remontée par les mouvements du poignet. Moins précise (quelques
-                  secondes par jour), mais on la regarde vivre, et elle n&apos;a pas besoin de pile.{" "}
+                  secondes par jour), mais on la regarde vivre, et elle n&apos;a pas besoin de pile.
                   <LienFiltre
+                    bloc
                     href="/montres?mouvement=automatique"
                     nombre={compter((p) => p.mouvement === "AUTOMATIQUE")}
                   >
-                    Voir
+                    Les automatiques
                   </LienFiltre>
                 </>
               ),
@@ -144,12 +151,13 @@ export default async function PageGuide() {
               terme: "Remontage manuel",
               detail: (
                 <>
-                  Mécanique, remontée à la main par la couronne, souvent chaque jour.{" "}
+                  Mécanique, remontée à la main par la couronne, souvent chaque jour.
                   <LienFiltre
+                    bloc
                     href="/montres?mouvement=manuel"
                     nombre={compter((p) => p.mouvement === "MANUEL")}
                   >
-                    Voir
+                    Les montres à remontage manuel
                   </LienFiltre>
                 </>
               ),
@@ -157,7 +165,7 @@ export default async function PageGuide() {
           ]}
         />
         <p>
-          Une automatique s&apos;arrête si on ne la porte pas pendant quelques jours : il suffit de
+          Une automatique s&apos;arrête si on ne la porte pas pendant quelques jours : il suffit de
           la remonter et de la remettre à l&apos;heure. La durée qu&apos;elle tient au repos
           s&apos;appelle la réserve de marche, indiquée sur chaque fiche.
         </p>
@@ -166,7 +174,7 @@ export default async function PageGuide() {
       <Rubrique {...rubriques[2]}>
         <p>
           Le diamètre est la mesure la plus citée, mais ce qui compte au poignet est la distance
-          entre les cornes, d&apos;une attache du bracelet à l&apos;autre : elle ne doit pas
+          entre les cornes, d&apos;une attache du bracelet à l&apos;autre : elle ne doit pas
           dépasser la largeur du poignet. Mesurez votre tour de poignet avec un mètre ruban, puis
           servez-vous de ces repères, qui ne sont pas des règles.
         </p>
@@ -181,7 +189,7 @@ export default async function PageGuide() {
           ]}
         />
         <p>
-          Pour porter la montre sous une manche de chemise, regardez aussi l&apos;épaisseur : sous
+          Pour porter la montre sous une manche de chemise, regardez aussi l&apos;épaisseur : sous
           12 mm, elle passe sans accrocher.
         </p>
         <ListeLiens>
@@ -217,7 +225,7 @@ export default async function PageGuide() {
         />
         <p>
           Si la couronne se visse, vissez-la toujours avant d&apos;aller dans l&apos;eau. Évitez le
-          sauna et le hammam : la chaleur fatigue les joints.
+          sauna et le hammam : la chaleur fatigue les joints.
         </p>
         <ListeLiens>
           {tranchesEtancheite.map((t) => (
@@ -249,7 +257,7 @@ export default async function PageGuide() {
           ]}
         />
         <p>
-          Pour une montre portée tous les jours, le saphir est le meilleur investissement : un verre
+          Pour une montre portée tous les jours, le saphir est le meilleur investissement : un verre
           rayé se remarque à chaque coup d&apos;œil.
         </p>
       </Rubrique>
@@ -261,12 +269,13 @@ export default async function PageGuide() {
               terme: "Acier",
               detail: (
                 <>
-                  Le plus durable, il supporte l&apos;eau. Il se règle en retirant des maillons.{" "}
+                  Le plus durable, il supporte l&apos;eau. Il se règle en retirant des maillons.
                   <LienFiltre
+                    bloc
                     href="/montres?bracelet=acier"
                     nombre={compter((p) => p.bracelet === "ACIER")}
                   >
-                    Voir
+                    Sur bracelet acier
                   </LienFiltre>
                 </>
               ),
@@ -275,12 +284,13 @@ export default async function PageGuide() {
               terme: "Cuir",
               detail: (
                 <>
-                  Le plus habillé, et il se patine. Il craint l&apos;eau et la transpiration.{" "}
+                  Le plus habillé, et il se patine. Il craint l&apos;eau et la transpiration.
                   <LienFiltre
+                    bloc
                     href="/montres?bracelet=cuir"
                     nombre={compter((p) => p.bracelet === "CUIR")}
                   >
-                    Voir
+                    Sur bracelet cuir
                   </LienFiltre>
                 </>
               ),
@@ -289,12 +299,13 @@ export default async function PageGuide() {
               terme: "Caoutchouc",
               detail: (
                 <>
-                  Fait pour l&apos;eau et le sport, il se rince sous le robinet.{" "}
+                  Fait pour l&apos;eau et le sport, il se rince sous le robinet.
                   <LienFiltre
+                    bloc
                     href="/montres?bracelet=caoutchouc"
                     nombre={compter((p) => p.bracelet === "CAOUTCHOUC")}
                   >
-                    Voir
+                    Sur bracelet caoutchouc
                   </LienFiltre>
                 </>
               ),
@@ -306,7 +317,7 @@ export default async function PageGuide() {
           ]}
         />
         <p>
-          Le bracelet est la pièce la plus facile à changer : choisissez d&apos;abord la montre, le
+          Le bracelet est la pièce la plus facile à changer : choisissez d&apos;abord la montre, le
           bracelet suivra.
         </p>
       </Rubrique>
@@ -314,22 +325,22 @@ export default async function PageGuide() {
       <Rubrique {...rubriques[6]}>
         <ul>
           <li>
-            <strong>Mécanique :</strong> une révision par un horloger tous les cinq à dix ans selon
+            <strong>Mécanique :</strong> une révision par un horloger tous les cinq à dix ans selon
             les marques. Tenez-la éloignée des aimants puissants (enceintes, fermoirs de sacs), qui
             peuvent la faire avancer.
           </li>
           <li>
-            <strong>Quartz :</strong> faites changer la pile chez un horloger, qui contrôle aussi
+            <strong>Quartz :</strong> faites changer la pile chez un horloger, qui contrôle aussi
             l&apos;étanchéité.
           </li>
           <li>
-            <strong>Au quotidien :</strong> un chiffon doux suffit. Un bracelet acier se nettoie à
+            <strong>Au quotidien :</strong> un chiffon doux suffit. Un bracelet acier se nettoie à
             l&apos;eau tiède avec une brosse souple, si la montre est étanche.
           </li>
         </ul>
         <p>
           Votre montre est couverte par notre garantie de {boutique.garantieMois / 12} ans.{" "}
-          <Link href="/faq#garantie">Ce qu&apos;elle couvre</Link>.
+          <Link href="/faq#garantie">En savoir plus</Link>.
         </p>
       </Rubrique>
     </PageEditoriale>
