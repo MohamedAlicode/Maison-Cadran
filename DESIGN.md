@@ -112,7 +112,7 @@ components:
 
 Un plan de travail en acier, une lumière franche, et la montre posée au centre. Tout le reste s'efface : la page est d'un blanc légèrement grisé, comme un boîtier brossé, et la seule couleur vive est le bleu soleillé des cadrans. Ce bleu ne décore pas : il marque ce qu'on peut faire (acheter, suivre un lien, savoir où est le focus).
 
-La densité est faible et l'espace généreux, parce qu'un premier acheteur doit pouvoir regarder une montre sans être pressé. La hiérarchie de chaque produit est toujours la même : marque en petites capitales, modèle en serif, prix en chiffres tabulaires.
+La densité est faible et l'espace généreux, parce qu'un premier acheteur doit pouvoir regarder une montre sans être pressé. La hiérarchie de chaque produit est toujours la même : marque puis modèle dans un même titre serif (la marque en graphite), puis prix en chiffres tabulaires.
 
 Le verre dépoli existe, mais seulement là où il a une fonction : l'en-tête collant et les barres posées sur une photo. Jamais en carte décorative.
 
@@ -169,14 +169,14 @@ Une palette froide et retenue : des neutres teintés vers le bleu, un accent uni
 - **Title** (400, 1.25rem) : nom du modèle sur une carte produit.
 - **Body** (400, 1rem, interligne 1.5) : texte courant, 65 caractères de large au plus.
 - **Label** (500, 0.8125rem, approche 0.14em, capitales) : boutons et navigation.
-- **Eyebrow** (500, 0.75rem, approche 0.14em, capitales, graphite) : marque au-dessus du modèle, sur-titres.
+- **Eyebrow** (500, 0.75rem, approche 0.14em, capitales, graphite) : libellés et intitulés de colonnes. Jamais au-dessus d'un titre.
 - **Price** (500, 1rem, chiffres tabulaires) : prix partout.
 
 ### Named Rules
 
 **La règle du poids unique.** Instrument Serif n'a qu'une graisse : un titre n'est jamais en `font-medium` ou plus, sous peine de faux gras.
 
-**La règle marque, modèle, prix.** Sur toute présentation produit, cet ordre et ces trois styles (eyebrow, title ou display, price) ne changent pas.
+**La règle marque, modèle, prix.** Sur toute présentation produit, cet ordre ne change pas : la marque ouvre le titre en graphite, le modèle suit en encre, le prix vient ensuite en chiffres tabulaires. Pas de sur-titre de marque (décision de Boss, 2026-10-12).
 
 ## Layout
 

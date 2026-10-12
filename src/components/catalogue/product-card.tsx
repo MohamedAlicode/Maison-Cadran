@@ -23,7 +23,7 @@ function badgeProduit(p: ProduitIndexe) {
   return null;
 }
 
-/** Carte produit du catalogue : photo carrée, marque, nom serif, prix tabulaire. */
+/** Carte produit du catalogue : photo carrée, marque et nom en serif, prix tabulaire. */
 export function ProductCard({
   produit,
   prioritaire = false,
@@ -65,15 +65,13 @@ export function ProductCard({
         )}
       </div>
       <div className="pt-4">
-        <p className="text-xs font-medium tracking-surtitre text-graphite uppercase">
-          {produit.marqueNom}
-        </p>
-        <Titre className="mt-1 font-serif text-xl leading-snug">
+        {/* La marque ouvre le titre, en gris, plutôt qu'en sur-titre au-dessus (déconseillé). */}
+        <Titre className="font-serif text-xl leading-snug">
           <Link
             href={`/montres/${produit.slug}`}
             className="after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-4 focus-visible:after:outline-cadran"
           >
-            {produit.nom}
+            <span className="text-graphite">{produit.marqueNom}</span> {produit.nom}
           </Link>
         </Titre>
         <p className="mt-0.5 text-sm text-graphite">{produit.detail}</p>
