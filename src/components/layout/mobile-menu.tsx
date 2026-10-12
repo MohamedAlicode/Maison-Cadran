@@ -10,7 +10,7 @@ export function MobileMenu() {
   return (
     <Drawer>
       <DrawerTrigger
-        className="grid size-11 place-items-center rounded-xs hover:bg-sable/40 lg:hidden"
+        className="grid size-11 place-items-center rounded-xs hover:bg-filet/40 lg:hidden"
         aria-label="Ouvrir le menu"
       >
         <Menu className="size-5" strokeWidth={1.5} />

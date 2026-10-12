@@ -138,10 +138,10 @@ function Declinaisons({ produit }: { produit: FicheProduit }) {
                 aria-label={`Cadran ${libelleCouleur(d.dialColor).toLowerCase()}${d.stock <= 0 ? " (épuisé)" : ""}`}
                 aria-current={courant ? "true" : undefined}
                 className={cn(
-                  "block size-9 rounded-full ring-1 ring-offset-2 ring-offset-creme transition",
-                  courant ? "ring-encre" : "ring-sable hover:ring-sable-fonce",
+                  "block size-9 rounded-full ring-1 ring-offset-2 ring-offset-acier transition",
+                  courant ? "ring-encre" : "ring-filet hover:ring-filet-fort",
                 )}
-                style={{ backgroundColor: teintesCadran[d.dialColor] ?? "#888" }}
+                style={{ backgroundColor: teintesCadran[d.dialColor] ?? teintesCadran.noir }}
               />
             </li>
           );
@@ -184,7 +184,7 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
             >
               {produit.brand.name}
             </Link>
-            <h1 className="mt-2 text-4xl leading-[1.05] md:text-5xl">{produit.name}</h1>
+            <h1 className="mt-2 text-4xl leading-affiche md:text-5xl">{produit.name}</h1>
             <p className="chiffres mt-3 text-sm text-graphite">
               Réf. {produit.reference} · {libellesMouvement[produit.movement]}
             </p>
@@ -243,17 +243,17 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
                 seuilBas={produit.lowStockThreshold}
               />
 
-              <div className="border-y border-sable py-6">
-                <p className="text-xs font-medium tracking-surtitre text-laiton-fonce uppercase">
+              <div className="border-y border-filet py-6">
+                <p className="text-xs font-medium tracking-surtitre text-cadran uppercase">
                   Ce qui est inclus
                 </p>
                 <ul className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
                   <li className="flex items-center gap-3">
-                    <Gift aria-hidden className="size-4 text-laiton" strokeWidth={1.5} /> Écrin
+                    <Gift aria-hidden className="size-4 text-cadran" strokeWidth={1.5} /> Écrin
                     d&apos;origine {produit.brand.name}
                   </li>
                   <li className="flex items-center gap-3">
-                    <ShieldCheck aria-hidden className="size-4 text-laiton" strokeWidth={1.5} />{" "}
+                    <ShieldCheck aria-hidden className="size-4 text-cadran" strokeWidth={1.5} />{" "}
                     Garantie {produit.warrantyMonths / 12} ans
                   </li>
                   {engagements
@@ -261,7 +261,7 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
                     .concat(engagements.slice(3))
                     .map(({ icone: Icone, titre }) => (
                       <li key={titre} className="flex items-center gap-3">
-                        <Icone aria-hidden className="size-4 text-laiton" strokeWidth={1.5} />{" "}
+                        <Icone aria-hidden className="size-4 text-cadran" strokeWidth={1.5} />{" "}
                         {titre}
                       </li>
                     ))}
@@ -296,15 +296,15 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
       </Container>
 
       {/* Description et avis de la maison */}
-      <section className="mt-16 border-t border-sable bg-ivoire py-16 md:mt-24 md:py-24">
+      <section className="mt-16 border-t border-filet bg-blanc py-16 md:mt-24 md:py-24">
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-24">
           <div>
             <SectionHeading surtitre="Description" titre={`À propos de la ${produit.name}`} />
             <p className="mt-8 max-w-prose leading-relaxed text-graphite">{produit.description}</p>
           </div>
           {produit.editorialNote && (
-            <figure className="self-end border-l border-laiton pl-8">
-              <p className="text-xs font-medium tracking-surtitre text-laiton-fonce uppercase">
+            <figure className="self-end border-l border-cadran pl-8">
+              <p className="text-xs font-medium tracking-surtitre text-cadran uppercase">
                 L&apos;avis de la maison
               </p>
               <blockquote className="mt-4 font-serif text-2xl leading-snug italic md:text-3xl">
@@ -328,7 +328,7 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
       {/* Avis clients */}
       <section
         id="avis"
-        className="scroll-mt-32 border-t border-sable py-16 md:py-24"
+        className="scroll-mt-32 border-t border-filet py-16 md:py-24"
         aria-labelledby="titre-avis"
       >
         <Container>
@@ -341,7 +341,7 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
 
       {/* Montres similaires */}
       {similaires.length > 0 && (
-        <section className="border-t border-sable py-16 md:py-24" aria-labelledby="similaires">
+        <section className="border-t border-filet py-16 md:py-24" aria-labelledby="similaires">
           <Container>
             <h2 id="similaires" className="mb-10 text-3xl md:text-4xl">
               Vous aimerez aussi
@@ -357,13 +357,13 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
 function FicheSquelette() {
   return (
     <Container className="py-6 md:py-10" aria-hidden>
-      <div className="h-4 w-64 bg-sable/60" />
+      <div className="h-4 w-64 bg-filet/60" />
       <div className="mt-6 grid gap-10 lg:grid-cols-[1.25fr_1fr] lg:gap-16 xl:gap-24">
-        <div className="aspect-square animate-pulse bg-ivoire" />
+        <div className="aspect-square animate-pulse bg-blanc" />
         <div className="space-y-4">
-          <div className="h-3 w-20 bg-sable/60" />
-          <div className="h-12 w-3/4 bg-sable/60" />
-          <div className="h-8 w-28 bg-sable/60" />
+          <div className="h-3 w-20 bg-filet/60" />
+          <div className="h-12 w-3/4 bg-filet/60" />
+          <div className="h-8 w-28 bg-filet/60" />
         </div>
       </div>
     </Container>

@@ -31,16 +31,16 @@ export default async function Accueil() {
   return (
     <>
       {/* Hero sombre */}
-      <section className="bg-nuit text-creme">
+      <section className="bg-nuit text-acier">
         <Container className="grid items-center gap-12 py-20 md:grid-cols-2 md:py-28 lg:py-32">
           <div className="animate-fondu">
-            <Eyebrow className="text-laiton-clair">Nouvelle sélection automne</Eyebrow>
-            <h1 className="mt-5 text-5xl leading-[1.05] md:text-6xl lg:text-7xl">
+            <Eyebrow className="text-cadran-clair">Nouvelle sélection automne</Eyebrow>
+            <h1 className="mt-5 text-5xl leading-affiche md:text-6xl lg:text-7xl">
               Le temps,
               <br />
-              <em className="font-normal text-laiton-clair">bien choisi.</em>
+              <em className="font-normal text-cadran-clair">bien choisi.</em>
             </h1>
-            <p className="mt-6 max-w-md leading-relaxed text-creme/75">
+            <p className="mt-6 max-w-md leading-relaxed text-acier/75">
               Des montres de caractère, de 100 à 2 000 €, sélectionnées pièce par pièce.
               Authenticité garantie, livraison assurée, retours gratuits sous 14 jours.
             </p>
@@ -52,7 +52,7 @@ export default async function Accueil() {
                 asChild
                 variante="secondaire"
                 taille="lg"
-                className="border-creme/40 text-creme hover:bg-creme hover:text-encre"
+                className="border-acier/40 text-acier hover:bg-acier hover:text-encre"
               >
                 <Link href="/marques">Nos marques</Link>
               </Button>
@@ -65,7 +65,7 @@ export default async function Accueil() {
               fill
               priority
               sizes="(min-width: 768px) 28rem, 24rem"
-              className="object-contain p-[12%]"
+              className="object-contain p-(--marge-photo-large)"
             />
           </div>
         </Container>
@@ -85,23 +85,21 @@ export default async function Accueil() {
       </section>
 
       {/* Collections */}
-      <section className="border-y border-sable bg-ivoire py-20 md:py-28">
+      <section className="border-y border-filet bg-blanc py-20 md:py-28">
         <Container>
           <SectionHeading surtitre="Collections" titre="Par envie" className="mb-12" />
-          <ul className="grid gap-px bg-sable md:grid-cols-3">
+          <ul className="grid gap-px bg-filet md:grid-cols-3">
             {collections.map((c) => (
-              <li key={c.id} className="bg-ivoire">
+              <li key={c.id} className="bg-blanc">
                 <Link
                   href={`/collections/${c.slug}`}
-                  className="group flex h-full flex-col p-8 transition-colors hover:bg-creme"
+                  className="group flex h-full flex-col p-8 transition-colors hover:bg-acier"
                 >
-                  <h3 className="text-3xl transition-colors group-hover:text-laiton-fonce">
-                    {c.name}
-                  </h3>
+                  <h3 className="text-3xl transition-colors group-hover:text-cadran">{c.name}</h3>
                   <p className="mt-4 flex-1 text-sm leading-relaxed text-graphite">
                     {c.description}
                   </p>
-                  <span className="mt-8 text-[13px] font-medium tracking-surtitre uppercase">
+                  <span className="mt-8 text-libelle font-medium tracking-surtitre uppercase">
                     Découvrir{" "}
                     <span
                       aria-hidden
@@ -133,7 +131,7 @@ export default async function Accueil() {
       )}
 
       {/* Marques */}
-      <section className="border-y border-sable bg-ivoire py-16">
+      <section className="border-y border-filet bg-blanc py-16">
         <Container>
           <Eyebrow className="text-center">Les maisons que nous sélectionnons</Eyebrow>
           <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 font-serif text-2xl text-graphite md:gap-x-14">

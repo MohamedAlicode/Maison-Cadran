@@ -32,16 +32,16 @@ export function DrawerContent({
       <DialogPrimitive.Overlay className="fixed inset-0 z-40 bg-nuit/40 data-[state=open]:animate-fondu" />
       <DialogPrimitive.Content
         className={cn(
-          "fixed inset-y-0 z-50 flex w-full max-w-md flex-col bg-ivoire shadow-2xl",
+          "fixed inset-y-0 z-50 flex w-full max-w-md flex-col bg-blanc shadow-tiroir",
           cote === "droite" ? "right-0 data-[state=open]:animate-glisse-droite" : "left-0",
           className,
         )}
         {...props}
       >
-        <div className="flex items-center justify-between border-b border-sable px-6 py-5">
+        <div className="flex items-center justify-between border-b border-filet px-6 py-5">
           <DialogPrimitive.Title className="font-serif text-2xl">{titre}</DialogPrimitive.Title>
           <DialogPrimitive.Close
-            className="grid size-10 place-items-center rounded-xs text-encre hover:bg-sable/40"
+            className="grid size-10 place-items-center rounded-xs text-encre hover:bg-filet/40"
             aria-label="Fermer"
           >
             <X className="size-5" strokeWidth={1.5} />
@@ -55,7 +55,7 @@ export function DrawerContent({
           <DialogPrimitive.Description className="sr-only">{titre}</DialogPrimitive.Description>
         )}
         <div className="flex-1 overflow-y-auto px-6 py-6">{children}</div>
-        {pied && <div className="border-t border-sable px-6 py-5">{pied}</div>}
+        {pied && <div className="border-t border-filet px-6 py-5">{pied}</div>}
       </DialogPrimitive.Content>
     </DialogPrimitive.Portal>
   );

@@ -44,7 +44,7 @@ export async function VueCatalogue({ searchParams, chemin, marque, slugs }: Prop
 
   return (
     <NavigationCatalogue>
-      <div className="flex items-center justify-between gap-4 border-y border-sable py-3">
+      <div className="flex items-center justify-between gap-4 border-y border-filet py-3">
         <div className="flex items-center gap-4">
           <MobileFilters
             facettes={facettesUtiles}
@@ -78,7 +78,7 @@ export async function VueCatalogue({ searchParams, chemin, marque, slugs }: Prop
           {produits.length > 0 ? (
             <GrilleProduits produits={produits} colonnes={3} niveauTitre="h2" />
           ) : (
-            <div className="border border-sable bg-ivoire px-6 py-16 text-center">
+            <div className="border border-filet bg-blanc px-6 py-16 text-center">
               <p className="font-serif text-2xl">Aucune montre ne correspond à ces critères</p>
               <p className="mt-3 text-graphite">Retirez un filtre pour élargir votre recherche.</p>
               <Button asChild variante="secondaire" className="mt-8">
@@ -127,7 +127,7 @@ function PucesFiltres({
           <Link
             href={p.href}
             scroll={false}
-            className="inline-flex h-8 items-center gap-2 rounded-xs border border-sable bg-ivoire px-3 text-xs text-encre transition-colors hover:border-encre"
+            className="inline-flex h-8 items-center gap-2 rounded-xs border border-filet bg-blanc px-3 text-xs text-encre transition-colors hover:border-encre"
           >
             {p.libelle}
             <X aria-hidden className="size-3.5 text-graphite" />
@@ -139,7 +139,7 @@ function PucesFiltres({
         <Link
           href={chemin + versQueryString({ tri: filtres.tri })}
           scroll={false}
-          className="ml-2 text-xs text-laiton-fonce underline underline-offset-4"
+          className="ml-2 text-xs text-cadran underline underline-offset-4"
         >
           Tout effacer
         </Link>
@@ -168,7 +168,7 @@ function Pagination({
           aria-current={n === page ? "page" : undefined}
           className={cn(
             "chiffres grid size-10 place-items-center rounded-xs border text-sm",
-            n === page ? "border-encre bg-encre text-creme" : "border-sable hover:border-encre",
+            n === page ? "border-encre bg-encre text-acier" : "border-filet hover:border-encre",
           )}
         >
           {n}
@@ -182,19 +182,19 @@ function Pagination({
 export function CatalogueSquelette() {
   return (
     <div aria-hidden>
-      <div className="h-[66px] border-y border-sable" />
+      <div className="h-16.5 border-y border-filet" />
       <div className="mt-8 grid gap-10 lg:grid-cols-[260px_1fr] xl:gap-14">
         <div className="hidden space-y-4 lg:block">
           {Array.from({ length: 5 }, (_, i) => (
-            <div key={i} className="h-12 border-b border-sable" />
+            <div key={i} className="h-12 border-b border-filet" />
           ))}
         </div>
         <div className="grid grid-cols-2 gap-x-4 gap-y-12 md:grid-cols-3 md:gap-x-6">
           {Array.from({ length: 6 }, (_, i) => (
             <div key={i}>
-              <div className="aspect-square animate-pulse bg-ivoire" />
-              <div className="mt-4 h-3 w-16 bg-sable/60" />
-              <div className="mt-2 h-5 w-3/4 bg-sable/60" />
+              <div className="aspect-square animate-pulse bg-blanc" />
+              <div className="mt-4 h-3 w-16 bg-filet/60" />
+              <div className="mt-2 h-5 w-3/4 bg-filet/60" />
             </div>
           ))}
         </div>

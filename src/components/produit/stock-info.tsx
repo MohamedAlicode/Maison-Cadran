@@ -38,14 +38,14 @@ export function StockInfo({
       </li>
       {stock > 0 && (
         <li className="flex items-center gap-3 text-graphite">
-          <Clock aria-hidden className="size-4 text-laiton" strokeWidth={1.5} />
+          <Clock aria-hidden className="size-4 text-cadran" strokeWidth={1.5} />
           Expédiée sous {delaiJours} jour{delaiJours > 1 ? "s" : ""} ouvré
           {delaiJours > 1 ? "s" : ""}, livrée en{" "}
           {boutique.livraison.delaiLivraison.replace(" après expédition", "")}
         </li>
       )}
       <li className="flex items-center gap-3 text-graphite">
-        <PackageCheck aria-hidden className="size-4 text-laiton" strokeWidth={1.5} />
+        <PackageCheck aria-hidden className="size-4 text-cadran" strokeWidth={1.5} />
         {boutique.livraison.transporteur}, assurée
       </li>
     </ul>

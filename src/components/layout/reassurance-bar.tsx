@@ -35,14 +35,14 @@ export function ReassuranceBar({
 }) {
   if (compacte) {
     return (
-      <div className={cn("border-b border-sable bg-ivoire", className)}>
+      <div className={cn("border-b border-filet bg-blanc", className)}>
         <ul className="mx-auto flex max-w-site items-center justify-center gap-8 overflow-x-auto px-6 py-2.5 text-xs text-graphite lg:justify-between lg:px-12">
           {engagements.map(({ icone: Icone, titre }, i) => (
             <li
               key={titre}
               className={cn("flex shrink-0 items-center gap-2", i > 0 && "hidden md:flex")}
             >
-              <Icone aria-hidden className="size-4 text-laiton" strokeWidth={1.5} />
+              <Icone aria-hidden className="size-4 text-cadran" strokeWidth={1.5} />
               {titre}
             </li>
           ))}
@@ -55,7 +55,7 @@ export function ReassuranceBar({
     <ul className={cn("grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4", className)}>
       {engagements.map(({ icone: Icone, titre, detail }) => (
         <li key={titre} className="flex flex-col items-center text-center">
-          <Icone aria-hidden className="mb-4 size-7 text-laiton" strokeWidth={1.25} />
+          <Icone aria-hidden className="mb-4 size-7 text-cadran" strokeWidth={1.25} />
           <p className="font-serif text-xl">{titre}</p>
           <p className="mt-1.5 text-sm text-graphite">{detail}</p>
         </li>

@@ -59,7 +59,7 @@ export function Gallery({
               aria-current={i === active}
               className={cn(
                 "relative block aspect-square w-full bg-blanc ring-1 transition",
-                i === active ? "ring-encre" : "ring-sable hover:ring-sable-fonce",
+                i === active ? "ring-encre" : "ring-filet hover:ring-filet-fort",
               )}
             >
               <Image src={image.url} alt="" fill sizes="72px" className="object-contain p-1.5" />
@@ -84,7 +84,7 @@ export function Gallery({
             fill
             priority={priorite}
             sizes="(min-width: 1280px) 600px, 50vw"
-            className="object-contain p-[8%] transition-transform duration-200 ease-out"
+            className="object-contain p-(--marge-photo) transition-transform duration-(--duree-courte) ease-maison"
             style={
               zoom ? { transform: "scale(2)", transformOrigin: `${zoom.x}% ${zoom.y}%` } : undefined
             }
@@ -123,7 +123,7 @@ export function Gallery({
                 fill
                 priority={priorite && i === 0}
                 sizes="100vw"
-                className="object-contain p-[8%]"
+                className="object-contain p-(--marge-photo)"
               />
             </button>
           ))}
@@ -135,7 +135,7 @@ export function Gallery({
                 key={image.url}
                 className={cn(
                   "h-0.5 w-6 transition-colors",
-                  i === active ? "bg-encre" : "bg-sable",
+                  i === active ? "bg-encre" : "bg-filet",
                 )}
               />
             ))}
@@ -159,7 +159,7 @@ export function Gallery({
                 {active + 1} / {images.length}
               </span>
               <DialogPrimitive.Close
-                className="grid size-11 place-items-center rounded-xs hover:bg-sable/40"
+                className="grid size-11 place-items-center rounded-xs hover:bg-filet/40"
                 aria-label="Fermer"
               >
                 <X className="size-5" strokeWidth={1.5} />
@@ -179,7 +179,7 @@ export function Gallery({
                     type="button"
                     onClick={() => allerA(active - 1)}
                     aria-label="Vue précédente"
-                    className="absolute top-1/2 left-2 grid size-12 -translate-y-1/2 place-items-center rounded-xs bg-ivoire/80 hover:bg-ivoire md:left-8"
+                    className="absolute top-1/2 left-2 grid size-12 -translate-y-1/2 place-items-center rounded-xs bg-blanc/80 hover:bg-blanc md:left-8"
                   >
                     <ChevronLeft className="size-6" strokeWidth={1.25} />
                   </button>
@@ -187,7 +187,7 @@ export function Gallery({
                     type="button"
                     onClick={() => allerA(active + 1)}
                     aria-label="Vue suivante"
-                    className="absolute top-1/2 right-2 grid size-12 -translate-y-1/2 place-items-center rounded-xs bg-ivoire/80 hover:bg-ivoire md:right-8"
+                    className="absolute top-1/2 right-2 grid size-12 -translate-y-1/2 place-items-center rounded-xs bg-blanc/80 hover:bg-blanc md:right-8"
                   >
                     <ChevronRight className="size-6" strokeWidth={1.25} />
                   </button>

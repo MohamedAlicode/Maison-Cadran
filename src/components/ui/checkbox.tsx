@@ -10,14 +10,14 @@ export function Checkbox({ className, ...props }: ComponentProps<typeof Checkbox
   return (
     <CheckboxPrimitive.Root
       className={cn(
-        "grid size-[18px] shrink-0 place-items-center rounded-xs border border-sable-fonce bg-ivoire",
-        "transition-colors duration-150 data-[state=checked]:border-encre data-[state=checked]:bg-encre",
+        "grid size-4.5 shrink-0 place-items-center rounded-xs border border-filet-fort bg-blanc",
+        "transition-colors duration-(--duree-courte) data-[state=checked]:border-encre data-[state=checked]:bg-encre",
         className,
       )}
       {...props}
     >
       <CheckboxPrimitive.Indicator>
-        <Check className="size-3 text-creme" strokeWidth={2.5} />
+        <Check className="size-3 text-acier" strokeWidth={2.5} />
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   );

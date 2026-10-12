@@ -2,7 +2,7 @@ import Link from "next/link";
 import { boutique } from "@/config/boutique";
 import { cn } from "@/lib/utils";
 
-/** Logotype provisoire : nom en serif, petit filet laiton. */
+/** Logotype provisoire : nom en serif, petit filet bleu cadran. */
 export function Logo({ className, clair = false }: { className?: string; clair?: boolean }) {
   return (
     <Link
@@ -12,13 +12,13 @@ export function Logo({ className, clair = false }: { className?: string; clair?:
     >
       <span
         className={cn(
-          "font-serif text-2xl font-medium tracking-[0.08em] uppercase md:text-[28px]",
-          clair ? "text-creme" : "text-encre",
+          "font-serif text-2xl tracking-logo uppercase md:text-3xl",
+          clair ? "text-acier" : "text-encre",
         )}
       >
         {boutique.nom}
       </span>
-      <span aria-hidden className="mt-1.5 h-px w-8 bg-laiton" />
+      <span aria-hidden className="mt-1.5 h-px w-8 bg-cadran" />
     </Link>
   );
 }

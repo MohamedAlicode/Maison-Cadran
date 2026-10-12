@@ -3,21 +3,21 @@ import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
-// Bouton de la charte : capitales espacées, coins quasi droits, filet laiton au survol.
+// Bouton de la charte : capitales espacées, coins quasi droits, filet clair au survol.
 const variantesBouton = cva(
   [
     "group/bouton relative inline-flex items-center justify-center gap-2 rounded-xs",
-    "text-[13px] font-medium tracking-surtitre uppercase whitespace-nowrap",
-    "transition-colors duration-200 ease-maison",
+    "text-libelle font-medium tracking-surtitre uppercase whitespace-nowrap",
+    "transition-colors duration-(--duree-courte) ease-maison",
     "disabled:pointer-events-none disabled:opacity-50",
   ],
   {
     variants: {
       variante: {
-        principal: "bg-encre text-creme hover:bg-nuit",
-        secondaire: "border border-encre text-encre hover:bg-encre hover:text-creme",
-        clair: "bg-creme text-encre hover:bg-ivoire",
-        fantome: "text-encre hover:bg-sable/40",
+        principal: "bg-cadran text-blanc hover:bg-cadran-fonce",
+        secondaire: "border border-encre text-encre hover:bg-encre hover:text-acier",
+        clair: "bg-acier text-encre hover:bg-blanc",
+        fantome: "text-encre hover:bg-filet/40",
       },
       taille: {
         sm: "h-10 px-4",
@@ -67,7 +67,7 @@ export function Button({
           {avecFilet && (
             <span
               aria-hidden
-              className="absolute inset-x-7 bottom-3 h-px origin-left scale-x-0 bg-laiton-clair transition-transform duration-300 ease-maison group-hover/bouton:scale-x-100"
+              className="absolute inset-x-7 bottom-3 h-px origin-left scale-x-0 bg-cadran-clair transition-transform duration-(--duree-moyenne) ease-maison group-hover/bouton:scale-x-100"
             />
           )}
         </>

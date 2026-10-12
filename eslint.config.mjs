@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Scripts tiers des skills de design, hors du code du site :
+    ".claude/**",
   ]),
 ]);
 

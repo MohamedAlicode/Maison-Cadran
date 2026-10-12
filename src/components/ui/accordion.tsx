@@ -12,7 +12,7 @@ export function AccordionItem({
   className,
   ...props
 }: ComponentProps<typeof AccordionPrimitive.Item>) {
-  return <AccordionPrimitive.Item className={cn("border-b border-sable", className)} {...props} />;
+  return <AccordionPrimitive.Item className={cn("border-b border-filet", className)} {...props} />;
 }
 
 export function AccordionTrigger({
@@ -32,7 +32,7 @@ export function AccordionTrigger({
         {children}
         <Plus
           aria-hidden
-          className="size-4 text-laiton transition-transform duration-300 ease-maison group-data-[state=open]:rotate-45"
+          className="size-4 text-cadran transition-transform duration-(--duree-moyenne) ease-maison group-data-[state=open]:rotate-45"
           strokeWidth={1.5}
         />
       </AccordionPrimitive.Trigger>

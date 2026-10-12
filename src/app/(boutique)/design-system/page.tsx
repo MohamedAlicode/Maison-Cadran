@@ -26,45 +26,30 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
+// Les valeurs hexadécimales vivent uniquement dans globals.css : la pastille affiche le token lui-même.
 const couleurs = [
-  { nom: "Crème", token: "creme", valeur: "#F7F3EC", usage: "Fond de page" },
-  { nom: "Ivoire", token: "ivoire", valeur: "#FFFDF9", usage: "Surfaces, champs" },
-  { nom: "Blanc", token: "blanc", valeur: "#FFFFFF", usage: "Fond des photos" },
-  { nom: "Sable", token: "sable", valeur: "#E4DDD1", usage: "Bordures, filets" },
-  { nom: "Graphite", token: "graphite", valeur: "#5E5A53", usage: "Texte secondaire" },
-  { nom: "Encre", token: "encre", valeur: "#1C1B19", usage: "Texte, boutons" },
-  { nom: "Nuit", token: "nuit", valeur: "#14161A", usage: "Sections sombres" },
-  { nom: "Laiton", token: "laiton", valeur: "#B08D57", usage: "Accent décoratif" },
+  { nom: "Acier", token: "acier", fond: "bg-acier", usage: "Fond de page" },
+  { nom: "Blanc", token: "blanc", fond: "bg-blanc", usage: "Photos, surfaces, champs" },
+  { nom: "Filet", token: "filet", fond: "bg-filet", usage: "Bordures, séparateurs" },
+  { nom: "Filet fort", token: "filet-fort", fond: "bg-filet-fort", usage: "Contour des contrôles" },
+  { nom: "Graphite", token: "graphite", fond: "bg-graphite", usage: "Texte secondaire" },
+  { nom: "Encre", token: "encre", fond: "bg-encre", usage: "Texte" },
+  { nom: "Nuit", token: "nuit", fond: "bg-nuit", usage: "Sections sombres" },
+  { nom: "Cadran", token: "cadran", fond: "bg-cadran", usage: "Actions, liens, focus" },
   {
-    nom: "Laiton foncé",
-    token: "laiton-fonce",
-    valeur: "#7A5C26",
-    usage: "Liens, petit texte doré",
+    nom: "Cadran clair",
+    token: "cadran-clair",
+    fond: "bg-cadran-clair",
+    usage: "Accent sur fond nuit",
   },
-  { nom: "Sauge", token: "sauge", valeur: "#3E6B4F", usage: "En stock, succès" },
-  { nom: "Ambre", token: "ambre", valeur: "#9A5B13", usage: "Stock faible" },
-  { nom: "Bordeaux", token: "bordeaux", valeur: "#9B2C2C", usage: "Erreurs" },
+  { nom: "Sauge", token: "sauge", fond: "bg-sauge", usage: "En stock, succès" },
+  { nom: "Ambre", token: "ambre", fond: "bg-ambre", usage: "Stock faible" },
+  { nom: "Bordeaux", token: "bordeaux", fond: "bg-bordeaux", usage: "Erreurs" },
 ];
-
-// Classes écrites en entier pour que Tailwind les détecte.
-const fonds: Record<string, string> = {
-  creme: "bg-creme",
-  ivoire: "bg-ivoire",
-  blanc: "bg-blanc",
-  sable: "bg-sable",
-  graphite: "bg-graphite",
-  encre: "bg-encre",
-  nuit: "bg-nuit",
-  laiton: "bg-laiton",
-  "laiton-fonce": "bg-laiton-fonce",
-  sauge: "bg-sauge",
-  ambre: "bg-ambre",
-  bordeaux: "bg-bordeaux",
-};
 
 function Bloc({ titre, children }: { titre: string; children: React.ReactNode }) {
   return (
-    <section className="border-t border-sable py-14">
+    <section className="border-t border-filet py-14">
       <h2 className="mb-8 text-3xl">{titre}</h2>
       {children}
     </section>
@@ -86,9 +71,9 @@ export default async function DesignSystem() {
         <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
           {couleurs.map((c) => (
             <li key={c.token}>
-              <div className={`aspect-[4/3] rounded-xs ring-1 ring-sable ${fonds[c.token]}`} />
+              <div className={`aspect-[4/3] rounded-xs ring-1 ring-filet ${c.fond}`} />
               <p className="mt-3 text-sm font-medium">{c.nom}</p>
-              <p className="chiffres text-xs text-graphite">{c.valeur}</p>
+              <p className="text-xs text-graphite">--color-{c.token}</p>
               <p className="text-xs text-graphite">{c.usage}</p>
             </li>
           ))}
@@ -98,7 +83,7 @@ export default async function DesignSystem() {
       <Bloc titre="Typographies">
         <div className="space-y-6">
           <div>
-            <Eyebrow>Titres : Cormorant Garamond</Eyebrow>
+            <Eyebrow>Titres : Instrument Serif</Eyebrow>
             <p className="mt-2 font-serif text-6xl leading-none">Le temps, bien choisi</p>
             <p className="mt-2 font-serif text-4xl leading-tight">
               Hamilton Khaki Field Mechanical
@@ -106,7 +91,7 @@ export default async function DesignSystem() {
             <p className="mt-2 font-serif text-2xl italic">Un classique militaire depuis 1940</p>
           </div>
           <div className="max-w-2xl">
-            <Eyebrow>Texte : Inter</Eyebrow>
+            <Eyebrow>Texte : Hanken Grotesk</Eyebrow>
             <p className="mt-2 leading-relaxed">
               Le calibre H-50 offre une réserve de marche de 80 heures. Son boîtier en acier de 38
               mm, étanche à 50 mètres, accueille un verre saphir traité antireflet.
@@ -137,7 +122,7 @@ export default async function DesignSystem() {
           <Badge variante="nouveau">Nouveau</Badge>
           <Badge variante="alerte">Dernière pièce</Badge>
           <Badge variante="succes">En stock</Badge>
-          <Badge variante="laiton">Édition limitée</Badge>
+          <Badge variante="cadran">Édition limitée</Badge>
           <Badge>Automatique</Badge>
         </div>
         <div className="mt-6 flex flex-wrap gap-10 text-lg">
@@ -175,7 +160,7 @@ export default async function DesignSystem() {
       </Bloc>
 
       <Bloc titre="Accordéon">
-        <Accordion type="single" collapsible className="max-w-2xl border-t border-sable">
+        <Accordion type="single" collapsible className="max-w-2xl border-t border-filet">
           <AccordionItem value="livraison">
             <AccordionTrigger>Livraison et retours</AccordionTrigger>
             <AccordionContent>

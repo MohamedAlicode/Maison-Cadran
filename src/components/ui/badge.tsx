@@ -3,13 +3,13 @@ import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 const variantesBadge = cva(
-  "inline-flex items-center gap-1.5 rounded-xs px-2 py-1 text-[11px] font-medium tracking-surtitre uppercase",
+  "inline-flex items-center gap-1.5 rounded-xs px-2 py-1 text-xs font-medium tracking-surtitre uppercase",
   {
     variants: {
       variante: {
-        neutre: "bg-ivoire text-encre ring-1 ring-sable",
-        nouveau: "bg-encre text-creme",
-        laiton: "bg-laiton/15 text-laiton-fonce",
+        neutre: "bg-blanc text-encre ring-1 ring-filet",
+        nouveau: "bg-encre text-acier",
+        cadran: "bg-cadran/15 text-cadran",
         alerte: "bg-ambre/10 text-ambre",
         succes: "bg-sauge/10 text-sauge",
       },

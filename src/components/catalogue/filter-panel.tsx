@@ -39,16 +39,14 @@ export function FilterPanel({ facettes, filtres, chemin, idPrefixe }: Proprietes
     .map((f) => f.cle);
 
   return (
-    <Accordion type="multiple" defaultValue={ouvertes} className="border-t border-sable">
+    <Accordion type="multiple" defaultValue={ouvertes} className="border-t border-filet">
       {visibles.map((facette) => (
         <AccordionItem key={facette.cle} value={facette.cle}>
           <AccordionTrigger>
             <span>
               {facette.titre}
               {filtres[facette.cle].length > 0 && (
-                <span className="chiffres ml-2 text-laiton-fonce">
-                  ({filtres[facette.cle].length})
-                </span>
+                <span className="chiffres ml-2 text-cadran">({filtres[facette.cle].length})</span>
               )}
             </span>
           </AccordionTrigger>

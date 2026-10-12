@@ -44,7 +44,7 @@ async function EnTeteMarque({ params }: { params: Promise<{ slug: string }> }) {
             {marque.country} · depuis {marque.foundedYear}
           </Eyebrow>
           <h1 className="mt-3 text-5xl md:text-6xl">{marque.name}</h1>
-          <span aria-hidden className="mt-5 block h-px w-12 bg-laiton" />
+          <span aria-hidden className="mt-5 block h-px w-12 bg-cadran" />
         </div>
         <div className="space-y-4 leading-relaxed text-graphite">
           <p className="text-encre">{marque.description}</p>

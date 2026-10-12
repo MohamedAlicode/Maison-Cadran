@@ -24,17 +24,17 @@ export default async function PageMarques() {
         titre="Nos marques"
         description="Des manufactures suisses et japonaises choisies pour la qualité de leurs mouvements et le sérieux de leur service après-vente."
       />
-      <ul className="mt-14 grid gap-px bg-sable sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="mt-14 grid gap-px bg-filet sm:grid-cols-2 lg:grid-cols-4">
         {marques.map((marque) => (
-          <li key={marque.id} className="bg-creme">
+          <li key={marque.id} className="bg-acier">
             <Link
               href={`/marques/${marque.slug}`}
-              className="group flex h-full flex-col p-6 transition-colors hover:bg-ivoire md:p-8"
+              className="group flex h-full flex-col p-6 transition-colors hover:bg-blanc md:p-8"
             >
-              <span className="text-[11px] font-medium tracking-surtitre text-graphite uppercase">
+              <span className="text-xs font-medium tracking-surtitre text-graphite uppercase">
                 {marque.country} · depuis {marque.foundedYear}
               </span>
-              <h2 className="mt-3 text-3xl transition-colors group-hover:text-laiton-fonce">
+              <h2 className="mt-3 text-3xl transition-colors group-hover:text-cadran">
                 {marque.name}
               </h2>
               <p className="mt-3 flex-1 text-sm leading-relaxed text-graphite">

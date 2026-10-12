@@ -57,9 +57,7 @@ export function DemoMiniPanier() {
             />
           </div>
           <div className="flex-1 text-sm">
-            <p className="text-[11px] font-medium tracking-surtitre text-graphite uppercase">
-              Orient
-            </p>
+            <p className="text-xs font-medium tracking-surtitre text-graphite uppercase">Orient</p>
             <p className="font-serif text-lg">Bambino Version 2</p>
             <p className="text-graphite">Quantité : 1</p>
             <Price centimes={sousTotal} className="mt-2" />

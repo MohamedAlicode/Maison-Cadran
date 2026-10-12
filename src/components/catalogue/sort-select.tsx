@@ -21,7 +21,7 @@ export function SortSelect({ filtres, chemin }: { filtres: Filtres; chemin: stri
               chemin + versQueryString({ ...filtres, tri: e.target.value as CleTri, page: 1 }),
             )
           }
-          className="h-10 cursor-pointer appearance-none rounded-xs border border-sable bg-ivoire py-0 pr-9 pl-3 text-sm text-encre hover:border-sable-fonce"
+          className="h-10 cursor-pointer appearance-none rounded-xs border border-filet bg-blanc py-0 pr-9 pl-3 text-sm text-encre hover:border-filet-fort"
         >
           {optionsTri.map((o) => (
             <option key={o.cle} value={o.cle}>

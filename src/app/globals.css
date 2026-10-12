@@ -1,43 +1,84 @@
 @import "tailwindcss";
 
 /*
- * Charte graphique Maison Cadran.
- * Les couleurs sont exposées en utilitaires Tailwind : bg-creme, text-encre, border-sable…
- * Règle d'usage : 90 % crème/ivoire/blanc, 8 % encre/nuit, 2 % laiton.
+ * Tokens Maison Cadran : seule source de vérité du design (direction « Acier et cadran bleu »).
+ * Chaque token @theme devient un utilitaire Tailwind : bg-acier, text-encre, border-filet, shadow-tiroir…
+ * Règle d'usage : l'acier et le blanc portent la page, le bleu cadran est réservé aux actions et au focus.
  */
 @theme {
   /* Fonds */
-  --color-creme: #f7f3ec;
-  --color-ivoire: #fffdf9;
+  --color-acier: #f1f1ee;
   --color-blanc: #ffffff;
-  --color-nuit: #14161a;
-  --color-nuit-2: #1f2228;
+  --color-nuit: #111b29;
 
   /* Texte */
-  --color-encre: #1c1b19;
-  --color-graphite: #5e5a53;
-  --color-sable: #e4ddd1;
-  --color-sable-fonce: #cfc6b6;
+  --color-encre: #15191c;
+  --color-graphite: #555c61;
 
-  /* Accent laiton : décoratif uniquement, sauf « laiton-fonce » (AA sur crème) */
-  --color-laiton: #b08d57;
-  --color-laiton-fonce: #7a5c26;
-  --color-laiton-clair: #c9a86a;
+  /* Filets et bordures : « filet-fort » atteint 3:1, le minimum pour le contour d'un contrôle */
+  --color-filet: #d9dad6;
+  --color-filet-fort: #7e8482;
+
+  /* Accent bleu cadran : CTA, liens, focus. « cadran-clair » sert uniquement sur fond nuit. */
+  --color-cadran: #1f3a5f;
+  --color-cadran-fonce: #162e4c;
+  --color-cadran-clair: #a9bedb;
 
   /* États */
-  --color-sauge: #3e6b4f;
-  --color-ambre: #9a5b13;
-  --color-bordeaux: #9b2c2c;
+  --color-sauge: #2f6b4a;
+  --color-ambre: #8f5a12;
+  --color-bordeaux: #a3302b;
 
   /* Typographies (variables posées par next/font dans le layout) */
-  --font-serif: var(--font-cormorant), "Times New Roman", serif;
-  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-serif: var(--font-instrument-serif), "Times New Roman", serif;
+  --font-sans: var(--font-hanken-grotesk), system-ui, sans-serif;
 
-  /* Sur-titres en capitales espacées */
+  /* Échelle typographique (rem) */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: calc(1 / 0.75);
+  --text-libelle: 0.8125rem;
+  --text-libelle--line-height: 1.4;
+  --text-sm: 0.875rem;
+  --text-sm--line-height: calc(1.25 / 0.875);
+  --text-base: 1rem;
+  --text-base--line-height: 1.5;
+  --text-lg: 1.125rem;
+  --text-lg--line-height: calc(1.75 / 1.125);
+  --text-xl: 1.25rem;
+  --text-xl--line-height: calc(1.75 / 1.25);
+  --text-2xl: 1.5rem;
+  --text-2xl--line-height: calc(2 / 1.5);
+  --text-3xl: 1.875rem;
+  --text-3xl--line-height: calc(2.25 / 1.875);
+  --text-4xl: 2.25rem;
+  --text-4xl--line-height: calc(2.5 / 2.25);
+  --text-5xl: 3rem;
+  --text-5xl--line-height: 1;
+  --text-6xl: 3.75rem;
+  --text-6xl--line-height: 1;
+  --text-7xl: 4.5rem;
+  --text-7xl--line-height: 1;
+
+  /* Interlignage des grands titres */
+  --leading-affiche: 1.05;
+  --leading-titre: 1.1;
+
+  /* Approches */
+  --tracking-titre: -0.01em;
+  --tracking-logo: 0.08em;
   --tracking-surtitre: 0.14em;
 
-  /* Coins quasi droits, esprit joaillerie */
+  /* Espacements : pas de 4 px, toutes les marges et tailles en sont des multiples */
+  --spacing: 0.25rem;
+
+  /* Coins quasi droits, esprit boîtier usiné */
   --radius-xs: 2px;
+
+  /* Ombre teintée nuit, jamais noire : réservée aux panneaux qui passent au-dessus de la page */
+  --shadow-tiroir: 0 24px 48px -12px rgb(17 27 41 / 0.28);
+
+  /* Flou du verre (en-tête et barres posées sur les photos) */
+  --blur-verre: 16px;
 
   /* Mouvement */
   --ease-maison: cubic-bezier(0.2, 0, 0, 1);
@@ -46,8 +87,8 @@
   --container-site: 1440px;
 
   /* Animations */
-  --animate-fondu: fondu 400ms var(--ease-maison) both;
-  --animate-glisse-droite: glisse-droite 300ms var(--ease-maison) both;
+  --animate-fondu: fondu var(--duree-longue) var(--ease-maison) both;
+  --animate-glisse-droite: glisse-droite var(--duree-moyenne) var(--ease-maison) both;
 
   @keyframes fondu {
     from {
@@ -70,13 +111,28 @@
   }
 }
 
+/*
+ * Tokens sans utilitaire Tailwind dédié, employés via la syntaxe duration-(--duree-courte) ou p-(--marge-photo).
+ */
+:root {
+  /* Durées de transition */
+  --duree-courte: 180ms;
+  --duree-moyenne: 300ms;
+  --duree-longue: 500ms;
+
+  /* Respiration autour d'une montre dans son cadre : vignette, galerie, survol */
+  --marge-photo-serree: 4%;
+  --marge-photo: 10%;
+  --marge-photo-large: 12%;
+}
+
 @layer base {
   html {
     -webkit-tap-highlight-color: transparent;
   }
 
   body {
-    @apply bg-creme font-sans text-encre antialiased;
+    @apply bg-acier font-sans text-encre antialiased;
     font-feature-settings: "tnum" 0;
   }
 
@@ -84,16 +140,16 @@
   h2,
   h3,
   h4 {
-    @apply font-serif font-medium tracking-[-0.01em] text-balance;
+    @apply font-serif font-normal tracking-titre text-balance;
   }
 
-  /* Focus visible au clavier uniquement : anneau laiton bien visible */
+  /* Focus visible au clavier uniquement : anneau bleu cadran, 10:1 sur l'acier */
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-laiton;
+    @apply outline-2 outline-offset-2 outline-cadran;
   }
 
   ::selection {
-    @apply bg-laiton/25;
+    @apply bg-cadran/20;
   }
 }
 

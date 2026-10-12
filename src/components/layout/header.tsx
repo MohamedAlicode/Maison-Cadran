@@ -6,15 +6,15 @@ import { MobileMenu } from "./mobile-menu";
 import { navigationPrincipale } from "./navigation";
 
 const classeIcone =
-  "grid size-11 place-items-center rounded-xs text-encre transition-colors hover:bg-sable/40";
+  "grid size-11 place-items-center rounded-xs text-encre transition-colors hover:bg-filet/40";
 
 /** En-tête du site : réassurance, logo centré, navigation et accès rapides. */
 export function Header() {
   return (
-    <header className="sticky top-0 z-30 bg-creme/95 backdrop-blur supports-[backdrop-filter]:bg-creme/85">
+    <header className="sticky top-0 z-30 bg-acier/95 backdrop-blur-verre supports-[backdrop-filter]:bg-acier/85">
       <a
         href="#contenu"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-encre focus:px-4 focus:py-2 focus:text-creme"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:bg-encre focus:px-4 focus:py-2 focus:text-acier"
       >
         Aller au contenu
       </a>
@@ -26,10 +26,10 @@ export function Header() {
             <Search className="size-5" strokeWidth={1.5} />
           </Link>
           <nav aria-label="Navigation principale" className="hidden lg:block">
-            <ul className="flex gap-8 text-[13px] font-medium tracking-surtitre uppercase">
+            <ul className="flex gap-8 text-libelle font-medium tracking-surtitre uppercase">
               {navigationPrincipale.slice(0, 3).map((lien) => (
                 <li key={lien.href}>
-                  <Link href={lien.href} className="transition-colors hover:text-laiton-fonce">
+                  <Link href={lien.href} className="transition-colors hover:text-cadran">
                     {lien.libelle}
                   </Link>
                 </li>
@@ -42,10 +42,10 @@ export function Header() {
 
         <div className="flex items-center justify-end gap-1 lg:gap-6">
           <nav aria-label="Navigation secondaire" className="hidden lg:block">
-            <ul className="flex gap-8 text-[13px] font-medium tracking-surtitre uppercase">
+            <ul className="flex gap-8 text-libelle font-medium tracking-surtitre uppercase">
               {navigationPrincipale.slice(3).map((lien) => (
                 <li key={lien.href}>
-                  <Link href={lien.href} className="transition-colors hover:text-laiton-fonce">
+                  <Link href={lien.href} className="transition-colors hover:text-cadran">
                     {lien.libelle}
                   </Link>
                 </li>
@@ -80,7 +80,7 @@ export function Header() {
           </div>
         </div>
       </div>
-      <div aria-hidden className="h-px bg-sable" />
+      <div aria-hidden className="h-px bg-filet" />
     </header>
   );
 }

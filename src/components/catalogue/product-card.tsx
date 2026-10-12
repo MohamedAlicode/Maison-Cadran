@@ -18,7 +18,7 @@ function badgeProduit(p: ProduitIndexe) {
   if (p.stock <= 0) return { libelle: "Épuisée", variante: "neutre" as const };
   if (p.stock === 1) return { libelle: "Dernière pièce", variante: "alerte" as const };
   if (p.prixBarreCentimes && p.prixBarreCentimes > p.prixCentimes)
-    return { libelle: "Offre", variante: "laiton" as const };
+    return { libelle: "Offre", variante: "cadran" as const };
   if (p.nouveau) return { libelle: "Nouveau", variante: "nouveau" as const };
   return null;
 }
@@ -43,7 +43,7 @@ export function ProductCard({
             sizes={tailles}
             priority={prioritaire}
             className={cn(
-              "object-contain p-[10%] transition-[opacity,transform] duration-500 ease-maison",
+              "object-contain p-(--marge-photo) transition-[opacity,transform] duration-(--duree-longue) ease-maison",
               produit.imageSurvol ? "md:group-hover:opacity-0" : "md:group-hover:scale-[1.03]",
               produit.stock <= 0 && "opacity-60",
             )}
@@ -55,7 +55,7 @@ export function ProductCard({
             alt=""
             fill
             sizes={tailles}
-            className="hidden object-contain p-[4%] opacity-0 transition-opacity duration-500 ease-maison md:block md:group-hover:opacity-100"
+            className="hidden object-contain p-(--marge-photo-serree) opacity-0 transition-opacity duration-(--duree-longue) ease-maison md:block md:group-hover:opacity-100"
           />
         )}
         {badge && (
@@ -65,13 +65,13 @@ export function ProductCard({
         )}
       </div>
       <div className="pt-4">
-        <p className="text-[11px] font-medium tracking-surtitre text-graphite uppercase">
+        <p className="text-xs font-medium tracking-surtitre text-graphite uppercase">
           {produit.marqueNom}
         </p>
         <Titre className="mt-1 font-serif text-xl leading-snug">
           <Link
             href={`/montres/${produit.slug}`}
-            className="after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-4 focus-visible:after:outline-laiton"
+            className="after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-4 focus-visible:after:outline-cadran"
           >
             {produit.nom}
           </Link>
@@ -80,7 +80,7 @@ export function ProductCard({
         <Price
           centimes={produit.prixCentimes}
           barreCentimes={produit.prixBarreCentimes}
-          className="mt-2 text-[15px]"
+          className="mt-2 text-base"
         />
       </div>
     </article>

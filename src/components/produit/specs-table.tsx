@@ -58,14 +58,14 @@ export function SpecsTable({ produit }: { produit: FicheProduit }) {
     <div className="grid gap-x-12 gap-y-10 md:grid-cols-2">
       {rubriques.map((rubrique) => (
         <table key={rubrique.titre} className="w-full text-sm">
-          <caption className="mb-3 text-left text-xs font-medium tracking-surtitre text-laiton-fonce uppercase">
+          <caption className="mb-3 text-left text-xs font-medium tracking-surtitre text-cadran uppercase">
             {rubrique.titre}
           </caption>
           <tbody>
             {rubrique.lignes
               .filter(([, valeur]) => valeur)
               .map(([libelle, valeur]) => (
-                <tr key={libelle} className="border-b border-sable">
+                <tr key={libelle} className="border-b border-filet">
                   <th scope="row" className="w-1/2 py-3 pr-4 text-left font-normal text-graphite">
                     {libelle}
                   </th>
