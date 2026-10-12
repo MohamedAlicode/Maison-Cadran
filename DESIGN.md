@@ -228,7 +228,7 @@ Coins quasi droits (2px) sur les boutons, champs, badges et tiroirs, comme un bo
 
 ### Navigation
 
-- **Style:** en-tête collant en verre (acier à 85%, flou 16px), logo centré en serif capitales, liens en libellés capitales qui passent au bleu cadran au survol. Icônes Lucide de 20px, trait 1.5, dans des zones de 44px. En dessous de 1024px, le menu passe dans un tiroir.
+- **Style:** en-tête collant en verre (acier à 85%, flou 16px), logo centré en serif capitales, liens en libellés capitales qui passent au bleu cadran au survol. Icônes Lucide de 20px, trait 1.5, dans des zones de 44px. En dessous de 1280px, le menu passe dans un tiroir : les cinq liens et les quatre icônes ne tiennent pas autour du logo plus tôt.
 
 ## Do's and Don'ts
 

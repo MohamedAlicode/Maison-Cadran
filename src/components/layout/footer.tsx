@@ -51,12 +51,21 @@ export function Footer() {
               Une question ?
             </p>
             <p className="mt-3">
-              <a href={`mailto:${boutique.contact.email}`} className="hover:text-cadran-clair">
+              <a
+                href={`mailto:${boutique.contact.email}`}
+                className="transition-colors hover:text-acier"
+              >
                 {boutique.contact.email}
               </a>
             </p>
             <p className="mt-1">
-              {boutique.contact.telephone}, {boutique.contact.horaires}
+              <a
+                href={`tel:${boutique.contact.telephone.replace(/\s/g, "")}`}
+                className="transition-colors hover:text-acier"
+              >
+                {boutique.contact.telephone}
+              </a>
+              , {boutique.contact.horaires}
             </p>
           </div>
         </div>
@@ -65,10 +74,13 @@ export function Footer() {
             <h2 className="font-sans text-xs font-medium tracking-surtitre text-cadran-clair uppercase">
               {colonne.titre}
             </h2>
-            <ul className="mt-5 space-y-3 text-sm text-acier/80">
+            <ul className="mt-3.5 text-sm text-acier/80">
               {colonne.liens.map((lien) => (
                 <li key={lien.href}>
-                  <Link href={lien.href} className="transition-colors hover:text-acier">
+                  <Link
+                    href={lien.href}
+                    className="inline-block py-1.5 transition-colors hover:text-acier"
+                  >
                     {lien.libelle}
                   </Link>
                 </li>

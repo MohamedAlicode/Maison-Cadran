@@ -18,7 +18,10 @@ export function Logo({ className, clair = false }: { className?: string; clair?:
       >
         {boutique.nom}
       </span>
-      <span aria-hidden className="mt-1.5 h-px w-8 bg-cadran" />
+      <span
+        aria-hidden
+        className={cn("mt-1.5 h-px w-8", clair ? "bg-cadran-clair" : "bg-cadran")}
+      />
     </Link>
   );
 }

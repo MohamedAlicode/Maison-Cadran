@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Variante pour les visiteurs qui demandent moins de transparence : le verre redevient opaque. */
+@custom-variant transparence-reduite (@media (prefers-reduced-transparency: reduce));
+
 /*
  * Tokens Maison Cadran : seule source de vérité du design (direction « Acier et cadran bleu »).
  * Chaque token @theme devient un utilitaire Tailwind : bg-acier, text-encre, border-filet, shadow-tiroir…
@@ -89,6 +92,7 @@
   /* Animations */
   --animate-fondu: fondu var(--duree-longue) var(--ease-maison) both;
   --animate-glisse-droite: glisse-droite var(--duree-moyenne) var(--ease-maison) both;
+  --animate-glisse-gauche: glisse-gauche var(--duree-moyenne) var(--ease-maison) both;
 
   @keyframes fondu {
     from {
@@ -104,6 +108,15 @@
   @keyframes glisse-droite {
     from {
       transform: translateX(100%);
+    }
+    to {
+      transform: none;
+    }
+  }
+
+  @keyframes glisse-gauche {
+    from {
+      transform: translateX(-100%);
     }
     to {
       transform: none;
@@ -146,6 +159,11 @@
   /* Focus visible au clavier uniquement : anneau bleu cadran, 10:1 sur l'acier */
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-cadran;
+  }
+
+  /* Sur fond nuit, le bleu cadran ne ressort plus (1,5:1) : l'anneau passe au bleu pâle (9:1). */
+  :where(.bg-nuit) :focus-visible {
+    @apply outline-cadran-clair;
   }
 
   ::selection {

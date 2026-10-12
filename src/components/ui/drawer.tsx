@@ -3,6 +3,7 @@
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
+import { variantesBouton } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 // Tiroir latéral (mini-panier, filtres mobiles, menu). Basé sur Dialog de Radix :
@@ -33,7 +34,9 @@ export function DrawerContent({
       <DialogPrimitive.Content
         className={cn(
           "fixed inset-y-0 z-50 flex w-full max-w-md flex-col bg-blanc shadow-tiroir",
-          cote === "droite" ? "right-0 data-[state=open]:animate-glisse-droite" : "left-0",
+          cote === "droite"
+            ? "right-0 data-[state=open]:animate-glisse-droite"
+            : "left-0 data-[state=open]:animate-glisse-gauche",
           className,
         )}
         {...props}
@@ -41,7 +44,7 @@ export function DrawerContent({
         <div className="flex items-center justify-between border-b border-filet px-6 py-5">
           <DialogPrimitive.Title className="font-serif text-2xl">{titre}</DialogPrimitive.Title>
           <DialogPrimitive.Close
-            className="grid size-10 place-items-center rounded-xs text-encre hover:bg-filet/40"
+            className={variantesBouton({ variante: "fantome", taille: "icone" })}
             aria-label="Fermer"
           >
             <X className="size-5" strokeWidth={1.5} />
