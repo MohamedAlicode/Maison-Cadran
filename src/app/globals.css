@@ -171,6 +171,37 @@
   }
 }
 
+@layer components {
+  /* Texte long des pages de lecture (guide, FAQ, pages juridiques), écrit en JSX simple */
+  .redaction {
+    @apply leading-relaxed text-encre;
+
+    & > * + * {
+      @apply mt-4;
+    }
+
+    & > h3 {
+      @apply mt-8 font-sans text-base font-medium tracking-normal;
+    }
+
+    & ul {
+      @apply list-disc space-y-2 pl-5 marker:text-filet-fort;
+    }
+
+    & ol {
+      @apply list-decimal space-y-2 pl-5 marker:text-graphite;
+    }
+
+    & strong {
+      @apply font-medium;
+    }
+
+    & a:not([class]) {
+      @apply text-cadran underline decoration-cadran/40 decoration-1 underline-offset-4 transition-colors duration-(--duree-courte) ease-maison hover:decoration-cadran;
+    }
+  }
+}
+
 @layer utilities {
   /* Chiffres tabulaires pour les prix et caractéristiques */
   .chiffres {
