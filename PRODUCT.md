@@ -22,7 +22,7 @@ Le site lui-même est la raison d'acheter ici : une expérience qui attire et s�
 
 - Catalogue filtrable, fiches produit, collections et pages marques : en place (Next.js 16, Tailwind 4, Prisma, PostgreSQL).
 - Panier et paiement Stripe (mode test, 3x/4x via Klarna) : prévus en phase 3, pas encore construits.
-- Livraison offerte dès 150 €, 9,90 € sinon (Colissimo contre signature). Rétractation 14 jours. Garantie 2 ans. Valeurs centralisées dans `src/config/boutique.ts`.
+- Livraison offerte dès 150 €, 9,90 € sinon (Colissimo contre signature). Retours gratuits sous 14 jours (frais de retour offerts, confirmé par le propriétaire le 2026-10-12). Garantie 2 ans. Valeurs centralisées dans `src/config/boutique.ts`.
 - Club de membres exclusif : demandé par le propriétaire le 2026-10-12, avec un appel à l'adhésion. Non construit, et son contenu (avantages, conditions, gratuit ou payant) n'est pas défini. Ne pas inventer d'avantages.
 - Neuf uniquement. Pas d'occasion.
 
