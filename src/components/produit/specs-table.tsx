@@ -10,7 +10,7 @@ import {
 type Ligne = [libelle: string, valeur: string | null | undefined, aide?: string];
 
 // Une phrase pour un premier acheteur, sous les caractéristiques qui demandent à être lues.
-const aideMouvement: Record<string, string> = {
+export const aideMouvement: Record<string, string> = {
   AUTOMATIQUE: "Se remonte en la portant, sans pile.",
   MANUEL: "Se remonte à la main par la couronne.",
   QUARTZ: "À pile, la plus précise.",
@@ -18,7 +18,7 @@ const aideMouvement: Record<string, string> = {
   KINETIQUE: "Quartz rechargé par les mouvements du poignet.",
 };
 
-function aideEtancheite(metres: number) {
+export function aideEtancheite(metres: number) {
   if (metres <= 50) return "Pluie et éclaboussures, pas de baignade.";
   if (metres < 200) return "Baignade et natation.";
   return "Plongée de loisir et sports nautiques.";

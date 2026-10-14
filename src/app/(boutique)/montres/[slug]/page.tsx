@@ -7,7 +7,7 @@ import { GrilleProduits } from "@/components/catalogue/product-card";
 import { engagements } from "@/components/layout/reassurance-bar";
 import { Gallery } from "@/components/produit/gallery";
 import { Reviews } from "@/components/produit/reviews";
-import { SpecsTable } from "@/components/produit/specs-table";
+import { aideEtancheite, aideMouvement, SpecsTable } from "@/components/produit/specs-table";
 import { StockInfo } from "@/components/produit/stock-info";
 import { JsonLd } from "@/components/seo/json-ld";
 import {
@@ -139,7 +139,7 @@ function Declinaisons({ produit }: { produit: FicheProduit }) {
                 aria-label={`Cadran ${libelleCouleur(d.dialColor).toLowerCase()}${d.stock <= 0 ? " (épuisé)" : ""}`}
                 aria-current={courant ? "true" : undefined}
                 className={cn(
-                  "block size-9 rounded-full ring-1 ring-offset-2 ring-offset-acier transition",
+                  "block size-11 rounded-full ring-1 ring-offset-2 ring-offset-acier transition",
                   courant ? "ring-encre" : "ring-filet hover:ring-filet-fort",
                 )}
                 style={{ backgroundColor: teintesCadran[d.dialColor] ?? teintesCadran.noir }}
@@ -183,9 +183,7 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
             <h1 className="text-4xl leading-affiche md:text-5xl">
               <span className="text-graphite">{produit.brand.name}</span> {produit.name}
             </h1>
-            <p className="chiffres mt-3 text-sm text-graphite">
-              Réf. {produit.reference} · {libellesMouvement[produit.movement]}
-            </p>
+            <p className="chiffres mt-3 text-sm text-graphite">Réf. {produit.reference}</p>
 
             {produit.noteMoyenne !== null && (
               <a
@@ -216,14 +214,21 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
 
             <dl className="mt-6 grid grid-cols-2 gap-px border-y border-filet bg-filet text-sm">
               {[
-                ["Mouvement", libellesMouvement[produit.movement]],
+                ["Mouvement", libellesMouvement[produit.movement], aideMouvement[produit.movement]],
                 ["Diamètre", formatMm(produit.caseDiameterMm)],
                 ["Boîtier", libellesMatiere[produit.caseMaterial]],
-                ["Étanchéité", `${produit.waterResistanceM} m`],
-              ].map(([terme, valeur]) => (
+                [
+                  "Étanchéité",
+                  `${produit.waterResistanceM} m`,
+                  aideEtancheite(produit.waterResistanceM),
+                ],
+              ].map(([terme, valeur, aide]) => (
                 <div key={terme} className="bg-acier py-3 pr-3 odd:pr-4 even:pl-4">
                   <dt className="text-graphite">{terme}</dt>
-                  <dd className="chiffres mt-0.5 text-encre">{valeur}</dd>
+                  <dd className="chiffres mt-0.5 text-encre">
+                    {valeur}
+                    {aide && <span className="mt-0.5 block text-xs text-graphite">{aide}</span>}
+                  </dd>
                 </div>
               ))}
             </dl>
@@ -287,7 +292,7 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="garantie">
-                  <AccordionTrigger>Garantie et authenticité</AccordionTrigger>
+                  <AccordionTrigger>Garantie</AccordionTrigger>
                   <AccordionContent>
                     Chaque montre est neuve et garantie {produit.warrantyMonths / 12} ans, en plus
                     de la garantie légale de conformité.

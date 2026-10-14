@@ -25,12 +25,18 @@ export function Gallery({
   const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null);
   const defileur = useRef<HTMLDivElement>(null);
   const departDoigt = useRef(0);
+  const photos = useRef<(HTMLButtonElement | null)[]>([]);
 
   if (images.length === 0) return <div className="aspect-square bg-blanc" />;
 
   function allerA(index: number) {
-    const i = (index + images.length) % images.length;
+    // Pas de retour au début après la dernière photo : les flèches s'effacent aux extrémités.
+    const i = Math.min(Math.max(index, 0), images.length - 1);
     setActive(i);
+    // Au clavier, le focus suit la photo affichée au lieu de rester sur celle qui sort de l'écran.
+    if (photos.current.includes(document.activeElement as HTMLButtonElement)) {
+      photos.current[i]?.focus({ preventScroll: true });
+    }
     const reduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     defileur.current?.scrollTo({
       left: i * defileur.current.clientWidth,
@@ -94,9 +100,10 @@ export function Gallery({
             {images.map((image, i) => (
               <button
                 key={image.url}
+                ref={(el) => {
+                  photos.current[i] = el;
+                }}
                 type="button"
-                role="group"
-                aria-roledescription="photo"
                 aria-label={`${i + 1} sur ${images.length} : ${image.alt}. Agrandir`}
                 onClick={() => {
                   setActive(i);
@@ -169,7 +176,11 @@ export function Gallery({
         <DialogPrimitive.Portal>
           <DialogPrimitive.Content
             className="fixed inset-0 z-50 flex flex-col bg-blanc data-[state=open]:animate-fondu"
-            onKeyDown={clavier}
+            onCloseAutoFocus={(e) => {
+              // La photo n'est pas un Dialog.Trigger : sans ceci, le focus retomberait en haut de page.
+              e.preventDefault();
+              photos.current[active]?.focus({ preventScroll: true });
+            }}
           >
             <DialogPrimitive.Title className="sr-only">{images[active].alt}</DialogPrimitive.Title>
             <DialogPrimitive.Description className="sr-only">
@@ -207,16 +218,18 @@ export function Gallery({
                   <button
                     type="button"
                     onClick={() => allerA(active - 1)}
+                    disabled={active === 0}
                     aria-label="Vue précédente"
-                    className="absolute top-1/2 left-2 grid size-12 -translate-y-1/2 place-items-center rounded-xs bg-blanc/80 hover:bg-blanc md:left-8"
+                    className="absolute top-1/2 left-2 grid size-12 -translate-y-1/2 place-items-center rounded-xs bg-blanc/80 hover:bg-blanc disabled:pointer-events-none disabled:opacity-0 md:left-8"
                   >
                     <ChevronLeft className="size-6" strokeWidth={1.25} />
                   </button>
                   <button
                     type="button"
                     onClick={() => allerA(active + 1)}
+                    disabled={active === images.length - 1}
                     aria-label="Vue suivante"
-                    className="absolute top-1/2 right-2 grid size-12 -translate-y-1/2 place-items-center rounded-xs bg-blanc/80 hover:bg-blanc md:right-8"
+                    className="absolute top-1/2 right-2 grid size-12 -translate-y-1/2 place-items-center rounded-xs bg-blanc/80 hover:bg-blanc disabled:pointer-events-none disabled:opacity-0 md:right-8"
                   >
                     <ChevronRight className="size-6" strokeWidth={1.25} />
                   </button>
