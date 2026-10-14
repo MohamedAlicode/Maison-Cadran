@@ -10,8 +10,8 @@ type ImageGalerie = { url: string; alt: string };
 
 /**
  * Galerie de la fiche produit.
- * Desktop : vignettes verticales, zoom loupe au survol, plein écran au clic.
- * Mobile : défilement horizontal au doigt avec points de position, plein écran au toucher.
+ * Les photos défilent de gauche à droite (doigt, trackpad, flèches, clavier) à toutes les tailles.
+ * Desktop : vignettes verticales et loupe au survol. Plein écran au clic ou au toucher.
  */
 export function Gallery({
   images,
@@ -24,16 +24,23 @@ export function Gallery({
   const [pleinEcran, setPleinEcran] = useState(false);
   const [zoom, setZoom] = useState<{ x: number; y: number } | null>(null);
   const defileur = useRef<HTMLDivElement>(null);
+  const departDoigt = useRef(0);
 
   if (images.length === 0) return <div className="aspect-square bg-blanc" />;
 
   function allerA(index: number) {
     const i = (index + images.length) % images.length;
     setActive(i);
-    defileur.current?.scrollTo({ left: i * defileur.current.clientWidth, behavior: "smooth" });
+    const reduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    defileur.current?.scrollTo({
+      left: i * defileur.current.clientWidth,
+      behavior: reduit ? "auto" : "smooth",
+    });
   }
 
   function suivreSouris(e: MouseEvent<HTMLButtonElement>) {
+    // La loupe ne sert qu'à la souris, sur grand écran : sur tablette, le doigt fait défiler.
+    if (!window.matchMedia("(min-width: 1024px) and (hover: hover)").matches) return;
     const zone = e.currentTarget.getBoundingClientRect();
     setZoom({
       x: ((e.clientX - zone.left) / zone.width) * 100,
@@ -68,73 +75,87 @@ export function Gallery({
         ))}
       </ul>
 
-      {/* Image principale (desktop) avec loupe */}
-      <div className="relative hidden lg:block">
-        <button
-          type="button"
-          onClick={() => setPleinEcran(true)}
-          onMouseMove={suivreSouris}
-          onMouseLeave={() => setZoom(null)}
-          aria-label="Agrandir l'image"
-          className="relative block aspect-square w-full cursor-zoom-in overflow-hidden bg-blanc"
+      {/* Photos : défilement au doigt ou au trackpad à toutes les tailles, flèches dès 768 px */}
+      <div className="min-w-0">
+        <div
+          role="region"
+          aria-roledescription="carrousel"
+          aria-label="Photos de la montre"
+          className="group/galerie relative"
         >
-          <Image
-            src={images[active].url}
-            alt={images[active].alt}
-            fill
-            priority={priorite}
-            sizes="(min-width: 1280px) 600px, 50vw"
-            className="object-contain p-(--marge-photo) transition-transform duration-(--duree-courte) ease-maison"
-            style={
-              zoom ? { transform: "scale(2)", transformOrigin: `${zoom.x}% ${zoom.y}%` } : undefined
-            }
-          />
-        </button>
-        <span className="pointer-events-none mt-3 flex items-center justify-end gap-2 text-xs text-graphite">
+          <div
+            ref={defileur}
+            onScroll={(e) => {
+              const el = e.currentTarget;
+              setActive(Math.round(el.scrollLeft / el.clientWidth));
+            }}
+            className="flex snap-x snap-mandatory [scrollbar-width:none] overflow-x-auto overscroll-x-contain [&::-webkit-scrollbar]:hidden"
+          >
+            {images.map((image, i) => (
+              <button
+                key={image.url}
+                type="button"
+                role="group"
+                aria-roledescription="photo"
+                aria-label={`${i + 1} sur ${images.length} : ${image.alt}. Agrandir`}
+                onClick={() => {
+                  setActive(i);
+                  setPleinEcran(true);
+                }}
+                onMouseMove={suivreSouris}
+                onMouseLeave={() => setZoom(null)}
+                className="relative aspect-square w-full shrink-0 snap-center overflow-hidden bg-blanc lg:cursor-zoom-in"
+              >
+                <Image
+                  src={image.url}
+                  alt=""
+                  fill
+                  priority={priorite && i === 0}
+                  sizes="(min-width: 1280px) 600px, (min-width: 1024px) 50vw, 100vw"
+                  className="object-contain p-(--marge-photo) transition-transform duration-(--duree-courte) ease-maison"
+                  style={
+                    zoom && i === active
+                      ? { transform: "scale(2)", transformOrigin: `${zoom.x}% ${zoom.y}%` }
+                      : undefined
+                  }
+                />
+              </button>
+            ))}
+          </div>
+
+          {images.length > 1 && (
+            <>
+              <BoutonVue
+                sens="precedent"
+                onClick={() => allerA(active - 1)}
+                disabled={active === 0}
+              />
+              <BoutonVue
+                sens="suivant"
+                onClick={() => allerA(active + 1)}
+                disabled={active === images.length - 1}
+              />
+              <span
+                aria-live="polite"
+                className="chiffres pointer-events-none absolute bottom-3 left-3 rounded-xs bg-acier/85 px-2 py-1 text-xs text-encre backdrop-blur-verre transparence-reduite:bg-acier"
+              >
+                {active + 1} / {images.length}
+              </span>
+            </>
+          )}
+        </div>
+
+        <p className="mt-3 hidden items-center justify-end gap-2 text-xs text-graphite lg:flex">
           <Expand aria-hidden className="size-3.5" strokeWidth={1.5} /> Survolez pour zoomer,
           cliquez pour agrandir
-        </span>
-      </div>
-
-      {/* Carrousel (mobile et tablette) */}
-      <div className="lg:hidden">
-        <div
-          ref={defileur}
-          onScroll={(e) => {
-            const el = e.currentTarget;
-            setActive(Math.round(el.scrollLeft / el.clientWidth));
-          }}
-          className="flex snap-x snap-mandatory [scrollbar-width:none] overflow-x-auto [&::-webkit-scrollbar]:hidden"
-        >
-          {images.map((image, i) => (
-            <button
-              key={image.url}
-              type="button"
-              onClick={() => {
-                setActive(i);
-                setPleinEcran(true);
-              }}
-              aria-label={`Agrandir : ${image.alt}`}
-              className="relative aspect-square w-full shrink-0 snap-center bg-blanc"
-            >
-              <Image
-                src={image.url}
-                alt={image.alt}
-                fill
-                priority={priorite && i === 0}
-                sizes="100vw"
-                className="object-contain p-(--marge-photo)"
-              />
-            </button>
-          ))}
-        </div>
+        </p>
         {images.length > 1 && (
-          <div className="mt-4 flex justify-center gap-2" aria-hidden>
+          <div className="mt-4 flex justify-center gap-2 lg:hidden" aria-hidden>
             {images.map((image, i) => (
               <span
                 key={image.url}
                 className={cn(
-                  "h-0.5 w-6 transition-colors",
+                  "h-0.5 w-6 transition-colors duration-(--duree-courte)",
                   i === active ? "bg-encre" : "bg-filet",
                 )}
               />
@@ -165,7 +186,15 @@ export function Gallery({
                 <X className="size-5" strokeWidth={1.5} />
               </DialogPrimitive.Close>
             </div>
-            <div className="relative flex-1">
+            <div
+              className="relative flex-1 touch-pan-y"
+              onTouchStart={(e) => (departDoigt.current = e.touches[0].clientX)}
+              onTouchEnd={(e) => {
+                const ecart = e.changedTouches[0].clientX - departDoigt.current;
+                // Au-delà de 48 px, le geste est un balayage et non un simple toucher.
+                if (Math.abs(ecart) > 48) allerA(active + (ecart < 0 ? 1 : -1));
+              }}
+            >
               <Image
                 src={images[active].url}
                 alt={images[active].alt}
@@ -198,5 +227,33 @@ export function Gallery({
         </DialogPrimitive.Portal>
       </DialogPrimitive.Root>
     </div>
+  );
+}
+
+/** Flèche posée sur la photo, en verre utile (fond acier à 85 %). */
+function BoutonVue({
+  sens,
+  onClick,
+  disabled,
+}: {
+  sens: "precedent" | "suivant";
+  onClick: () => void;
+  disabled: boolean;
+}) {
+  const Icone = sens === "precedent" ? ChevronLeft : ChevronRight;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={sens === "precedent" ? "Photo précédente" : "Photo suivante"}
+      className={cn(
+        "absolute top-1/2 hidden size-11 -translate-y-1/2 place-items-center rounded-xs bg-acier/85 text-encre backdrop-blur-verre transition-opacity duration-(--duree-courte) ease-maison md:grid transparence-reduite:bg-acier",
+        "hover:bg-acier disabled:pointer-events-none disabled:opacity-0",
+        sens === "precedent" ? "left-3" : "right-3",
+      )}
+    >
+      <Icone aria-hidden className="size-5" strokeWidth={1.5} />
+    </button>
   );
 }

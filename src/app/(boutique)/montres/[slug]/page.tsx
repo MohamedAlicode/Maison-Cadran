@@ -1,4 +1,4 @@
-import { Gift, ShieldCheck, ShoppingBag } from "lucide-react";
+import { ShieldCheck, ShoppingBag } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -24,12 +24,13 @@ import { SectionHeading } from "@/components/ui/section-heading";
 import { Stars } from "@/components/ui/stars";
 import { boutique } from "@/config/boutique";
 import {
+  formatMm,
   produitParSlug,
   produitsSimilaires,
   slugsProduits,
   type FicheProduit,
 } from "@/lib/catalogue";
-import { libelleCouleur, libellesMouvement } from "@/lib/libelles";
+import { libelleCouleur, libellesMatiere, libellesMouvement } from "@/lib/libelles";
 import { formatPrixCourt } from "@/lib/prix";
 import { cn } from "@/lib/utils";
 import { teintesCadran } from "@/lib/visuels";
@@ -178,13 +179,10 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
           <Gallery images={produit.images.map((i) => ({ url: i.url, alt: i.alt }))} />
 
           <div className="lg:sticky lg:top-36 lg:self-start">
-            <Link
-              href={`/marques/${produit.brand.slug}`}
-              className="text-xs font-medium tracking-surtitre text-graphite uppercase hover:text-encre"
-            >
-              {produit.brand.name}
-            </Link>
-            <h1 className="mt-2 text-4xl leading-affiche md:text-5xl">{produit.name}</h1>
+            {/* Même règle que les cartes : la marque ouvre le titre, sans sur-titre. */}
+            <h1 className="text-4xl leading-affiche md:text-5xl">
+              <span className="text-graphite">{produit.brand.name}</span> {produit.name}
+            </h1>
             <p className="chiffres mt-3 text-sm text-graphite">
               Réf. {produit.reference} · {libellesMouvement[produit.movement]}
             </p>
@@ -216,6 +214,20 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
 
             <p className="mt-6 leading-relaxed">{produit.shortDescription}</p>
 
+            <dl className="mt-6 grid grid-cols-2 gap-px border-y border-filet bg-filet text-sm">
+              {[
+                ["Mouvement", libellesMouvement[produit.movement]],
+                ["Diamètre", formatMm(produit.caseDiameterMm)],
+                ["Boîtier", libellesMatiere[produit.caseMaterial]],
+                ["Étanchéité", `${produit.waterResistanceM} m`],
+              ].map(([terme, valeur]) => (
+                <div key={terme} className="bg-acier py-3 pr-3 odd:pr-4 even:pl-4">
+                  <dt className="text-graphite">{terme}</dt>
+                  <dd className="chiffres mt-0.5 text-encre">{valeur}</dd>
+                </div>
+              ))}
+            </dl>
+
             <div className="mt-8 space-y-8">
               <Declinaisons produit={produit} />
 
@@ -244,16 +256,10 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
               />
 
               <div className="border-y border-filet py-6">
-                <p className="text-xs font-medium tracking-surtitre text-cadran uppercase">
-                  Ce qui est inclus
-                </p>
-                <ul className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+                <p className="text-sm font-medium">Avec votre montre</p>
+                <ul className="mt-4 grid gap-3 text-sm text-graphite sm:grid-cols-2">
                   <li className="flex items-center gap-3">
-                    <Gift aria-hidden className="size-4 text-cadran" strokeWidth={1.5} /> Écrin
-                    d&apos;origine {produit.brand.name}
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <ShieldCheck aria-hidden className="size-4 text-cadran" strokeWidth={1.5} />{" "}
+                    <ShieldCheck aria-hidden className="size-4 text-encre" strokeWidth={1.5} />{" "}
                     Garantie {produit.warrantyMonths / 12} ans
                   </li>
                   {engagements
@@ -261,7 +267,7 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
                     .concat(engagements.slice(3))
                     .map(({ icone: Icone, titre }) => (
                       <li key={titre} className="flex items-center gap-3">
-                        <Icone aria-hidden className="size-4 text-cadran" strokeWidth={1.5} />{" "}
+                        <Icone aria-hidden className="size-4 text-encre" strokeWidth={1.5} />{" "}
                         {titre}
                       </li>
                     ))}
@@ -283,10 +289,8 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
                 <AccordionItem value="garantie">
                   <AccordionTrigger>Garantie et authenticité</AccordionTrigger>
                   <AccordionContent>
-                    Chaque montre est neuve, contrôlée avant expédition et livrée avec son écrin,
-                    ses documents d&apos;origine et sa facture. Elle bénéficie d&apos;une garantie
-                    de {produit.warrantyMonths / 12} ans, en plus de la garantie légale de
-                    conformité.
+                    Chaque montre est neuve et garantie {produit.warrantyMonths / 12} ans, en plus
+                    de la garantie légale de conformité.
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -299,17 +303,17 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
       <section className="mt-16 border-t border-filet bg-blanc py-16 md:mt-24 md:py-24">
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-24">
           <div>
-            <SectionHeading surtitre="Description" titre={`À propos de la ${produit.name}`} />
+            <SectionHeading titre={`À propos de la ${produit.name}`} />
             <p className="mt-8 max-w-prose leading-relaxed text-graphite">{produit.description}</p>
           </div>
           {produit.editorialNote && (
             <figure className="self-end border-l border-cadran pl-8">
-              <p className="text-xs font-medium tracking-surtitre text-cadran uppercase">
-                L&apos;avis de la maison
-              </p>
-              <blockquote className="mt-4 font-serif text-2xl leading-snug italic md:text-3xl">
+              <blockquote className="font-serif text-2xl leading-snug italic md:text-3xl">
                 « {produit.editorialNote} »
               </blockquote>
+              <figcaption className="mt-4 text-sm text-graphite">
+                L&apos;avis de la maison
+              </figcaption>
             </figure>
           )}
         </Container>
