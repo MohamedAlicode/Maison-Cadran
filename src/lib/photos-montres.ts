@@ -1,0 +1,253 @@
+// Photos réelles des montres de test : photos libres de droits trouvées sur Wikimedia Commons.
+// Chaque photo garde son auteur et sa licence d'origine (attribution obligatoire), listés ici
+// une seule fois : le seed (prisma/seed.ts), les mentions légales et docs/credits-photos.md les reprennent.
+// Toutes ont été recadrées au carré et redimensionnées (1 200 px au plus) pour la boutique.
+
+export type Licence = { nom: string; url: string };
+
+const licences = {
+  ccBy20: { nom: "CC BY 2.0", url: "https://creativecommons.org/licenses/by/2.0/" },
+  ccBy25: { nom: "CC BY 2.5", url: "https://creativecommons.org/licenses/by/2.5/" },
+  ccBy30: { nom: "CC BY 3.0", url: "https://creativecommons.org/licenses/by/3.0/" },
+  ccBySa30: { nom: "CC BY-SA 3.0", url: "https://creativecommons.org/licenses/by-sa/3.0/" },
+  ccBySa40: { nom: "CC BY-SA 4.0", url: "https://creativecommons.org/licenses/by-sa/4.0/" },
+  cc0: { nom: "CC0 (domaine public)", url: "https://creativecommons.org/publicdomain/zero/1.0/" },
+  domainePublic: {
+    nom: "Domaine public",
+    url: "https://commons.wikimedia.org/wiki/Template:PD-self",
+  },
+} satisfies Record<string, Licence>;
+
+export type PhotoMontre = {
+  /** Slug du produit dans prisma/donnees-test.ts. */
+  produit: string;
+  /** Montre photographiée, pour les crédits. */
+  montre: string;
+  /** Chemin public, sous public/images/montres. */
+  url: string;
+  /** Côté de l'image carrée, en pixels. */
+  taille: number;
+  /** Ce que montre la photo, ajouté au texte alternatif. */
+  vue: string;
+  auteur: string;
+  licence: Licence;
+  /** Page de la photo d'origine sur Wikimedia Commons. */
+  source: string;
+};
+
+function commons(fichier: string) {
+  return `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(fichier.replaceAll(" ", "_"))}`;
+}
+
+export const photosMontres: PhotoMontre[] = [
+  {
+    produit: "tissot-prx-40mm-quartz-argente",
+    montre: "Tissot PRX 40 mm",
+    url: "/images/montres/tissot-prx-40mm-quartz-argente.jpg",
+    taille: 1200,
+    vue: "vue de face",
+    auteur: "Clyde94",
+    licence: licences.ccBySa40,
+    source: commons("Tissot PRX.jpg"),
+  },
+  {
+    produit: "tissot-le-locle-automatique-blanc",
+    montre: "Tissot Le Locle Automatique",
+    url: "/images/montres/tissot-le-locle-automatique-blanc.jpg",
+    taille: 1200,
+    vue: "portée au poignet",
+    auteur: "TheUrsus",
+    licence: licences.domainePublic,
+    source: commons("TissotLeLocle.jpg"),
+  },
+  {
+    produit: "tissot-prx-powermatic-80-35mm-noir",
+    montre: "Tissot PRX Powermatic 80 35 mm",
+    url: "/images/montres/tissot-prx-powermatic-80-35mm-noir.jpg",
+    taille: 1200,
+    vue: "vue de face",
+    auteur: "Soulreaper",
+    licence: licences.ccBySa40,
+    source: commons("Tissot PRX 35mm.jpg"),
+  },
+  {
+    produit: "tissot-luxury-powermatic-80-argente",
+    montre: "Tissot Luxury Powermatic 80",
+    url: "/images/montres/tissot-luxury-powermatic-80-argente.jpg",
+    taille: 1200,
+    vue: "vue de face",
+    auteur: "Hystiff",
+    licence: licences.ccBySa30,
+    source: commons("Cadran montre mécanique TISSOT Powermatic 80.jpg"),
+  },
+  {
+    produit: "hamilton-khaki-field-mechanical-38mm-noir",
+    montre: "Hamilton Khaki Field Mechanical",
+    url: "/images/montres/hamilton-khaki-field-mechanical-38mm-noir.jpg",
+    taille: 1200,
+    vue: "vue de face",
+    auteur: "EMore98",
+    licence: licences.ccBySa40,
+    source: commons("Hamilton Khaki Field.jpg"),
+  },
+  {
+    produit: "hamilton-khaki-field-officer-auto-44mm-noir",
+    montre: "Hamilton Khaki Field Officer Auto",
+    url: "/images/montres/hamilton-khaki-field-officer-auto-44mm-noir.jpg",
+    taille: 960,
+    vue: "vue de trois quarts",
+    auteur: "Rich Niewiroski Jr.",
+    licence: licences.ccBy30,
+    source: commons("HamiltonKhakiFieldOfficer-004 (cropped and turned).jpg"),
+  },
+  {
+    produit: "hamilton-khaki-field-officer-auto-44mm-noir",
+    montre: "Hamilton Khaki Field Officer Auto",
+    url: "/images/montres/hamilton-khaki-field-officer-auto-44mm-noir-2.jpg",
+    taille: 960,
+    vue: "vue de profil",
+    auteur: "Rich Niewiroski Jr.",
+    licence: licences.ccBy30,
+    source: commons("HamiltonKhakiFieldOfficer-007.jpg"),
+  },
+  {
+    produit: "hamilton-jazzmaster-maestro-auto-chrono-blanc",
+    montre: "Hamilton Jazzmaster Maestro Auto Chrono",
+    url: "/images/montres/hamilton-jazzmaster-maestro-auto-chrono-blanc.jpg",
+    taille: 1200,
+    vue: "dans son écrin",
+    auteur: "Russ (Flickr)",
+    licence: licences.ccBy20,
+    source: commons("Hamilton jazzmaster maestro (28181260375).jpg"),
+  },
+  {
+    produit: "seiko-presage-cocktail-time-sarb065-bleu",
+    montre: "Seiko Presage Cocktail Time",
+    url: "/images/montres/seiko-presage-cocktail-time-sarb065-bleu.jpg",
+    taille: 672,
+    vue: "vue de face",
+    auteur: "YipC",
+    licence: licences.ccBySa40,
+    source: commons("Seiko SARB.jpg"),
+  },
+  {
+    produit: "seiko-5-sports-snzh53-bleu",
+    montre: "Seiko 5 Sports",
+    url: "/images/montres/seiko-5-sports-snzh53-bleu.jpg",
+    taille: 853,
+    vue: "détail du cadran",
+    auteur: "Daniel Zimmermann (Flickr)",
+    licence: licences.ccBy20,
+    source: commons("Seiko 5 Sports SNZH53K1.jpg"),
+  },
+  {
+    produit: "seiko-prospex-alpinist-titane-noir",
+    montre: "Seiko Prospex Alpinist Titane",
+    url: "/images/montres/seiko-prospex-alpinist-titane-noir.jpg",
+    taille: 853,
+    vue: "vue de trois quarts",
+    auteur: "663highland",
+    licence: licences.ccBy25,
+    source: commons("Seiko Prospex Alpinist01bs.jpg"),
+  },
+  {
+    produit: "seiko-dame-quartz-saphir-blanc",
+    montre: "Seiko Classique Dame Saphir",
+    url: "/images/montres/seiko-dame-quartz-saphir-blanc.jpg",
+    taille: 1088,
+    vue: "dans son écrin",
+    auteur: "Maximilian Gattringer",
+    licence: licences.domainePublic,
+    source: commons("Montre Seiko.jpg"),
+  },
+  {
+    produit: "citizen-navihawk-a-t-noir",
+    montre: "Citizen Navihawk A-T",
+    url: "/images/montres/citizen-navihawk-a-t-noir.jpg",
+    taille: 1200,
+    vue: "vue de face",
+    auteur: "Jasmin Doglod",
+    licence: licences.cc0,
+    source: commons("CITIZEN JY8034-58E Navihawk A-T.2.jpg"),
+  },
+  {
+    produit: "citizen-promaster-diver-eco-drive-bleu",
+    montre: "Citizen Promaster Diver Eco-Drive",
+    url: "/images/montres/citizen-promaster-diver-eco-drive-bleu.jpg",
+    taille: 1200,
+    vue: "vue de face",
+    auteur: "Pittigrilli",
+    licence: licences.ccBySa40,
+    source: commons("Citizen Eco-Drive Diver's 200m - Diving watch (without background).jpg"),
+  },
+  {
+    produit: "orient-bambino-bleu-nuit",
+    montre: "Orient Bambino",
+    url: "/images/montres/orient-bambino-bleu-nuit.jpg",
+    taille: 851,
+    vue: "vue de face",
+    auteur: "VSchagow",
+    licence: licences.ccBySa40,
+    source: commons("2023071502 Orient Classic AC0000AB Zifferblattansicht frontal 2023.jpg"),
+  },
+  {
+    produit: "orient-bambino-bleu-nuit",
+    montre: "Orient Bambino",
+    url: "/images/montres/orient-bambino-bleu-nuit-2.jpg",
+    taille: 853,
+    vue: "vue de trois quarts",
+    auteur: "VSchagow",
+    licence: licences.ccBySa40,
+    source: commons("2023071501 Orient Classic AC0000AB schraeg links 2023.jpg"),
+  },
+  {
+    produit: "orient-mako-ii-noir",
+    montre: "Orient Mako II",
+    url: "/images/montres/orient-mako-ii-noir.jpg",
+    taille: 611,
+    vue: "vue de trois quarts",
+    auteur: "MIKI Yoshihito (Flickr)",
+    licence: licences.ccBy20,
+    source: commons("ORIENT New Mako Automatic 200M Diver's CEM75001B. (5921299415).jpg"),
+  },
+  {
+    produit: "certina-ds-action-noir",
+    montre: "Certina DS Action",
+    url: "/images/montres/certina-ds-action-noir.jpg",
+    taille: 1200,
+    vue: "en vitrine",
+    auteur: "Dezidor",
+    licence: licences.ccBy30,
+    source: commons("Hodinky Certina.jpg"),
+  },
+  {
+    produit: "mido-ocean-star-captain-bleu",
+    montre: "Mido Ocean Star Captain",
+    url: "/images/montres/mido-ocean-star-captain-bleu.jpg",
+    taille: 1024,
+    vue: "dans son écrin",
+    auteur: "Minzoblate",
+    licence: licences.ccBySa40,
+    source: commons("Mido-Ocean-Star-V-Blue-Dial-1024.jpg"),
+  },
+  {
+    produit: "mido-commander-ii-chronometre-argente",
+    montre: "Mido Commander II Chronomètre",
+    url: "/images/montres/mido-commander-ii-chronometre-argente.jpg",
+    taille: 1200,
+    vue: "dans son écrin",
+    auteur: "Minzoblate",
+    licence: licences.ccBySa40,
+    source: commons("Mido Commander II Chronometer.jpg"),
+  },
+  {
+    produit: "frederique-constant-healey-gris",
+    montre: "Frederique Constant Vintage Rally Healey",
+    url: "/images/montres/frederique-constant-healey-gris.jpg",
+    taille: 1200,
+    vue: "vue de face",
+    auteur: "Michael Kramer",
+    licence: licences.ccBySa30,
+    source: commons("Vintage Rally Healey FC-303GBRH5B4 01.jpg"),
+  },
+];

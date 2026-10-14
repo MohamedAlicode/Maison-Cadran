@@ -8,6 +8,7 @@ import {
   ValeurLegale,
 } from "@/components/editorial/page-editoriale";
 import { boutique } from "@/config/boutique";
+import { photosMontres } from "@/lib/photos-montres";
 
 export const metadata: Metadata = {
   title: "Mentions légales",
@@ -86,11 +87,21 @@ const rubriques = [
     id: "visuels",
     titre: "Crédits des visuels",
     contenu: (
-      <p>
-        Les illustrations de montres sont dessinées pour {boutique.nom} à partir des
-        caractéristiques publiées par les fabricants. Elles ne remplacent pas une photographie du
-        produit.
-      </p>
+      <>
+        <p>
+          Les photos de montres sont des photos libres publiées sur Wikimedia Commons par leurs
+          auteurs, recadrées et redimensionnées pour {boutique.nom}. Chacune reste sous sa licence
+          d&apos;origine :
+        </p>
+        <ul>
+          {photosMontres.map((photo) => (
+            <li key={photo.url}>
+              {photo.montre} ({photo.vue}) : <a href={photo.source}>{photo.auteur}</a>,{" "}
+              <a href={photo.licence.url}>{photo.licence.nom}</a>.
+            </li>
+          ))}
+        </ul>
+      </>
     ),
   },
   {
