@@ -1,68 +1,81 @@
-import { Heart } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
-import type { ReactNode } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Price } from "@/components/ui/price";
+import type { ProduitIndexe } from "@/lib/filtres";
 import { cn } from "@/lib/utils";
 
-export type ProduitCarte = {
-  slug: string;
-  marque: string;
-  nom: string;
-  detail: string;
-  prixCentimes: number;
-  prixBarreCentimes?: number | null;
-  badge?: { libelle: string; variante: "nouveau" | "alerte" | "laiton" };
+type Proprietes = {
+  produit: ProduitIndexe;
+  /** À activer pour les premières cartes visibles (chargement prioritaire de l'image). */
+  prioritaire?: boolean;
+  /** Niveau du titre de la carte selon la page (h2 dans une grille principale, h3 sinon). */
+  niveauTitre?: "h2" | "h3";
 };
 
-type Proprietes = {
-  produit: ProduitCarte;
-  /** Visuel principal (photo ou illustration). */
-  visuel: ReactNode;
-  /** Second visuel révélé au survol (desktop). */
-  visuelSurvol?: ReactNode;
-};
+/** Pastille affichée sur la photo : rupture, dernière pièce, offre ou nouveauté. */
+function badgeProduit(p: ProduitIndexe) {
+  if (p.stock <= 0) return { libelle: "Épuisée", variante: "neutre" as const };
+  if (p.stock === 1) return { libelle: "Dernière pièce", variante: "alerte" as const };
+  if (p.prixBarreCentimes && p.prixBarreCentimes > p.prixCentimes)
+    return { libelle: "Offre", variante: "laiton" as const };
+  if (p.nouveau) return { libelle: "Nouveau", variante: "nouveau" as const };
+  return null;
+}
 
 /** Carte produit du catalogue : photo carrée, marque, nom serif, prix tabulaire. */
-export function ProductCard({ produit, visuel, visuelSurvol }: Proprietes) {
+export function ProductCard({
+  produit,
+  prioritaire = false,
+  niveauTitre: Titre = "h3",
+}: Proprietes) {
+  const badge = badgeProduit(produit);
+  const tailles = "(min-width: 1024px) 22vw, (min-width: 768px) 30vw, 46vw";
+
   return (
     <article className="group relative">
       <div className="relative aspect-square overflow-hidden bg-blanc">
-        <div
-          className={cn(
-            "absolute inset-0 grid place-items-center p-[14%] transition-opacity duration-500 ease-maison",
-            visuelSurvol && "md:group-hover:opacity-0",
-          )}
-        >
-          {visuel}
-        </div>
-        {visuelSurvol && (
-          <div className="absolute inset-0 grid place-items-center p-[8%] opacity-0 transition-opacity duration-500 ease-maison md:group-hover:opacity-100">
-            {visuelSurvol}
-          </div>
+        {produit.image && (
+          <Image
+            src={produit.image.url}
+            alt={produit.image.alt}
+            fill
+            sizes={tailles}
+            priority={prioritaire}
+            className={cn(
+              "object-contain p-[10%] transition-[opacity,transform] duration-500 ease-maison",
+              produit.imageSurvol ? "md:group-hover:opacity-0" : "md:group-hover:scale-[1.03]",
+              produit.stock <= 0 && "opacity-60",
+            )}
+          />
         )}
-        {produit.badge && (
-          <Badge variante={produit.badge.variante} className="absolute top-3 left-3">
-            {produit.badge.libelle}
+        {produit.imageSurvol && (
+          <Image
+            src={produit.imageSurvol.url}
+            alt=""
+            fill
+            sizes={tailles}
+            className="hidden object-contain p-[4%] opacity-0 transition-opacity duration-500 ease-maison md:block md:group-hover:opacity-100"
+          />
+        )}
+        {badge && (
+          <Badge variante={badge.variante} className="absolute top-3 left-3">
+            {badge.libelle}
           </Badge>
         )}
-        <button
-          type="button"
-          aria-label={`Ajouter ${produit.marque} ${produit.nom} aux favoris`}
-          className="absolute right-2 bottom-2 z-10 grid size-10 place-items-center rounded-xs text-graphite transition hover:text-encre md:top-2 md:bottom-auto md:opacity-0 md:group-hover:opacity-100 md:focus-visible:opacity-100"
-        >
-          <Heart className="size-[18px]" strokeWidth={1.5} />
-        </button>
       </div>
       <div className="pt-4">
         <p className="text-[11px] font-medium tracking-surtitre text-graphite uppercase">
-          {produit.marque}
+          {produit.marqueNom}
         </p>
-        <h3 className="mt-1 font-serif text-xl leading-snug">
-          <Link href={`/montres/${produit.slug}`} className="after:absolute after:inset-0">
+        <Titre className="mt-1 font-serif text-xl leading-snug">
+          <Link
+            href={`/montres/${produit.slug}`}
+            className="after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-4 focus-visible:after:outline-laiton"
+          >
             {produit.nom}
           </Link>
-        </h3>
+        </Titre>
         <p className="mt-0.5 text-sm text-graphite">{produit.detail}</p>
         <Price
           centimes={produit.prixCentimes}
@@ -71,5 +84,31 @@ export function ProductCard({ produit, visuel, visuelSurvol }: Proprietes) {
         />
       </div>
     </article>
+  );
+}
+
+/** Grille de cartes : 2 colonnes mobile, 3 tablette, 4 desktop (ou 3 avec la colonne de filtres). */
+export function GrilleProduits({
+  produits,
+  colonnes = 4,
+  niveauTitre,
+}: {
+  produits: ProduitIndexe[];
+  colonnes?: 3 | 4;
+  niveauTitre?: "h2" | "h3";
+}) {
+  return (
+    <ul
+      className={cn(
+        "grid grid-cols-2 gap-x-4 gap-y-12 md:grid-cols-3 md:gap-x-6",
+        colonnes === 4 && "lg:grid-cols-4",
+      )}
+    >
+      {produits.map((produit, i) => (
+        <li key={produit.id}>
+          <ProductCard produit={produit} prioritaire={i < 4} niveauTitre={niveauTitre} />
+        </li>
+      ))}
+    </ul>
   );
 }

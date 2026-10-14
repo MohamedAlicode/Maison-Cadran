@@ -1,29 +1,33 @@
+import Image from "next/image";
 import Link from "next/link";
-import { WatchPlaceholder } from "@/components/brand/watch-placeholder";
-import { ProductCard } from "@/components/catalogue/product-card";
+import { GrilleProduits } from "@/components/catalogue/product-card";
 import { ReassuranceBar } from "@/components/layout/reassurance-bar";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Eyebrow } from "@/components/ui/eyebrow";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { TextLink } from "@/components/ui/text-link";
-import { produitsDemo } from "@/lib/demo";
+import {
+  indexCatalogue,
+  listeCollections,
+  listeMarques,
+  produitsPlusApprecies,
+} from "@/lib/catalogue";
+import { trier } from "@/lib/filtres";
 
-// Page d'accueil, version phase 1 : sert de vitrine au design system.
-// Les sections seront branchées sur la base de données en phase 2.
+// Page d'accueil : hero, nouveautés, collections, montres les plus appréciées, marques, réassurance.
+export default async function Accueil() {
+  const [index, appreciees, collections, marques] = await Promise.all([
+    indexCatalogue(),
+    produitsPlusApprecies(),
+    listeCollections(),
+    listeMarques(),
+  ]);
+  const nouveautes = trier(
+    index.filter((p) => p.stock > 0),
+    "nouveautes",
+  ).slice(0, 4);
 
-const marques = [
-  "Tissot",
-  "Hamilton",
-  "Seiko",
-  "Citizen",
-  "Orient",
-  "Certina",
-  "Mido",
-  "Frederique Constant",
-];
-
-export default function Accueil() {
   return (
     <>
       {/* Hero sombre */}
@@ -50,16 +54,18 @@ export default function Accueil() {
                 taille="lg"
                 className="border-creme/40 text-creme hover:bg-creme hover:text-encre"
               >
-                <Link href="/guide">Guide d&apos;achat</Link>
+                <Link href="/marques">Nos marques</Link>
               </Button>
             </div>
           </div>
-          <div className="mx-auto w-full max-w-sm md:max-w-md">
-            <WatchPlaceholder
-              cadran="#1f3a5f"
-              boitier="#d8d3ca"
-              bracelet="#2a2d33"
-              label="Montre à cadran bleu"
+          <div className="relative mx-auto aspect-square w-full max-w-sm overflow-hidden rounded-full bg-blanc md:max-w-md">
+            <Image
+              src="/images/montres/hero.svg"
+              alt="Montre à cadran bleu"
+              fill
+              priority
+              sizes="(min-width: 768px) 28rem, 24rem"
+              className="object-contain p-[12%]"
             />
           </div>
         </Container>
@@ -68,28 +74,63 @@ export default function Accueil() {
       {/* Nouveautés */}
       <section className="py-20 md:py-28">
         <Container>
-          <div className="flex flex-wrap items-end justify-between gap-6">
+          <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
             <SectionHeading surtitre="Nouveautés" titre="Arrivées récentes" />
             <TextLink href="/montres?tri=nouveautes" className="text-sm font-medium">
               Voir toutes les nouveautés
             </TextLink>
           </div>
-          <div className="mt-12 grid grid-cols-2 gap-x-4 gap-y-12 md:gap-x-6 lg:grid-cols-4">
-            {produitsDemo.map((produit) => (
-              <ProductCard
-                key={produit.slug}
-                produit={produit}
-                visuel={
-                  <WatchPlaceholder
-                    {...produit.couleurs}
-                    label={`${produit.marque} ${produit.nom}`}
-                  />
-                }
-              />
-            ))}
-          </div>
+          <GrilleProduits produits={nouveautes} />
         </Container>
       </section>
+
+      {/* Collections */}
+      <section className="border-y border-sable bg-ivoire py-20 md:py-28">
+        <Container>
+          <SectionHeading surtitre="Collections" titre="Par envie" className="mb-12" />
+          <ul className="grid gap-px bg-sable md:grid-cols-3">
+            {collections.map((c) => (
+              <li key={c.id} className="bg-ivoire">
+                <Link
+                  href={`/collections/${c.slug}`}
+                  className="group flex h-full flex-col p-8 transition-colors hover:bg-creme"
+                >
+                  <h3 className="text-3xl transition-colors group-hover:text-laiton-fonce">
+                    {c.name}
+                  </h3>
+                  <p className="mt-4 flex-1 text-sm leading-relaxed text-graphite">
+                    {c.description}
+                  </p>
+                  <span className="mt-8 text-[13px] font-medium tracking-surtitre uppercase">
+                    Découvrir{" "}
+                    <span
+                      aria-hidden
+                      className="inline-block transition-transform group-hover:translate-x-1"
+                    >
+                      →
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Container>
+      </section>
+
+      {/* Les plus appréciées */}
+      {appreciees.length > 0 && (
+        <section className="py-20 md:py-28">
+          <Container>
+            <SectionHeading
+              surtitre="Avis clients"
+              titre="Les plus appréciées"
+              description="Les montres les mieux notées par nos clients."
+              className="mb-12"
+            />
+            <GrilleProduits produits={appreciees} />
+          </Container>
+        </section>
+      )}
 
       {/* Marques */}
       <section className="border-y border-sable bg-ivoire py-16">
@@ -97,9 +138,12 @@ export default function Accueil() {
           <Eyebrow className="text-center">Les maisons que nous sélectionnons</Eyebrow>
           <ul className="mt-8 flex flex-wrap items-center justify-center gap-x-10 gap-y-4 font-serif text-2xl text-graphite md:gap-x-14">
             {marques.map((marque) => (
-              <li key={marque}>
-                <Link href="/marques" className="transition-colors hover:text-encre">
-                  {marque}
+              <li key={marque.id}>
+                <Link
+                  href={`/marques/${marque.slug}`}
+                  className="transition-colors hover:text-encre"
+                >
+                  {marque.name}
                 </Link>
               </li>
             ))}

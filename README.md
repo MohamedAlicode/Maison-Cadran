@@ -9,8 +9,8 @@ Stack prévue : Next.js (App Router) + TypeScript + Tailwind CSS, PostgreSQL (Ne
 | Étape | Contenu | Statut |
 |---|---|---|
 | 0 | Cadrage : arborescence, schéma de base de données, charte graphique | Validée |
-| 1 | Setup du projet + design system | En revue |
-| 2 | Catalogue + fiche produit | À venir |
+| 1 | Setup du projet + design system | En revue (PR #1) |
+| 2 | Catalogue + fiche produit | En revue |
 | 3 | Panier + checkout Stripe (test) | À venir |
 | 4 | Comptes clients | À venir |
 | 5 | Back-office admin | À venir |
@@ -30,8 +30,9 @@ npm install
 cp .env.example .env
 # puis renseigner DATABASE_URL dans .env
 
-# 3. Créer les tables
+# 3. Créer les tables et charger les 19 montres de test
 npm run db:migrate
+npm run db:seed
 
 # 4. Lancer le site
 npm run dev
@@ -39,7 +40,10 @@ npm run dev
 
 Puis ouvrir :
 
-- http://localhost:3000 : accueil (version vitrine du design system)
+- http://localhost:3000 : accueil (nouveautés, collections, montres les plus appréciées)
+- http://localhost:3000/montres : catalogue avec filtres et tri
+- http://localhost:3000/montres/tissot-prx-powermatic-80-40mm-bleu : exemple de fiche produit
+- http://localhost:3000/marques : pages marques
 - http://localhost:3000/design-system : référence des couleurs, typographies et composants
 - http://localhost:3000/api/sante : doit répondre `{"ok":true,"base":"connectée"}`
 
@@ -54,10 +58,20 @@ Puis ouvrir :
 | `npm run format` | Formatage Prettier |
 | `npm run db:migrate` | Créer et appliquer une migration (développement) |
 | `npm run db:deploy` | Appliquer les migrations (production) |
+| `npm run db:seed` | Recharger le jeu de données de test (vide d'abord le catalogue) |
 | `npm run db:studio` | Explorer la base dans le navigateur |
+| `npm run visuels` | Régénérer les illustrations SVG des montres de test |
 
 ## Versions et écarts avec l'étape 0
 
 - **Next.js 16** : le fichier `middleware.ts` s'appelle désormais `proxy.ts` (il arrivera en phase 4). Les « Cache Components » sont activés : une valeur variable (date, requête) doit être mise en cache ou lue à la demande.
 - **Tailwind CSS 4** : plus de `tailwind.config.ts`, la charte est déclarée dans `src/app/globals.css` (bloc `@theme`).
 - **Prisma 7** (dernière version stable) : l'URL de la base est dans `prisma.config.ts`, le client est généré dans `src/generated/prisma` et se connecte via l'adaptateur `pg`.
+
+## Catalogue (phase 2)
+
+- **Filtres dans l'URL** : `/montres?marque=tissot,seiko&mouvement=automatique&tri=prix-croissant`. Une recherche se partage et se met en favori. Les combinaisons de filtres ont pour URL canonique la page principale, pour éviter le contenu dupliqué.
+- **Compteurs** : chaque option indique le nombre de résultats obtenus en la cochant, en tenant compte des autres filtres.
+- **Logique** dans `src/lib/filtres.ts` (pure, testée) ; lectures base mises en cache dans `src/lib/catalogue.ts` (étiquette `catalogue`, à invalider depuis l'admin en phase 5). Le filtrage se fait en mémoire sur un index léger : adapté jusqu'à quelques milliers de références.
+- **Images** : en attendant les photos, chaque montre a trois illustrations SVG (face, détail, profil) générées depuis ses vraies caractéristiques, dans `public/images/montres`. Cloudinary les remplacera en phase 5.
+- **SEO** : données structurées `Product` (prix, disponibilité, avis) et `BreadcrumbList` sur chaque fiche, métadonnées par page.
