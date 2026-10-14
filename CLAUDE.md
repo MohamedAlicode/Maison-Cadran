@@ -12,7 +12,7 @@ Ce workflow s'applique à toute session jusqu'à la fin du projet, sans qu'on ai
 
 - **Design system ui-ux-pro-max :** `design-system/maison-cadran/MASTER.md`.
 - **Overrides par page (prioritaires sur le MASTER) :** `design-system/maison-cadran/pages/accueil.md`, `catalogue.md`, `fiche-produit.md`, `panier-checkout.md`.
-- **Tokens, seule source de vérité :** `src/app/globals.css` (bloc `@theme` pour les utilitaires Tailwind, bloc `:root` pour les durées et les marges de photo). Aucune autre valeur de couleur, taille, ombre ou durée n'est écrite ailleurs. Seule exception : `themeColor` dans `src/app/layout.tsx`, que Next exige en littéral.
+- **Tokens, seule source de vérité :** `src/app/globals.css` (bloc `@theme` pour les utilitaires Tailwind, bloc `:root` pour les durées et les marges de photo). Aucune autre valeur de couleur, taille, ombre ou durée n'est écrite ailleurs. Deux exceptions : `themeColor` dans `src/app/layout.tsx`, que Next exige en littéral, et `src/config/couleurs-imprimees.ts`, copie des couleurs pour les e-mails et les factures PDF qui ne lisent pas les variables CSS.
 - **Système visuel décrit :** `DESIGN.md` et son complément `.impeccable/design.json`. À régénérer avec `/impeccable document` quand les tokens changent.
 - **Skills :** `.claude/skills/ui-ux-pro-max/` (recherche : `python3 .claude/skills/ui-ux-pro-max/scripts/search.py`) et `.claude/skills/impeccable/` (CLI : `.claude/skills/impeccable/scripts/impeccable`).
 

@@ -318,7 +318,7 @@ model Order {
   id     String      @id @default(cuid())
   number String      @unique // MC-2026-000123 (lisible client)
   userId String? // Null si achat invité
-  email  String
+  email  String? // Saisi sur Stripe Checkout : renseigné au paiement
   status OrderStatus @default(PENDING)
 
   // Montants figés (centimes, TTC sauf mention)
@@ -332,9 +332,10 @@ model Order {
   discountCodeId String?
   discountCode   String? // Code figé au moment de l'achat
 
-  // Adresses figées (JSON validé par Zod, instantané immuable)
-  shippingAddress Json
-  billingAddress  Json
+  // Adresses figées (JSON validé par Zod, instantané immuable), saisies sur Stripe Checkout :
+  // vides tant que la commande attend son paiement.
+  shippingAddress Json?
+  billingAddress  Json?
 
   // Stripe
   stripeCheckoutSessionId String? @unique
