@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useId, useState, useTransition } from "react";
+import { useEffect, useId, useRef, useState, useTransition } from "react";
 import { Price } from "@/components/ui/price";
 import type { LignePanier as Ligne } from "@/lib/panier/serveur";
 import { formatPrixCourt } from "@/lib/prix";
@@ -14,17 +14,40 @@ export function LignePanier({ ligne, compacte = false }: { ligne: Ligne; compact
   const [enCours, demarrer] = useTransition();
   const [erreur, changerErreur] = useState<string | null>(null);
   const idQuantite = useId();
+  const refLigne = useRef<HTMLLIElement>(null);
+  const focusApresRetrait = useRef<HTMLElement | null>(null);
 
+  // La ligne retirée disparaît avec le bouton qui avait le focus : on le confie à la ligne
+  // voisine, sinon au tiroir ou au titre de la page, au lieu de le renvoyer en haut du document.
+  useEffect(() => () => focusApresRetrait.current?.focus(), []);
+
+  // Pendant une mise à jour, les contrôles restent actifs (aria-disabled) : un contrôle
+  // désactivé perd le focus, et un utilisateur au clavier se retrouverait en haut de la page.
   function executer(action: () => Promise<{ ok: true } | { ok: false; message: string }>) {
+    if (enCours) return;
     changerErreur(null);
     demarrer(async () => {
       const resultat = await action();
-      if (!resultat.ok) changerErreur(resultat.message);
+      if (!resultat.ok) {
+        focusApresRetrait.current = null;
+        changerErreur(resultat.message);
+      }
     });
+  }
+
+  function retirer() {
+    const li = refLigne.current;
+    const voisine = li?.nextElementSibling ?? li?.previousElementSibling;
+    focusApresRetrait.current =
+      voisine?.querySelector<HTMLElement>("select, button") ??
+      li?.closest<HTMLElement>("[role=dialog]") ??
+      document.getElementById("titre-panier");
+    executer(() => retirerDuPanier(ligne.id));
   }
 
   return (
     <li
+      ref={refLigne}
       aria-busy={enCours}
       className={cn(
         "flex gap-4 transition-opacity duration-(--duree-courte) ease-maison",
@@ -69,12 +92,12 @@ export function LignePanier({ ligne, compacte = false }: { ligne: Ligne; compact
           {ligne.quantiteMax > 1 ? (
             <div className="flex items-center gap-2">
               <label htmlFor={idQuantite} className="text-graphite">
-                Quantité
+                Quantité<span className="sr-only"> {`${ligne.marque} ${ligne.nom}`}</span>
               </label>
               <select
                 id={idQuantite}
                 value={ligne.quantite}
-                disabled={enCours}
+                aria-disabled={enCours}
                 onChange={(e) => executer(() => changerQuantite(ligne.id, Number(e.target.value)))}
                 className="chiffres h-11 rounded-xs border border-filet-fort bg-blanc px-3 text-base"
               >
@@ -90,8 +113,8 @@ export function LignePanier({ ligne, compacte = false }: { ligne: Ligne; compact
           )}
           <button
             type="button"
-            disabled={enCours}
-            onClick={() => executer(() => retirerDuPanier(ligne.id))}
+            aria-disabled={enCours}
+            onClick={retirer}
             className="inline-flex h-11 items-center text-graphite underline decoration-filet-fort underline-offset-4 hover:text-encre"
           >
             Retirer<span className="sr-only"> {`${ligne.marque} ${ligne.nom}`}</span>

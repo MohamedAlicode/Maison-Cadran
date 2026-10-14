@@ -7,7 +7,10 @@ import { GabaritEmail, styles } from "./gabarit";
 export function EmailCommandeRemboursee({ commande }: { commande: CommandeComplete }) {
   const montres = commande.items.map((i) => `${i.brandName} ${i.productName}`).join(", ");
   return (
-    <GabaritEmail apercu={`Votre commande ${commande.number} n'a pas pu être honorée.`}>
+    <GabaritEmail
+      apercu={`Votre commande ${commande.number} n'a pas pu être honorée.`}
+      rappels={false}
+    >
       <Text style={styles.titre}>Toutes nos excuses</Text>
       <Text style={styles.texte}>
         La dernière pièce de votre sélection ({montres}) a été réservée par un autre client au

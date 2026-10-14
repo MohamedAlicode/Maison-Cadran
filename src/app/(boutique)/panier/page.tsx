@@ -38,7 +38,7 @@ async function ContenuPanier({ searchParams }: Pick<PageProps<"/panier">, "searc
           </p>
         ))}
         <p className="text-lg">Votre panier est vide pour le moment.</p>
-        <Button asChild variante="secondaire" className="mt-6">
+        <Button asChild className="mt-6">
           <Link href="/montres">Découvrir les montres</Link>
         </Button>
       </div>
@@ -67,7 +67,7 @@ async function ContenuPanier({ searchParams }: Pick<PageProps<"/panier">, "searc
         </ul>
         <Link
           href="/montres"
-          className="mt-6 inline-block text-sm text-graphite underline decoration-filet-fort underline-offset-4 hover:text-encre"
+          className="mt-3 inline-flex min-h-11 items-center text-sm text-graphite underline decoration-filet-fort underline-offset-4 hover:text-encre"
         >
           Continuer mes achats
         </Link>
@@ -110,7 +110,10 @@ function PanierSquelette() {
 export default function PagePanier({ searchParams }: PageProps<"/panier">) {
   return (
     <Container className="py-10 md:py-14">
-      <h1 className="text-4xl md:text-5xl">Votre panier</h1>
+      {/* Cible du focus quand la dernière montre est retirée (voir LignePanier). */}
+      <h1 id="titre-panier" tabIndex={-1} className="text-4xl md:text-5xl">
+        Votre panier
+      </h1>
       <Suspense fallback={<PanierSquelette />}>
         <ContenuPanier searchParams={searchParams} />
       </Suspense>

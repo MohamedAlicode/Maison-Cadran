@@ -39,6 +39,8 @@ export function DrawerContent({
             : "left-0 data-[state=open]:animate-glisse-gauche",
           className,
         )}
+        // Sans description, Radix en attend une : on le signale plutôt que de répéter le titre.
+        {...(!description && { "aria-describedby": undefined })}
         {...props}
       >
         <div className="flex items-center justify-between border-b border-filet px-6 py-5">
@@ -50,12 +52,10 @@ export function DrawerContent({
             <X className="size-5" strokeWidth={1.5} />
           </DialogPrimitive.Close>
         </div>
-        {description ? (
+        {description && (
           <DialogPrimitive.Description className="sr-only">
             {description}
           </DialogPrimitive.Description>
-        ) : (
-          <DialogPrimitive.Description className="sr-only">{titre}</DialogPrimitive.Description>
         )}
         <div className="flex-1 overflow-y-auto px-6 py-6">{children}</div>
         {pied && <div className="border-t border-filet px-6 py-5">{pied}</div>}

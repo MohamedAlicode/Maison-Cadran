@@ -42,6 +42,8 @@ export async function envoyerEmail({
 
   const { error } = await new Resend(env.RESEND_API_KEY).emails.send({
     from: env.EMAIL_EXPEDITEUR ?? `${boutique.nom} <onboarding@resend.dev>`,
+    // L'expéditeur peut être une adresse d'envoi technique : les réponses vont au service client.
+    replyTo: boutique.contact.email,
     to: a,
     subject: sujet,
     html,

@@ -20,12 +20,15 @@ export function ProgressionLivraison({ montants }: { montants: MontantsPanier })
           "Votre livraison assurée est offerte."
         )}
       </p>
-      <Progress
-        className="mt-3"
-        valeur={montants.sousTotalCentimes}
-        max={boutique.livraison.seuilGratuitCentimes}
-        label="Progression vers la livraison offerte"
-      />
+      {/* Une fois le seuil atteint, la jauge pleine ne dirait plus rien : seule la phrase reste. */}
+      {reste > 0 && (
+        <Progress
+          className="mt-3"
+          valeur={montants.sousTotalCentimes}
+          max={boutique.livraison.seuilGratuitCentimes}
+          label="Progression vers la livraison offerte"
+        />
+      )}
     </div>
   );
 }
@@ -33,26 +36,33 @@ export function ProgressionLivraison({ montants }: { montants: MontantsPanier })
 /** Sous-total, livraison et total TTC. */
 export function Montants({ montants }: { montants: MontantsPanier }) {
   return (
-    <dl className="chiffres space-y-3 text-sm">
-      <div className="flex justify-between gap-4">
-        <dt>Sous-total</dt>
-        <dd>{formatPrix(montants.sousTotalCentimes)}</dd>
-      </div>
-      <div className="flex justify-between gap-4">
-        <dt>
-          Livraison
-          <span className="block text-xs text-graphite">{boutique.livraison.transporteur}</span>
-        </dt>
-        <dd>
-          {montants.livraisonCentimes === 0 ? "Offerte" : formatPrix(montants.livraisonCentimes)}
-        </dd>
-      </div>
-      <div className="flex justify-between gap-4 border-t border-filet pt-3 text-base font-medium">
-        <dt>Total</dt>
-        <dd>{formatPrix(montants.totalCentimes)}</dd>
-      </div>
+    <div className="chiffres space-y-3 text-sm">
+      <dl className="space-y-3">
+        <div className="flex justify-between gap-4">
+          <dt>Sous-total</dt>
+          <dd>{formatPrix(montants.sousTotalCentimes)}</dd>
+        </div>
+        <div className="flex justify-between gap-4">
+          <dt>
+            Livraison
+            <span className="block text-xs text-graphite">{boutique.livraison.transporteur}</span>
+          </dt>
+          <dd>
+            {montants.livraisonCentimes === 0 ? "Offerte" : formatPrix(montants.livraisonCentimes)}
+          </dd>
+        </div>
+        {/* Annoncé par les lecteurs d'écran quand une quantité change ou qu'une montre est retirée. */}
+        <div
+          aria-live="polite"
+          aria-atomic
+          className="flex justify-between gap-4 border-t border-filet pt-3 text-base font-medium"
+        >
+          <dt>Total</dt>
+          <dd>{formatPrix(montants.totalCentimes)}</dd>
+        </div>
+      </dl>
       <p className="text-xs text-graphite">TTC, dont TVA {formatPrix(montants.tvaCentimes)}</p>
-    </dl>
+    </div>
   );
 }
 

@@ -10,7 +10,15 @@ export function FormulaireCommander() {
   const [etat, action, enCours] = useActionState(passerCommande, null);
   return (
     <form action={action}>
-      <Button type="submit" pleineLargeur taille="lg" disabled={enCours}>
+      {/* aria-disabled plutôt que disabled : le bouton garde le focus, et le message d'erreur
+          éventuel s'annonce juste après lui. */}
+      <Button
+        type="submit"
+        pleineLargeur
+        taille="lg"
+        aria-disabled={enCours}
+        onClick={(evenement) => enCours && evenement.preventDefault()}
+      >
         <Lock aria-hidden className="size-4" strokeWidth={1.5} />
         {enCours ? "Redirection vers le paiement…" : "Commander"}
       </Button>

@@ -2,6 +2,7 @@
 
 // Server Actions du panier. Le client n'envoie qu'un identifiant et une quantité :
 // le stock est revérifié ici, et les prix seront relus en base à l'affichage.
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { ajouterUn, changerQuantiteLigne, quantiteMax } from "@/lib/panier/regles";
@@ -59,4 +60,33 @@ export async function changerQuantite(
 
 export async function retirerDuPanier(produitId: string): Promise<ResultatPanier> {
   return changerQuantite(produitId, 0);
+}
+
+/**
+ * Paiement refusé par la banque : le panier a été vidé au retour de Stripe, on y remet donc
+ * les montres de la commande. L'identifiant de session Stripe sert de preuve, comme pour
+ * afficher la commande ; prix et stock seront revérifiés à l'affichage du panier.
+ */
+export async function reprendreSelection(sessionId: string) {
+  const id = z.string().min(1).max(255).safeParse(sessionId);
+  const commande =
+    id.success &&
+    (await db.order.findUnique({
+      where: { stripeCheckoutSessionId: id.data },
+      select: {
+        status: true,
+        stripePaymentIntentId: true,
+        items: { select: { productId: true, quantity: true } },
+      },
+    }));
+
+  if (commande && commande.status === "CANCELLED" && !commande.stripePaymentIntentId) {
+    let contenu = await lireContenuPanier();
+    for (const { productId, quantity } of commande.items) {
+      if (productId)
+        contenu = changerQuantiteLigne(ajouterUn(contenu, productId), productId, quantity);
+    }
+    await enregistrerContenuPanier(contenu);
+  }
+  redirect("/panier");
 }

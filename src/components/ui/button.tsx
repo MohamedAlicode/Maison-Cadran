@@ -9,7 +9,7 @@ const variantesBouton = cva(
     "group/bouton relative inline-flex items-center justify-center gap-2 rounded-xs",
     "text-libelle font-medium tracking-surtitre uppercase whitespace-nowrap",
     "transition-colors duration-(--duree-courte) ease-maison",
-    "disabled:pointer-events-none disabled:opacity-50",
+    "disabled:pointer-events-none disabled:opacity-50 aria-disabled:opacity-50",
   ],
   {
     variants: {

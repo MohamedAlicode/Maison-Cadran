@@ -10,19 +10,35 @@ import { boutique } from "@/config/boutique";
 import type { Adresse } from "@/lib/commandes/adresse";
 import { chargerCommande, type CommandeComplete } from "@/lib/commandes/donnees";
 import { formatPrix } from "@/lib/prix";
+import { reprendreSelection } from "@/server/actions/panier";
 
 export const metadata: Metadata = {
   title: "Votre commande",
   robots: { index: false },
 };
 
+function nomsMontres(commande: CommandeComplete) {
+  return commande.items.map((item) => `${item.brandName} ${item.productName}`).join(", ");
+}
+
+function LienContact() {
+  return (
+    <a
+      href={`mailto:${boutique.contact.email}`}
+      className="text-encre underline decoration-filet-fort underline-offset-4 hover:text-cadran"
+    >
+      {boutique.contact.email}
+    </a>
+  );
+}
+
 function BlocAdresse({ titre, adresse }: { titre: string; adresse: Adresse | null }) {
   if (!adresse) return null;
   return (
     <div>
-      <h3 className="font-sans text-xs font-medium tracking-surtitre text-graphite uppercase">
+      <h2 className="font-sans text-xs font-medium tracking-surtitre text-graphite uppercase">
         {titre}
-      </h3>
+      </h2>
       <address className="mt-2 text-sm leading-relaxed not-italic">
         {adresse.nom}
         <br />
@@ -42,7 +58,7 @@ function BlocAdresse({ titre, adresse }: { titre: string; adresse: Adresse | nul
 
 function Recapitulatif({ commande }: { commande: CommandeComplete }) {
   return (
-    <section aria-labelledby="titre-recap" className="bg-blanc p-6 md:p-8">
+    <section aria-labelledby="titre-recap" className="bg-blanc p-6 md:p-8 lg:self-start">
       <h2 id="titre-recap" className="font-serif text-2xl">
         Commande {commande.number}
       </h2>
@@ -108,7 +124,7 @@ async function ContenuConfirmation({
         <h1 className="text-4xl md:text-5xl">Commande introuvable</h1>
         <p className="mt-4 leading-relaxed text-graphite">
           Ce lien ne correspond à aucune commande. Si vous venez de payer, vérifiez l&apos;e-mail de
-          confirmation ou écrivez-nous à {boutique.contact.email}.
+          confirmation ou écrivez-nous à <LienContact />.
         </p>
         <Button asChild variante="secondaire" className="mt-8">
           <Link href="/montres">Retour aux montres</Link>
@@ -122,9 +138,6 @@ async function ContenuConfirmation({
       <div className="max-w-xl" role="status">
         <Clock aria-hidden className="size-8 text-cadran" strokeWidth={1.5} />
         <h1 className="mt-4 text-4xl md:text-5xl">Paiement en cours de confirmation</h1>
-        <p className="mt-4 leading-relaxed text-graphite">
-          Votre banque nous répond. Cette page se met à jour toute seule dans quelques secondes.
-        </p>
         <ActualisationAttente />
       </div>
     );
@@ -137,12 +150,18 @@ async function ContenuConfirmation({
       <div className="max-w-xl">
         <h1 className="text-4xl md:text-5xl">Paiement non abouti</h1>
         <p className="mt-4 leading-relaxed text-graphite">
-          Votre banque n&apos;a pas validé le paiement : rien n&apos;a été débité. Vous pouvez
-          repasser commande quand vous le souhaitez, ou nous écrire à {boutique.contact.email}.
+          Votre banque n&apos;a pas validé le paiement de la commande {commande.number} (
+          {nomsMontres(commande)}) : rien n&apos;a été débité. Vous pouvez remettre votre sélection
+          dans le panier et réessayer, ou nous écrire à <LienContact />.
         </p>
-        <Button asChild variante="secondaire" className="mt-8">
-          <Link href="/montres">Retour aux montres</Link>
-        </Button>
+        <div className="mt-8 flex flex-wrap gap-4">
+          <form action={reprendreSelection.bind(null, commande.stripeCheckoutSessionId ?? "")}>
+            <Button type="submit">Remettre ma sélection dans le panier</Button>
+          </form>
+          <Button asChild variante="fantome">
+            <Link href="/montres">Retour aux montres</Link>
+          </Button>
+        </div>
       </div>
     );
   }
@@ -150,14 +169,18 @@ async function ContenuConfirmation({
   if (commande.status === "CANCELLED" || commande.status === "REFUNDED") {
     return (
       <div className="max-w-xl">
-        <h1 className="text-4xl md:text-5xl">Commande non honorée</h1>
+        <h1 className="text-4xl md:text-5xl">Toutes nos excuses</h1>
         <p className="mt-4 leading-relaxed text-graphite">
-          La dernière pièce de votre sélection a été réservée par un autre client au moment même de
-          votre paiement.{" "}
+          La dernière pièce de votre sélection ({nomsMontres(commande)}) a été réservée par un autre
+          client au moment même de votre paiement. Nous ne pouvons donc pas honorer votre commande{" "}
+          {commande.number}.
+        </p>
+        <p className="mt-4 leading-relaxed text-graphite">
           {commande.status === "REFUNDED"
-            ? `Vous êtes intégralement remboursé de ${formatPrix(commande.totalCents)}.`
-            : "Votre remboursement est en cours."}{" "}
-          Toutes nos excuses : nous vous avons écrit pour vous aider à trouver une montre proche.
+            ? `Vous êtes intégralement remboursé de ${formatPrix(commande.totalCents)} : le montant apparaîtra sur votre compte sous 5 à 10 jours, selon votre banque.`
+            : `Votre remboursement de ${formatPrix(commande.totalCents)} est en cours : nous vous écrirons dès qu'il sera effectué.`}{" "}
+          Répondez à notre e-mail ou écrivez-nous à <LienContact /> : nous vous aiderons à trouver
+          une montre proche.
         </p>
         <Button asChild variante="secondaire" className="mt-8">
           <Link href="/montres">Retour aux montres</Link>

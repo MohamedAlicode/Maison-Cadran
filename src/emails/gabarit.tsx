@@ -39,10 +39,29 @@ export const styles = {
   filet: { borderColor: c.filet, margin: "24px 0" },
 } satisfies Record<string, CSSProperties>;
 
-export function GabaritEmail({ apercu, children }: { apercu: string; children: ReactNode }) {
+/** `rappels` : garantie et livraison, retirés quand la commande ne sera pas livrée. */
+export function GabaritEmail({
+  apercu,
+  rappels = true,
+  children,
+}: {
+  apercu: string;
+  rappels?: boolean;
+  children: ReactNode;
+}) {
   return (
     <Html lang="fr">
       <Head>
+        {/* Seuls certains clients (Apple Mail, iOS) chargent ces polices ; les autres
+            retombent sur Georgia et Helvetica, prévues dans les piles de polices. */}
+        <Font
+          fontFamily="Instrument Serif"
+          fallbackFontFamily="Georgia"
+          webFont={{
+            url: "https://fonts.gstatic.com/s/instrumentserif/v5/jizBRFtNs2ka5fXjeivQ4LroWlx-2zI.ttf",
+            format: "truetype",
+          }}
+        />
         <Font
           fontFamily="Hanken Grotesk"
           fallbackFontFamily="Helvetica"
@@ -71,11 +90,15 @@ export function GabaritEmail({ apercu, children }: { apercu: string; children: R
           </Text>
           <Section style={{ backgroundColor: c.blanc, padding: "40px 32px" }}>{children}</Section>
           <Section style={{ padding: "24px 32px", textAlign: "center" }}>
-            <Text style={styles.discret}>
-              Garantie {boutique.garantieMois / 12} ans · Retours gratuits sous{" "}
-              {boutique.retours.joursRetractation} jours · Livraison assurée contre signature
-            </Text>
-            <Hr style={styles.filet} />
+            {rappels && (
+              <>
+                <Text style={styles.discret}>
+                  Garantie {boutique.garantieMois / 12} ans · Retours gratuits sous{" "}
+                  {boutique.retours.joursRetractation} jours · Livraison assurée contre signature
+                </Text>
+                <Hr style={styles.filet} />
+              </>
+            )}
             <Text style={styles.discret}>
               Une question ? Écrivez-nous à {boutique.contact.email}, {boutique.contact.horaires}.
             </Text>

@@ -1,7 +1,7 @@
 "use client";
 
 import { ShoppingBag } from "lucide-react";
-import { useState, useTransition } from "react";
+import { useState, useTransition, type MouseEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { ajouterAuPanier } from "@/server/actions/panier";
 import { useMiniPanier } from "./etat-mini-panier";
@@ -16,13 +16,16 @@ export function AjouterAuPanier({
 }) {
   const [enCours, demarrer] = useTransition();
   const [erreur, changerErreur] = useState<string | null>(null);
-  const { changerOuverture } = useMiniPanier();
+  const { ouvrirDepuis } = useMiniPanier();
 
-  function ajouter() {
+  // Pendant l'ajout, le bouton reste actif (aria-disabled) : désactivé, il perdrait le focus.
+  function ajouter(evenement: MouseEvent<HTMLButtonElement>) {
+    if (enCours) return;
+    const bouton = evenement.currentTarget;
     changerErreur(null);
     demarrer(async () => {
       const resultat = await ajouterAuPanier(produitId);
-      if (resultat.ok) changerOuverture(true);
+      if (resultat.ok) ouvrirDepuis(bouton);
       else changerErreur(resultat.message);
     });
   }
@@ -32,7 +35,8 @@ export function AjouterAuPanier({
       <Button
         pleineLargeur
         taille="lg"
-        disabled={!disponible || enCours}
+        disabled={!disponible}
+        aria-disabled={enCours}
         onClick={ajouter}
         aria-describedby="note-panier"
       >
