@@ -1,0 +1,453 @@
+// Schéma de la base de données Maison Cadran.
+// Conventions : prix en centimes (entiers), TTC ; les commandes figent un instantané
+// des produits et adresses pour que l'historique et les factures restent immuables.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+// L'URL de connexion est définie dans prisma.config.ts (Prisma 7).
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────── Enums ───────────────────────────
+
+enum Role {
+  CUSTOMER
+  ADMIN
+}
+
+enum Gender {
+  HOMME
+  FEMME
+  MIXTE
+}
+
+enum Movement {
+  AUTOMATIQUE
+  MANUEL
+  QUARTZ
+  SOLAIRE
+  KINETIQUE
+}
+
+enum CaseMaterial {
+  ACIER
+  TITANE
+  CERAMIQUE
+  OR
+  PLAQUE_OR
+  BRONZE
+  AUTRE
+}
+
+enum StrapType {
+  ACIER
+  CUIR
+  CAOUTCHOUC
+  NATO_TISSU
+  TITANE
+  AUTRE
+}
+
+enum Condition {
+  NEUF
+  OCCASION
+}
+
+enum ProductStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum OrderStatus {
+  PENDING // Session Stripe créée, paiement non confirmé
+  PAID // Payée (webhook reçu)
+  PREPARING // Préparée
+  SHIPPED // Expédiée
+  DELIVERED // Livrée
+  REFUNDED // Remboursée
+  CANCELLED // Abandonnée / expirée
+}
+
+enum DiscountType {
+  PERCENT
+  FIXED // Montant en centimes
+}
+
+enum ReviewStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+// ─────────────────────────── Auth.js ───────────────────────────
+
+model User {
+  id             String    @id @default(cuid())
+  email          String    @unique
+  emailVerified  DateTime?
+  name           String?
+  image          String?
+  role           Role      @default(CUSTOMER)
+  marketingOptIn Boolean   @default(false)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  accounts  Account[]
+  sessions  Session[]
+  addresses Address[]
+  orders    Order[]
+  wishlist  WishlistItem[]
+  reviews   Review[]
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─────────────────────────── Catalogue ───────────────────────────
+
+model Brand {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  slug        String   @unique
+  description String?  @db.Text
+  history     String?  @db.Text // Contenu éditorial de la page marque (SEO)
+  logoUrl     String?
+  country     String?
+  foundedYear Int?
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products Product[]
+}
+
+model Collection {
+  id          String   @id @default(cuid())
+  name        String // « Montres de plongée », « Idées cadeaux »
+  slug        String   @unique
+  description String?  @db.Text
+  imageUrl    String?
+  isFeatured  Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  products ProductCollection[]
+}
+
+model Product {
+  id        String        @id @default(cuid())
+  slug      String        @unique
+  name      String // « PRX Powermatic 80 »
+  reference String        @unique // Référence fabricant, ex. T137.407.11.041.00
+  brandId   String
+  familyKey String? // Regroupe les déclinaisons de cadran
+  status    ProductStatus @default(DRAFT)
+  condition Condition     @default(NEUF)
+
+  // Contenu
+  shortDescription String
+  description      String  @db.Text
+  editorialNote    String? @db.Text // « L'avis de la maison »
+
+  // Prix (centimes, TTC)
+  priceCents     Int
+  compareAtCents Int? // Prix barré éventuel
+  vatRate        Int  @default(2000) // 20,00 % en points de base
+
+  // Stock et logistique
+  stock             Int @default(0)
+  lowStockThreshold Int @default(2)
+  leadTimeDays      Int @default(2) // Délai d'expédition affiché
+  warrantyMonths    Int @default(24)
+
+  // Caractéristiques filtrables
+  gender           Gender
+  movement         Movement
+  caliber          String? // « Powermatic 80.111 »
+  powerReserveH    Int?
+  caseDiameterMm   Decimal      @db.Decimal(4, 1)
+  caseThicknessMm  Decimal?     @db.Decimal(4, 1)
+  lugWidthMm       Int?
+  caseMaterial     CaseMaterial
+  strapType        StrapType
+  strapColor       String?
+  dialColor        String // Valeur normalisée : bleu, noir, blanc, vert…
+  waterResistanceM Int // 50, 100, 200…
+  crystal          String? // « Saphir », « Minéral »
+  functions        String[] // Date, chronographe, GMT…
+
+  // SEO
+  metaTitle       String?
+  metaDescription String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  brand        Brand               @relation(fields: [brandId], references: [id])
+  images       ProductImage[]
+  collections  ProductCollection[]
+  orderItems   OrderItem[]
+  wishlistedBy WishlistItem[]
+  reviews      Review[]
+
+  @@index([status, brandId])
+  @@index([status, priceCents])
+  @@index([movement])
+  @@index([gender])
+  @@index([familyKey])
+}
+
+model ProductImage {
+  id        String @id @default(cuid())
+  productId String
+  publicId  String // Identifiant Cloudinary
+  url       String
+  alt       String // Obligatoire (accessibilité)
+  width     Int
+  height    Int
+  position  Int    @default(0) // 0 = image principale
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, position])
+}
+
+model ProductCollection {
+  productId    String
+  collectionId String
+  position     Int    @default(0)
+
+  product    Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@id([productId, collectionId])
+}
+
+// ─────────────────────────── Clients ───────────────────────────
+
+model Address {
+  id         String  @id @default(cuid())
+  userId     String
+  label      String? // « Maison », « Bureau »
+  firstName  String
+  lastName   String
+  company    String?
+  line1      String
+  line2      String?
+  postalCode String
+  city       String
+  country    String  @default("FR")
+  phone      String // Requis pour la livraison avec signature
+  isDefault  Boolean @default(false)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model WishlistItem {
+  userId    String
+  productId String
+  createdAt DateTime @default(now())
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@id([userId, productId])
+}
+
+model Review {
+  id        String       @id @default(cuid())
+  productId String
+  userId    String
+  orderId   String? // Renseigné = « Achat vérifié »
+  rating    Int // 1 à 5 (validé par Zod)
+  title     String?
+  body      String       @db.Text
+  status    ReviewStatus @default(PENDING)
+  createdAt DateTime     @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([productId, userId])
+  @@index([productId, status])
+}
+
+// ─────────────────────────── Commandes ───────────────────────────
+
+model Order {
+  id     String      @id @default(cuid())
+  number String      @unique // MC-2026-000123 (lisible client)
+  userId String? // Null si achat invité
+  email  String
+  status OrderStatus @default(PENDING)
+
+  // Montants figés (centimes, TTC sauf mention)
+  subtotalCents Int
+  discountCents Int    @default(0)
+  shippingCents Int    @default(0)
+  totalCents    Int
+  vatCents      Int // TVA incluse dans le total
+  currency      String @default("eur")
+
+  discountCodeId String?
+  discountCode   String? // Code figé au moment de l'achat
+
+  // Adresses figées (JSON validé par Zod, instantané immuable)
+  shippingAddress Json
+  billingAddress  Json
+
+  // Stripe
+  stripeCheckoutSessionId String? @unique
+  stripePaymentIntentId   String? @unique
+  paymentMethodType       String? // card, klarna…
+
+  // Logistique
+  carrier        String?
+  trackingNumber String?
+  trackingUrl    String?
+
+  // Horodatage des statuts
+  paidAt      DateTime?
+  preparedAt  DateTime?
+  shippedAt   DateTime?
+  deliveredAt DateTime?
+  refundedAt  DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  discount DiscountCode? @relation(fields: [discountCodeId], references: [id], onDelete: SetNull)
+  items    OrderItem[]
+  invoice  Invoice?
+  events   OrderEvent[]
+
+  @@index([userId])
+  @@index([status, createdAt])
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  orderId   String
+  productId String? // Null si le produit est supprimé plus tard
+
+  // Instantané produit
+  productName    String
+  brandName      String
+  reference      String
+  imageUrl       String?
+  unitPriceCents Int
+  vatRate        Int
+  quantity       Int
+
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model OrderEvent {
+  id        String      @id @default(cuid())
+  orderId   String
+  status    OrderStatus
+  note      String?
+  actorId   String? // Admin ayant changé le statut
+  createdAt DateTime    @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId, createdAt])
+}
+
+model Invoice {
+  id       String   @id @default(cuid())
+  orderId  String   @unique
+  number   String   @unique // F-2026-000001, séquence continue sans trou
+  sequence Int      @unique
+  pdfUrl   String?
+  issuedAt DateTime @default(now())
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Restrict)
+}
+
+model DiscountCode {
+  id             String       @id @default(cuid())
+  code           String       @unique // Stocké en majuscules
+  type           DiscountType
+  value          Int // % (ex. 10) ou centimes
+  minOrderCents  Int?
+  maxUses        Int?
+  usesCount      Int          @default(0)
+  perCustomerMax Int?         @default(1)
+  startsAt       DateTime?
+  endsAt         DateTime?
+  isActive       Boolean      @default(true)
+  createdAt      DateTime     @default(now())
+
+  orders Order[]
+}
+
+// ─────────────────────────── Contenu ───────────────────────────
+
+model Article {
+  id              String    @id @default(cuid())
+  slug            String    @unique
+  title           String
+  excerpt         String
+  content         String    @db.Text // Markdown (MDX en option)
+  coverUrl        String?
+  coverAlt        String?
+  publishedAt     DateTime?
+  metaTitle       String?
+  metaDescription String?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+// Webhooks Stripe déjà traités (idempotence)
+model StripeEvent {
+  id          String   @id // evt_… fourni par Stripe
+  type        String
+  processedAt DateTime @default(now())
+}

@@ -1,0 +1,8 @@
+src/generated
+.next
+node_modules
+prisma/migrations
+package-lock.json
+docs
+README.md
+AGENTS.md
