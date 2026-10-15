@@ -31,7 +31,7 @@ export default async function PageMarques() {
               href={`/marques/${marque.slug}`}
               className="group flex h-full flex-col p-6 transition-colors hover:bg-blanc md:p-8"
             >
-              <span className="text-xs font-medium tracking-surtitre text-graphite uppercase">
+              <span className="text-sm text-graphite">
                 {marque.country} · depuis {marque.foundedYear}
               </span>
               <h2 className="mt-3 text-3xl transition-colors group-hover:text-cadran">

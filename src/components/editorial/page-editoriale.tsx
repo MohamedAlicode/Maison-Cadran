@@ -32,7 +32,6 @@ export function PageEditoriale({
       <Breadcrumb miettes={[{ libelle: "Accueil", href: "/" }, { libelle: titre }]} />
       <header className="mt-8 max-w-3xl">
         <h1 className="text-4xl leading-affiche md:text-6xl">{titre}</h1>
-        <span aria-hidden className="mt-6 block h-px w-12 bg-cadran" />
         <div className="mt-6 text-lg leading-relaxed text-graphite">{introduction}</div>
         {miseAJour && <p className="mt-4 text-sm text-graphite">Mise à jour le {miseAJour}.</p>}
       </header>

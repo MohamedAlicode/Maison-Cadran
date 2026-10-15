@@ -20,7 +20,6 @@ import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Price } from "@/components/ui/price";
-import { SectionHeading } from "@/components/ui/section-heading";
 import { Stars } from "@/components/ui/stars";
 import { boutique } from "@/config/boutique";
 import {
@@ -308,7 +307,7 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
       <section className="mt-16 border-t border-filet bg-blanc py-16 md:mt-24 md:py-24">
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-24">
           <div>
-            <SectionHeading titre={`À propos de la ${produit.name}`} />
+            <h2 className="text-3xl md:text-4xl">À propos de la {produit.name}</h2>
             <p className="mt-8 max-w-prose leading-relaxed text-graphite">{produit.description}</p>
           </div>
           {produit.editorialNote && (
@@ -368,7 +367,7 @@ function FicheSquelette() {
     <Container className="py-6 md:py-10" aria-hidden>
       <div className="h-4 w-64 bg-filet/60" />
       <div className="mt-6 grid gap-10 lg:grid-cols-[1.25fr_1fr] lg:gap-16 xl:gap-24">
-        <div className="aspect-square animate-pulse bg-blanc" />
+        <div className="aspect-square animate-pulse rounded-cadre bg-blanc" />
         <div className="space-y-4">
           <div className="h-3 w-20 bg-filet/60" />
           <div className="h-12 w-3/4 bg-filet/60" />

@@ -32,6 +32,11 @@
   --color-ambre: #8f5a12;
   --color-bordeaux: #a3302b;
 
+  /* Fonds pâles opaques des badges : un fond translucide laisserait passer la photo et le contraste. */
+  --color-cadran-pale: color-mix(in oklab, var(--color-cadran) 15%, var(--color-blanc));
+  --color-ambre-pale: color-mix(in oklab, var(--color-ambre) 10%, var(--color-blanc));
+  --color-sauge-pale: color-mix(in oklab, var(--color-sauge) 10%, var(--color-blanc));
+
   /* Typographies (variables posées par next/font dans le layout) */
   --font-serif: var(--font-instrument-serif), "Times New Roman", serif;
   --font-sans: var(--font-hanken-grotesk), system-ui, sans-serif;

@@ -93,7 +93,7 @@ export async function VueCatalogue({ searchParams, chemin, marque, slugs }: Prop
           {produits.length > 0 ? (
             <GrilleProduits produits={produits} colonnes={3} niveauTitre="h2" />
           ) : (
-            <div className="border border-filet bg-blanc px-6 py-16 text-center">
+            <div className="rounded-controle border border-filet bg-blanc px-6 py-16 text-center">
               <p className="font-serif text-2xl">Aucune montre ne correspond à ces critères</p>
               <p className="mt-3 text-graphite">
                 Retirez l&apos;un des filtres ci-dessus, ou repartez de toute la sélection.
@@ -210,7 +210,7 @@ export function CatalogueSquelette() {
         <div className="grid grid-cols-2 gap-x-4 gap-y-12 md:grid-cols-3 md:gap-x-6">
           {Array.from({ length: 6 }, (_, i) => (
             <div key={i}>
-              <div className="aspect-square animate-pulse bg-blanc" />
+              <div className="aspect-square animate-pulse rounded-cadre bg-blanc" />
               <div className="mt-4 h-3 w-16 bg-filet/60" />
               <div className="mt-2 h-5 w-3/4 bg-filet/60" />
             </div>

@@ -21,7 +21,7 @@ export function SortSelect({ filtres, chemin }: { filtres: Filtres; chemin: stri
               chemin + versQueryString({ ...filtres, tri: e.target.value as CleTri, page: 1 }),
             )
           }
-          className="h-11 cursor-pointer appearance-none rounded-controle border border-filet bg-blanc py-0 pr-9 pl-3 text-sm text-encre hover:border-filet-fort"
+          className="h-11 cursor-pointer appearance-none rounded-full border border-filet-fort bg-blanc py-0 pr-10 pl-4 text-sm text-encre hover:border-filet-fort"
         >
           {optionsTri.map((o) => (
             <option key={o.cle} value={o.cle}>
@@ -31,7 +31,7 @@ export function SortSelect({ filtres, chemin }: { filtres: Filtres; chemin: stri
         </select>
         <ChevronDown
           aria-hidden
-          className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2 text-graphite"
+          className="pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2 text-graphite"
         />
       </div>
     </div>

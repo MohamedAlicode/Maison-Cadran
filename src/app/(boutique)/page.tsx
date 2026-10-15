@@ -5,6 +5,7 @@ import { GrilleProduits } from "@/components/catalogue/product-card";
 import { ReassuranceBar } from "@/components/layout/reassurance-bar";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { RangeeDefilante } from "@/components/ui/rangee-defilante";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { TextLink } from "@/components/ui/text-link";
 import {
@@ -151,18 +152,20 @@ export default async function Accueil() {
       <section className="py-20 md:py-28">
         <Container>
           <SectionHeading titre="Choisir par envie" className="mb-12" />
-          {/* Sous 768 px, les collections défilent sur une ligne, comme les grilles de montres. */}
-          <ul className="grid gap-6 max-md:-mx-6 max-md:flex max-md:snap-x max-md:snap-mandatory max-md:scroll-px-6 max-md:[scrollbar-width:none] max-md:overflow-x-auto max-md:px-6 max-md:pb-2 md:grid-cols-3">
+          <RangeeDefilante className="grid gap-x-4 md:grid-cols-3 md:gap-x-6">
             {collections.map((c) => (
-              <li key={c.id} className="max-md:w-[80%] max-md:shrink-0 max-md:snap-start">
-                <Link href={`/collections/${c.slug}`} className="group flex h-full flex-col">
+              <li key={c.id}>
+                <Link
+                  href={`/collections/${c.slug}`}
+                  className="group flex h-full flex-col rounded-cadre"
+                >
                   {c.image && (
                     <div className="relative aspect-4/5 overflow-hidden rounded-cadre bg-blanc">
                       <Image
                         src={c.image.url}
                         alt=""
                         fill
-                        sizes="(min-width: 768px) 30vw, 80vw"
+                        sizes="(min-width: 768px) 30vw, 75vw"
                         className="object-contain p-(--marge-photo) transition-transform duration-(--duree-longue) ease-maison md:group-hover:scale-[1.03]"
                       />
                     </div>
@@ -184,7 +187,7 @@ export default async function Accueil() {
                 </Link>
               </li>
             ))}
-          </ul>
+          </RangeeDefilante>
         </Container>
       </section>
 

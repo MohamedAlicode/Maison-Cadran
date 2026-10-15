@@ -182,7 +182,7 @@ Une palette froide et retenue : des neutres teintés vers le bleu, un accent uni
 
 ## Layout
 
-Conteneur de 1440px au plus (`max-w-site`), gouttières de 24px en mobile (16px dans l'en-tête) et 48px dès 1024px. Toutes les marges suivent un pas de 4px. Les grilles produit passent de 2 colonnes (mobile) à 3 (tablette) puis 4 (desktop), ou 3 à côté de la colonne de filtres. Les sections alternent fond acier et fond blanc, séparées par un filet, avec 64 à 112px de respiration verticale. Les vérifications se font à 375, 768, 1024 et 1440px.
+Conteneur de 1440px au plus (`max-w-site`), gouttières de 24px en mobile (16px dans l'en-tête) et 48px dès 1024px. Toutes les marges suivent un pas de 4px. Les grilles produit passent de 2 colonnes (mobile) à 3 (tablette) puis 4 (desktop), ou 3 à côté de la colonne de filtres. Les sections alternent fond acier et fond blanc, sans filet entre elles, avec 64 à 112px de respiration verticale. Les vérifications se font à 375, 768, 1024 et 1440px.
 
 Les photos gardent une marge intérieure en pourcentage pour que la montre respire de la même façon à toutes les tailles : 10% sur les vignettes et la galerie, 12% dans le cadre du hero, 4% pour la seconde vue au survol.
 

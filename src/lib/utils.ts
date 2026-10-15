@@ -10,6 +10,7 @@ const twMerge = extendTailwindMerge({
       leading: ["affiche", "titre"],
       tracking: ["titre", "logo", "surtitre"],
       shadow: ["tiroir"],
+      radius: ["controle", "cadre"],
       blur: ["verre"],
       ease: ["maison"],
     },

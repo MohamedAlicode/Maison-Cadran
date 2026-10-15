@@ -9,9 +9,9 @@ const variantesBadge = cva(
       variante: {
         neutre: "bg-blanc text-encre ring-1 ring-filet",
         nouveau: "bg-encre text-acier",
-        cadran: "bg-cadran/15 text-cadran",
-        alerte: "bg-ambre/10 text-ambre",
-        succes: "bg-sauge/10 text-sauge",
+        cadran: "bg-cadran-pale text-cadran",
+        alerte: "bg-ambre-pale text-ambre",
+        succes: "bg-sauge-pale text-sauge",
       },
     },
     defaultVariants: { variante: "neutre" },

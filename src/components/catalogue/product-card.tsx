@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Price } from "@/components/ui/price";
+import { RangeeDefilante } from "@/components/ui/rangee-defilante";
 import type { ProduitIndexe } from "@/lib/filtres";
 import { cn } from "@/lib/utils";
 
@@ -11,6 +12,8 @@ type Proprietes = {
   prioritaire?: boolean;
   /** Niveau du titre de la carte selon la page (h2 dans une grille principale, h3 sinon). */
   niveauTitre?: "h2" | "h3";
+  /** Carte d'une rangée qui défile : plus large sur mobile, donc une image plus grande. */
+  enRangee?: boolean;
 };
 
 /** Pastille affichée sur la photo : rupture, dernière pièce, offre ou nouveauté. */
@@ -28,9 +31,10 @@ export function ProductCard({
   produit,
   prioritaire = false,
   niveauTitre: Titre = "h3",
+  enRangee = false,
 }: Proprietes) {
   const badge = badgeProduit(produit);
-  const tailles = "(min-width: 1024px) 22vw, (min-width: 768px) 30vw, 72vw";
+  const tailles = `(min-width: 1024px) 22vw, (min-width: 768px) 30vw, ${enRangee ? "75vw" : "46vw"}`;
 
   return (
     <article className="group relative">
@@ -69,7 +73,7 @@ export function ProductCard({
         <Titre className="font-serif text-xl leading-snug">
           <Link
             href={`/montres/${produit.slug}`}
-            className="after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:outline-2 focus-visible:after:outline-offset-4 focus-visible:after:outline-cadran"
+            className="after:absolute after:inset-0 focus-visible:outline-none focus-visible:after:rounded-cadre focus-visible:after:outline-2 focus-visible:after:outline-offset-4 focus-visible:after:outline-cadran"
           >
             <span className="text-graphite">{produit.marqueNom}</span> {produit.nom}
           </Link>
@@ -98,24 +102,25 @@ export function GrilleProduits({
   /** Sous 768 px, les cartes défilent sur une ligne au lieu de s'empiler : la page reste courte. */
   rail?: boolean;
 }) {
+  const Liste = rail ? RangeeDefilante : "ul";
   return (
-    <ul
+    <Liste
       className={cn(
         "grid grid-cols-2 gap-x-4 gap-y-12 md:gap-x-6",
         // Une grille de 4 passe directement à 4 colonnes : en 3, la quatrième carte resterait seule.
         colonnes === 4 ? "md:grid-cols-4" : "md:grid-cols-3",
-        rail &&
-          "max-md:-mx-6 max-md:flex max-md:snap-x max-md:snap-mandatory max-md:scroll-px-6 max-md:[scrollbar-width:none] max-md:overflow-x-auto max-md:px-6 max-md:pb-2",
       )}
     >
       {produits.map((produit, i) => (
-        <li
-          key={produit.id}
-          className={cn(rail && "max-md:w-[72%] max-md:shrink-0 max-md:snap-start")}
-        >
-          <ProductCard produit={produit} prioritaire={i < 4} niveauTitre={niveauTitre} />
+        <li key={produit.id}>
+          <ProductCard
+            produit={produit}
+            prioritaire={i < 4}
+            niveauTitre={niveauTitre}
+            enRangee={rail}
+          />
         </li>
       ))}
-    </ul>
+    </Liste>
   );
 }
