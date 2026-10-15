@@ -36,7 +36,7 @@ export function Reviews({ produit }: { produit: FicheProduit }) {
           {reviews.length} avis client{reviews.length > 1 ? "s" : ""}
         </p>
       </div>
-      <ul className="divide-y divide-sable border-y border-sable">
+      <ul className="divide-y divide-filet border-y border-filet">
         {reviews.map((avis) => (
           <li key={avis.id} className="py-6">
             <div className="flex flex-wrap items-center gap-x-4 gap-y-1">

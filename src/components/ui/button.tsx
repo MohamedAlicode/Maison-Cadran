@@ -3,26 +3,26 @@ import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
-// Bouton de la charte : capitales espacées, coins quasi droits, filet laiton au survol.
+// Bouton de la charte : forme pilule, libellé en minuscules, le fond s'assombrit au survol.
 const variantesBouton = cva(
   [
-    "group/bouton relative inline-flex items-center justify-center gap-2 rounded-xs",
-    "text-[13px] font-medium tracking-surtitre uppercase whitespace-nowrap",
-    "transition-colors duration-200 ease-maison",
-    "disabled:pointer-events-none disabled:opacity-50",
+    "inline-flex items-center justify-center gap-2 rounded-full",
+    "text-sm font-medium whitespace-nowrap",
+    "transition-colors duration-(--duree-courte) ease-maison",
+    "disabled:pointer-events-none disabled:opacity-50 aria-disabled:opacity-50",
   ],
   {
     variants: {
       variante: {
-        principal: "bg-encre text-creme hover:bg-nuit",
-        secondaire: "border border-encre text-encre hover:bg-encre hover:text-creme",
-        clair: "bg-creme text-encre hover:bg-ivoire",
-        fantome: "text-encre hover:bg-sable/40",
+        principal: "bg-cadran text-blanc hover:bg-cadran-fonce",
+        secondaire: "border border-encre text-encre hover:bg-encre hover:text-acier",
+        clair: "bg-acier text-encre hover:bg-blanc",
+        fantome: "text-encre hover:bg-filet/40",
       },
       taille: {
         sm: "h-10 px-4",
-        md: "h-12 px-7",
-        lg: "h-14 px-9",
+        md: "h-12 px-6",
+        lg: "h-14 px-8",
         icone: "size-11",
       },
       pleineLargeur: {
@@ -52,26 +52,13 @@ export function Button({
   ...props
 }: ProprietesBouton) {
   const Composant = asChild ? Slot : "button";
-  const avecFilet = variante === "principal" || variante === undefined || variante === null;
 
   return (
     <Composant
       className={cn(variantesBouton({ variante, taille, pleineLargeur }), className)}
       {...props}
     >
-      {asChild ? (
-        children
-      ) : (
-        <>
-          {children}
-          {avecFilet && (
-            <span
-              aria-hidden
-              className="absolute inset-x-7 bottom-3 h-px origin-left scale-x-0 bg-laiton-clair transition-transform duration-300 ease-maison group-hover/bouton:scale-x-100"
-            />
-          )}
-        </>
-      )}
+      {children}
     </Composant>
   );
 }

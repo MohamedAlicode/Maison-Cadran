@@ -17,10 +17,10 @@ export function Progress({ valeur, max, label, className }: Proprietes) {
       aria-valuemin={0}
       aria-valuemax={max}
       aria-valuenow={Math.min(valeur, max)}
-      className={cn("h-[3px] w-full overflow-hidden bg-sable", className)}
+      className={cn("h-0.75 w-full overflow-hidden bg-filet", className)}
     >
       <div
-        className="h-full bg-laiton transition-[width] duration-500 ease-maison"
+        className="h-full bg-cadran transition-[width] duration-(--duree-longue) ease-maison"
         style={{ width: `${pourcentage}%` }}
       />
     </div>

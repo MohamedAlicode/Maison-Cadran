@@ -1,13 +1,15 @@
-import { Gift, ShieldCheck, ShoppingBag } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { GrilleProduits } from "@/components/catalogue/product-card";
 import { engagements } from "@/components/layout/reassurance-bar";
+import { AjouterAuPanier } from "@/components/panier/ajouter-au-panier";
+import { BarreAchatMobile } from "@/components/produit/barre-achat-mobile";
 import { Gallery } from "@/components/produit/gallery";
 import { Reviews } from "@/components/produit/reviews";
-import { SpecsTable } from "@/components/produit/specs-table";
+import { aideEtancheite, aideMouvement, SpecsTable } from "@/components/produit/specs-table";
 import { StockInfo } from "@/components/produit/stock-info";
 import { JsonLd } from "@/components/seo/json-ld";
 import {
@@ -17,19 +19,18 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Price } from "@/components/ui/price";
-import { SectionHeading } from "@/components/ui/section-heading";
 import { Stars } from "@/components/ui/stars";
 import { boutique } from "@/config/boutique";
 import {
+  formatMm,
   produitParSlug,
   produitsSimilaires,
   slugsProduits,
   type FicheProduit,
 } from "@/lib/catalogue";
-import { libelleCouleur, libellesMouvement } from "@/lib/libelles";
+import { libelleCouleur, libellesMatiere, libellesMouvement } from "@/lib/libelles";
 import { formatPrixCourt } from "@/lib/prix";
 import { cn } from "@/lib/utils";
 import { teintesCadran } from "@/lib/visuels";
@@ -138,10 +139,10 @@ function Declinaisons({ produit }: { produit: FicheProduit }) {
                 aria-label={`Cadran ${libelleCouleur(d.dialColor).toLowerCase()}${d.stock <= 0 ? " (épuisé)" : ""}`}
                 aria-current={courant ? "true" : undefined}
                 className={cn(
-                  "block size-9 rounded-full ring-1 ring-offset-2 ring-offset-creme transition",
-                  courant ? "ring-encre" : "ring-sable hover:ring-sable-fonce",
+                  "block size-11 rounded-full ring-1 ring-offset-2 ring-offset-acier transition",
+                  courant ? "ring-encre" : "ring-filet hover:ring-filet-fort",
                 )}
-                style={{ backgroundColor: teintesCadran[d.dialColor] ?? "#888" }}
+                style={{ backgroundColor: teintesCadran[d.dialColor] ?? teintesCadran.noir }}
               />
             </li>
           );
@@ -178,16 +179,11 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
           <Gallery images={produit.images.map((i) => ({ url: i.url, alt: i.alt }))} />
 
           <div className="lg:sticky lg:top-36 lg:self-start">
-            <Link
-              href={`/marques/${produit.brand.slug}`}
-              className="text-xs font-medium tracking-surtitre text-graphite uppercase hover:text-encre"
-            >
-              {produit.brand.name}
-            </Link>
-            <h1 className="mt-2 text-4xl leading-[1.05] md:text-5xl">{produit.name}</h1>
-            <p className="chiffres mt-3 text-sm text-graphite">
-              Réf. {produit.reference} · {libellesMouvement[produit.movement]}
-            </p>
+            {/* Même règle que les cartes : la marque ouvre le titre, sans sur-titre. */}
+            <h1 className="text-4xl leading-affiche md:text-5xl">
+              <span className="text-graphite">{produit.brand.name}</span> {produit.name}
+            </h1>
+            <p className="chiffres mt-3 text-sm text-graphite">Réf. {produit.reference}</p>
 
             {produit.noteMoyenne !== null && (
               <a
@@ -216,26 +212,41 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
 
             <p className="mt-6 leading-relaxed">{produit.shortDescription}</p>
 
+            <dl className="mt-6 grid grid-cols-2 gap-px border-y border-filet bg-filet text-sm">
+              {[
+                ["Mouvement", libellesMouvement[produit.movement], aideMouvement[produit.movement]],
+                ["Diamètre", formatMm(produit.caseDiameterMm)],
+                ["Boîtier", libellesMatiere[produit.caseMaterial]],
+                [
+                  "Étanchéité",
+                  `${produit.waterResistanceM} m`,
+                  aideEtancheite(produit.waterResistanceM),
+                ],
+              ].map(([terme, valeur, aide]) => (
+                <div key={terme} className="bg-acier py-3 pr-3 odd:pr-4 even:pl-4">
+                  <dt className="text-graphite">{terme}</dt>
+                  <dd className="chiffres mt-0.5 text-encre">
+                    {valeur}
+                    {aide && <span className="mt-0.5 block text-xs text-graphite">{aide}</span>}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+
             <div className="mt-8 space-y-8">
               <Declinaisons produit={produit} />
 
-              <div>
-                {/* Le panier arrive en phase 3 : le bouton est affiché pour valider la mise en page. */}
-                <Button
-                  pleineLargeur
-                  taille="lg"
-                  disabled={!disponible}
-                  aria-describedby="note-panier"
-                >
-                  <ShoppingBag aria-hidden className="size-4" strokeWidth={1.5} />
-                  {disponible ? "Ajouter au panier" : "Épuisée"}
-                </Button>
-                <p id="note-panier" className="mt-2 text-center text-xs text-graphite">
-                  {disponible
-                    ? "Commande en ligne bientôt disponible."
-                    : "Contactez-nous pour être prévenu de son retour."}
-                </p>
+              <div id="achat-principal">
+                <AjouterAuPanier produitId={produit.id} disponible={disponible} />
               </div>
+              <BarreAchatMobile
+                idCible="achat-principal"
+                produitId={produit.id}
+                disponible={disponible}
+                marque={produit.brand.name}
+                nom={produit.name}
+                prixCentimes={produit.priceCents}
+              />
 
               <StockInfo
                 stock={produit.stock}
@@ -243,17 +254,11 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
                 seuilBas={produit.lowStockThreshold}
               />
 
-              <div className="border-y border-sable py-6">
-                <p className="text-xs font-medium tracking-surtitre text-laiton-fonce uppercase">
-                  Ce qui est inclus
-                </p>
-                <ul className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
+              <div className="border-y border-filet py-6">
+                <p className="text-sm font-medium">Avec votre montre</p>
+                <ul className="mt-4 grid gap-3 text-sm text-graphite sm:grid-cols-2">
                   <li className="flex items-center gap-3">
-                    <Gift aria-hidden className="size-4 text-laiton" strokeWidth={1.5} /> Écrin
-                    d&apos;origine {produit.brand.name}
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <ShieldCheck aria-hidden className="size-4 text-laiton" strokeWidth={1.5} />{" "}
+                    <ShieldCheck aria-hidden className="size-4 text-encre" strokeWidth={1.5} />{" "}
                     Garantie {produit.warrantyMonths / 12} ans
                   </li>
                   {engagements
@@ -261,7 +266,7 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
                     .concat(engagements.slice(3))
                     .map(({ icone: Icone, titre }) => (
                       <li key={titre} className="flex items-center gap-3">
-                        <Icone aria-hidden className="size-4 text-laiton" strokeWidth={1.5} />{" "}
+                        <Icone aria-hidden className="size-4 text-encre" strokeWidth={1.5} />{" "}
                         {titre}
                       </li>
                     ))}
@@ -281,12 +286,10 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="garantie">
-                  <AccordionTrigger>Garantie et authenticité</AccordionTrigger>
+                  <AccordionTrigger>Garantie</AccordionTrigger>
                   <AccordionContent>
-                    Chaque montre est neuve, contrôlée avant expédition et livrée avec son écrin,
-                    ses documents d&apos;origine et sa facture. Elle bénéficie d&apos;une garantie
-                    de {produit.warrantyMonths / 12} ans, en plus de la garantie légale de
-                    conformité.
+                    Chaque montre est neuve et garantie {produit.warrantyMonths / 12} ans, en plus
+                    de la garantie légale de conformité.
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -296,20 +299,20 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
       </Container>
 
       {/* Description et avis de la maison */}
-      <section className="mt-16 border-t border-sable bg-ivoire py-16 md:mt-24 md:py-24">
+      <section className="mt-16 border-t border-filet bg-blanc py-16 md:mt-24 md:py-24">
         <Container className="grid gap-12 lg:grid-cols-2 lg:gap-24">
           <div>
-            <SectionHeading surtitre="Description" titre={`À propos de la ${produit.name}`} />
+            <h2 className="text-3xl md:text-4xl">À propos de la {produit.name}</h2>
             <p className="mt-8 max-w-prose leading-relaxed text-graphite">{produit.description}</p>
           </div>
           {produit.editorialNote && (
-            <figure className="self-end border-l border-laiton pl-8">
-              <p className="text-xs font-medium tracking-surtitre text-laiton-fonce uppercase">
-                L&apos;avis de la maison
-              </p>
-              <blockquote className="mt-4 font-serif text-2xl leading-snug italic md:text-3xl">
+            <figure className="self-end border-l border-cadran pl-8">
+              <blockquote className="font-serif text-2xl leading-snug italic md:text-3xl">
                 « {produit.editorialNote} »
               </blockquote>
+              <figcaption className="mt-4 text-sm text-graphite">
+                L&apos;avis de la maison
+              </figcaption>
             </figure>
           )}
         </Container>
@@ -328,7 +331,7 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
       {/* Avis clients */}
       <section
         id="avis"
-        className="scroll-mt-32 border-t border-sable py-16 md:py-24"
+        className="scroll-mt-32 border-t border-filet py-16 md:py-24"
         aria-labelledby="titre-avis"
       >
         <Container>
@@ -341,7 +344,7 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
 
       {/* Montres similaires */}
       {similaires.length > 0 && (
-        <section className="border-t border-sable py-16 md:py-24" aria-labelledby="similaires">
+        <section className="border-t border-filet py-16 md:py-24" aria-labelledby="similaires">
           <Container>
             <h2 id="similaires" className="mb-10 text-3xl md:text-4xl">
               Vous aimerez aussi
@@ -357,13 +360,13 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
 function FicheSquelette() {
   return (
     <Container className="py-6 md:py-10" aria-hidden>
-      <div className="h-4 w-64 bg-sable/60" />
+      <div className="h-4 w-64 bg-filet/60" />
       <div className="mt-6 grid gap-10 lg:grid-cols-[1.25fr_1fr] lg:gap-16 xl:gap-24">
-        <div className="aspect-square animate-pulse bg-ivoire" />
+        <div className="aspect-square animate-pulse rounded-cadre bg-blanc" />
         <div className="space-y-4">
-          <div className="h-3 w-20 bg-sable/60" />
-          <div className="h-12 w-3/4 bg-sable/60" />
-          <div className="h-8 w-28 bg-sable/60" />
+          <div className="h-3 w-20 bg-filet/60" />
+          <div className="h-12 w-3/4 bg-filet/60" />
+          <div className="h-8 w-28 bg-filet/60" />
         </div>
       </div>
     </Container>

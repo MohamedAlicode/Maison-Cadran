@@ -11,6 +11,8 @@ const schemaEnv = z.object({
   STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_").optional(),
   AUTH_SECRET: z.string().min(32).optional(),
   RESEND_API_KEY: z.string().startsWith("re_").optional(),
+  /** Expéditeur des e-mails, sur un domaine vérifié chez Resend. */
+  EMAIL_EXPEDITEUR: z.string().optional(),
   CLOUDINARY_CLOUD_NAME: z.string().optional(),
   CLOUDINARY_API_KEY: z.string().optional(),
   CLOUDINARY_API_SECRET: z.string().optional(),

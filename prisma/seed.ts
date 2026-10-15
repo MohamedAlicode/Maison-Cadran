@@ -4,8 +4,8 @@
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client";
-import { cheminVisuel, vuesMontre } from "../src/lib/visuels";
 import { avisTest, clientsTest, collections, marques, montres } from "./donnees-test";
+import { photosMontres } from "../src/lib/photos-montres";
 
 if (process.env.NODE_ENV === "production") {
   throw new Error("Le seed de test ne doit jamais être lancé en production.");
@@ -17,8 +17,6 @@ const db = new PrismaClient({
 
 const JOUR = 24 * 60 * 60 * 1000;
 const maintenant = Date.now();
-
-const nomsVues = { face: "vue de face", detail: "détail du cadran", profil: "vue de profil" };
 
 async function main() {
   // Vidage dans l'ordre des dépendances
@@ -56,14 +54,16 @@ async function main() {
         brandId: infosMarque.id,
         createdAt: date,
         images: {
-          create: vuesMontre.map((vue, position) => ({
-            publicId: `test/${montre.slug}-${vue}`,
-            url: cheminVisuel(montre.slug, vue),
-            alt: `${infosMarque.name} ${montre.name}, ${nomsVues[vue]}`,
-            width: 800,
-            height: 800,
-            position,
-          })),
+          create: photosMontres
+            .filter((photo) => photo.produit === montre.slug)
+            .map((photo, position) => ({
+              publicId: `test/${photo.url.split("/").pop()}`,
+              url: photo.url,
+              alt: `${infosMarque.name} ${montre.name}, ${photo.vue}`,
+              width: photo.taille,
+              height: photo.taille,
+              position,
+            })),
         },
         collections: {
           create: slugsCollections.map((slug, position) => ({

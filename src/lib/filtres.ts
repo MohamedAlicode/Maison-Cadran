@@ -91,7 +91,7 @@ const liste = z
         brut
           .split(",")
           .map((s) => s.trim().toLowerCase())
-          .filter((s) => /^[a-z0-9-]{1,40}$/.test(s)),
+          .filter((s) => /^[a-z0-9_-]{1,40}$/.test(s)),
       ),
     ].slice(0, 20);
   });
@@ -136,7 +136,17 @@ export const clesFiltres: CleFiltre[] = [
 ];
 
 export function lireFiltres(params: Record<string, string | string[] | undefined>): Filtres {
-  return schemaFiltres.parse(params);
+  const filtres = schemaFiltres.parse(params);
+  // Une tranche inconnue (lien ancien ou modifié) ne correspondrait à rien et n'aurait pas de
+  // puce pour la retirer : on l'ignore.
+  const garder = (valeurs: string[], tranches: readonly { cle: string }[]) =>
+    valeurs.filter((v) => tranches.some((t) => t.cle === v));
+  return {
+    ...filtres,
+    prix: garder(filtres.prix, tranchesPrix),
+    diametre: garder(filtres.diametre, tranchesDiametre),
+    etancheite: garder(filtres.etancheite, tranchesEtancheite),
+  };
 }
 
 /** Sérialise les filtres en query string stable (ordre fixe), sans les valeurs par défaut. */

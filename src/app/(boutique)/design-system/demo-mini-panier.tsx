@@ -49,7 +49,7 @@ export function DemoMiniPanier() {
         <div className="mt-8 flex gap-4">
           <div className="relative aspect-square w-24 shrink-0 bg-blanc">
             <Image
-              src="/images/montres/orient-bambino-version-2-creme-face.svg"
+              src="/images/montres/orient-bambino-bleu-nuit.jpg"
               alt=""
               fill
               sizes="96px"
@@ -57,10 +57,8 @@ export function DemoMiniPanier() {
             />
           </div>
           <div className="flex-1 text-sm">
-            <p className="text-[11px] font-medium tracking-surtitre text-graphite uppercase">
-              Orient
-            </p>
-            <p className="font-serif text-lg">Bambino Version 2</p>
+            <p className="text-xs font-medium tracking-surtitre text-graphite uppercase">Orient</p>
+            <p className="font-serif text-lg">Bambino</p>
             <p className="text-graphite">Quantité : 1</p>
             <Price centimes={sousTotal} className="mt-2" />
           </div>

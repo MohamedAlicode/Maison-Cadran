@@ -1,7 +1,7 @@
 "use client";
 
 import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { Plus } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
@@ -12,7 +12,7 @@ export function AccordionItem({
   className,
   ...props
 }: ComponentProps<typeof AccordionPrimitive.Item>) {
-  return <AccordionPrimitive.Item className={cn("border-b border-sable", className)} {...props} />;
+  return <AccordionPrimitive.Item className={cn("border-b border-filet", className)} {...props} />;
 }
 
 export function AccordionTrigger({
@@ -30,9 +30,9 @@ export function AccordionTrigger({
         {...props}
       >
         {children}
-        <Plus
+        <ChevronDown
           aria-hidden
-          className="size-4 text-laiton transition-transform duration-300 ease-maison group-data-[state=open]:rotate-45"
+          className="size-4 shrink-0 text-cadran transition-transform duration-(--duree-moyenne) ease-maison group-data-[state=open]:rotate-180"
           strokeWidth={1.5}
         />
       </AccordionPrimitive.Trigger>
