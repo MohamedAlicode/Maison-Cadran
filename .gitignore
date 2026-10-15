@@ -64,3 +64,6 @@ next-env.d.ts
 .impeccable/live/pending-manual-edits.json
 .impeccable/live/deferred-svelte-component-accepts.json
 .impeccable-live/
+
+# e-mails écrits en local quand Resend n'est pas configuré
+/.emails

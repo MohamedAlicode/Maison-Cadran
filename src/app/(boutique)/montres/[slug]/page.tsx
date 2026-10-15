@@ -1,10 +1,11 @@
-import { ShieldCheck, ShoppingBag } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { GrilleProduits } from "@/components/catalogue/product-card";
 import { engagements } from "@/components/layout/reassurance-bar";
+import { AjouterAuPanier } from "@/components/panier/ajouter-au-panier";
 import { Gallery } from "@/components/produit/gallery";
 import { Reviews } from "@/components/produit/reviews";
 import { aideEtancheite, aideMouvement, SpecsTable } from "@/components/produit/specs-table";
@@ -17,7 +18,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
-import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Price } from "@/components/ui/price";
 import { Stars } from "@/components/ui/stars";
@@ -235,23 +235,7 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
             <div className="mt-8 space-y-8">
               <Declinaisons produit={produit} />
 
-              <div>
-                {/* Le panier arrive en phase 3 : le bouton est affiché pour valider la mise en page. */}
-                <Button
-                  pleineLargeur
-                  taille="lg"
-                  disabled={!disponible}
-                  aria-describedby="note-panier"
-                >
-                  <ShoppingBag aria-hidden className="size-4" strokeWidth={1.5} />
-                  {disponible ? "Ajouter au panier" : "Épuisée"}
-                </Button>
-                <p id="note-panier" className="mt-2 text-center text-xs text-graphite">
-                  {disponible
-                    ? "Commande en ligne bientôt disponible."
-                    : "Contactez-nous pour être prévenu de son retour."}
-                </p>
-              </div>
+              <AjouterAuPanier produitId={produit.id} disponible={disponible} />
 
               <StockInfo
                 stock={produit.stock}

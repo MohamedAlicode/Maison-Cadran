@@ -1,6 +1,7 @@
-import { Heart, Search, ShoppingBag, User } from "lucide-react";
+import { Heart, Search, User } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
+import { BoutonPanier } from "@/components/panier/bouton-panier";
 import { variantesBouton } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ReassuranceBar } from "./reassurance-bar";
@@ -85,9 +86,7 @@ export function Header() {
               >
                 <Heart className="size-5" strokeWidth={1.5} />
               </Link>
-              <Link href="/panier" className={classeIcone} aria-label="Panier">
-                <ShoppingBag className="size-5" strokeWidth={1.5} />
-              </Link>
+              <BoutonPanier />
             </div>
           </div>
         </div>
