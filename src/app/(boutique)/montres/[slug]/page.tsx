@@ -7,6 +7,7 @@ import { GrilleProduits } from "@/components/catalogue/product-card";
 import { engagements } from "@/components/layout/reassurance-bar";
 import { AjouterAuPanier } from "@/components/panier/ajouter-au-panier";
 import { BarreAchatMobile } from "@/components/produit/barre-achat-mobile";
+import { FormulaireAvis } from "@/components/produit/formulaire-avis";
 import { Gallery } from "@/components/produit/gallery";
 import { Reviews } from "@/components/produit/reviews";
 import { aideEtancheite, aideMouvement, SpecsTable } from "@/components/produit/specs-table";
@@ -339,6 +340,8 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
             Avis clients
           </h2>
           <Reviews produit={produit} />
+          <h3 className="mt-16 mb-6 text-2xl">Donner votre avis</h3>
+          <FormulaireAvis produitId={produit.id} />
         </Container>
       </section>
 

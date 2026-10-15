@@ -8,15 +8,14 @@ const formatDate = new Intl.DateTimeFormat("fr-FR", {
   year: "numeric",
 });
 
-/** Avis clients modérés. Le dépôt d'un avis arrivera avec les comptes clients. */
+/** Avis clients publiés, du plus récent au plus ancien. */
 export function Reviews({ produit }: { produit: FicheProduit }) {
   const { reviews, noteMoyenne } = produit;
 
   if (reviews.length === 0 || noteMoyenne === null) {
     return (
       <p className="text-graphite">
-        Aucun avis pour le moment. Les clients ayant acheté cette montre pourront bientôt partager
-        leur expérience.
+        Aucun avis pour le moment. Soyez le premier à partager le vôtre.
       </p>
     );
   }
