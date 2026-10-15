@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import { GrilleProduits } from "@/components/catalogue/product-card";
 import { engagements } from "@/components/layout/reassurance-bar";
 import { AjouterAuPanier } from "@/components/panier/ajouter-au-panier";
+import { BarreAchatMobile } from "@/components/produit/barre-achat-mobile";
 import { Gallery } from "@/components/produit/gallery";
 import { Reviews } from "@/components/produit/reviews";
 import { aideEtancheite, aideMouvement, SpecsTable } from "@/components/produit/specs-table";
@@ -235,7 +236,17 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
             <div className="mt-8 space-y-8">
               <Declinaisons produit={produit} />
 
-              <AjouterAuPanier produitId={produit.id} disponible={disponible} />
+              <div id="achat-principal">
+                <AjouterAuPanier produitId={produit.id} disponible={disponible} />
+              </div>
+              <BarreAchatMobile
+                idCible="achat-principal"
+                produitId={produit.id}
+                disponible={disponible}
+                marque={produit.brand.name}
+                nom={produit.name}
+                prixCentimes={produit.priceCents}
+              />
 
               <StockInfo
                 stock={produit.stock}

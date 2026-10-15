@@ -38,7 +38,7 @@ Généré au départ par `ui-ux-pro-max/scripts/search.py`, puis réécrit pour 
 ## Espacements, formes, profondeur, mouvement
 
 - Pas de 4 px (`--spacing`). Aucune marge arbitraire en px.
-- Marge des photos : `p-(--marge-photo)` (10 %), `-serree` (4 %), `-large` (12 %).
+- Photos : `object-cover` dans leur cadre, sans marge intérieure (vraies prises de vue).
 - Coins : `rounded-xs` (2 px) pour cases et surlignages, `rounded-controle` (10 px) pour les champs, `rounded-cadre` (16 px) pour les cadres photo, `rounded-full` pour boutons, badges et pastilles.
 - Une seule ombre : `shadow-tiroir`, pour les panneaux au-dessus de la page.
 - Verre : `backdrop-blur-verre` sur fond acier à 85 % au moins, en-tête collant et barres posées sur une photo seulement.

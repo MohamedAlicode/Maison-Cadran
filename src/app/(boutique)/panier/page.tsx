@@ -55,7 +55,7 @@ async function ContenuPanier({ searchParams }: Pick<PageProps<"/panier">, "searc
           <p
             key={String(texte)}
             role="status"
-            className="mb-6 border-l-2 border-cadran bg-blanc px-4 py-3 text-sm"
+            className="mb-6 rounded-controle border border-filet bg-blanc px-4 py-3 text-sm"
           >
             {texte}
           </p>
@@ -74,7 +74,7 @@ async function ContenuPanier({ searchParams }: Pick<PageProps<"/panier">, "searc
       </section>
 
       <section aria-labelledby="titre-recapitulatif" className="lg:sticky lg:top-28 lg:self-start">
-        <div className="space-y-6 bg-blanc p-6 md:p-8">
+        <div className="space-y-6 rounded-cadre bg-blanc p-6 md:p-8">
           <h2 id="titre-recapitulatif" className="font-serif text-2xl">
             Récapitulatif
           </h2>
@@ -94,7 +94,7 @@ function PanierSquelette() {
       <div className="space-y-6 border-y border-filet py-6">
         {[0, 1].map((i) => (
           <div key={i} className="flex gap-4">
-            <div className="size-24 bg-filet/60 md:size-32" />
+            <div className="size-24 rounded-controle bg-filet/60 md:size-32" />
             <div className="flex-1 space-y-3">
               <div className="h-5 w-2/3 bg-filet/60" />
               <div className="h-4 w-1/3 bg-filet/60" />
@@ -102,7 +102,7 @@ function PanierSquelette() {
           </div>
         ))}
       </div>
-      <div className="h-96 bg-blanc" />
+      <div className="h-96 rounded-cadre bg-blanc" />
     </div>
   );
 }

@@ -119,7 +119,7 @@ export function Gallery({
                   fill
                   priority={priorite && i === 0}
                   sizes="(min-width: 1280px) 600px, (min-width: 1024px) 50vw, 100vw"
-                  className="object-contain p-(--marge-photo) transition-transform duration-(--duree-courte) ease-maison"
+                  className="object-cover transition-transform duration-(--duree-courte) ease-maison"
                   style={
                     zoom && i === active
                       ? { transform: "scale(2)", transformOrigin: `${zoom.x}% ${zoom.y}%` }

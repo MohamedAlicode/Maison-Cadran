@@ -135,18 +135,13 @@
 }
 
 /*
- * Tokens sans utilitaire Tailwind dédié, employés via la syntaxe duration-(--duree-courte) ou p-(--marge-photo).
+ * Tokens sans utilitaire Tailwind dédié, employés via la syntaxe duration-(--duree-courte).
  */
 :root {
   /* Durées de transition */
   --duree-courte: 180ms;
   --duree-moyenne: 300ms;
   --duree-longue: 500ms;
-
-  /* Respiration autour d'une montre dans son cadre : vignette, galerie, survol */
-  --marge-photo-serree: 4%;
-  --marge-photo: 10%;
-  --marge-photo-large: 12%;
 }
 
 @layer base {

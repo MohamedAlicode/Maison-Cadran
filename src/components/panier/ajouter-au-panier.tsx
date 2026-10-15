@@ -10,9 +10,12 @@ import { useMiniPanier } from "./etat-mini-panier";
 export function AjouterAuPanier({
   produitId,
   disponible,
+  compact = false,
 }: {
   produitId: string;
   disponible: boolean;
+  /** Version de la barre d'achat mobile : bouton plus petit, message d'erreur seul. */
+  compact?: boolean;
 }) {
   const [enCours, demarrer] = useTransition();
   const [erreur, changerErreur] = useState<string | null>(null);
@@ -28,6 +31,20 @@ export function AjouterAuPanier({
       if (resultat.ok) ouvrirDepuis(bouton);
       else changerErreur(resultat.message);
     });
+  }
+
+  if (compact) {
+    return (
+      <div className="flex flex-col items-end gap-1">
+        <Button disabled={!disponible} aria-disabled={enCours} onClick={ajouter}>
+          <ShoppingBag aria-hidden className="size-4" strokeWidth={1.5} />
+          {!disponible ? "Épuisée" : enCours ? "Ajout…" : "Ajouter"}
+        </Button>
+        <p role="status" className="text-xs text-bordeaux empty:hidden">
+          {erreur}
+        </p>
+      </div>
+    );
   }
 
   return (

@@ -36,9 +36,7 @@ function BlocAdresse({ titre, adresse }: { titre: string; adresse: Adresse | nul
   if (!adresse) return null;
   return (
     <div>
-      <h2 className="font-sans text-xs font-medium tracking-surtitre text-graphite uppercase">
-        {titre}
-      </h2>
+      <h2 className="font-sans text-sm font-medium text-graphite">{titre}</h2>
       <address className="mt-2 text-sm leading-relaxed not-italic">
         {adresse.nom}
         <br />
@@ -58,22 +56,19 @@ function BlocAdresse({ titre, adresse }: { titre: string; adresse: Adresse | nul
 
 function Recapitulatif({ commande }: { commande: CommandeComplete }) {
   return (
-    <section aria-labelledby="titre-recap" className="bg-blanc p-6 md:p-8 lg:self-start">
+    <section
+      aria-labelledby="titre-recap"
+      className="rounded-cadre bg-blanc p-6 md:p-8 lg:self-start"
+    >
       <h2 id="titre-recap" className="font-serif text-2xl">
         Commande {commande.number}
       </h2>
       <ul className="mt-6 divide-y divide-filet border-y border-filet">
         {commande.items.map((item) => (
           <li key={item.id} className="flex gap-4 py-4">
-            <div className="relative size-20 shrink-0 bg-acier">
+            <div className="relative size-20 shrink-0 overflow-hidden rounded-controle bg-acier">
               {item.imageUrl && (
-                <Image
-                  src={item.imageUrl}
-                  alt=""
-                  fill
-                  sizes="80px"
-                  className="object-contain p-(--marge-photo)"
-                />
+                <Image src={item.imageUrl} alt="" fill sizes="80px" className="object-cover" />
               )}
             </div>
             <div className="flex flex-1 justify-between gap-4">

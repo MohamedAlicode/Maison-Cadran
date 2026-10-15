@@ -33,7 +33,9 @@ export function DrawerContent({
       <DialogPrimitive.Overlay className="fixed inset-0 z-40 bg-nuit/40 data-[state=open]:animate-fondu" />
       <DialogPrimitive.Content
         className={cn(
-          "fixed inset-y-0 z-50 flex w-full max-w-md flex-col bg-blanc shadow-tiroir",
+          // Verre : la page reste devinée derrière le tiroir. 90 % d'acier garde le texte graphite
+          // au-dessus de 4,5:1 même devant le pied de page sombre.
+          "fixed inset-y-0 z-50 flex w-full max-w-md flex-col bg-acier/90 shadow-tiroir backdrop-blur-verre transparence-reduite:bg-acier",
           cote === "droite"
             ? "right-0 data-[state=open]:animate-glisse-droite"
             : "left-0 data-[state=open]:animate-glisse-gauche",

@@ -47,5 +47,5 @@ Layout global (header et footer), puis accueil, catalogue, fiche produit, panier
 
 ### Décisions en attente
 
-- **Verre liquide :** limité pour l'instant à l'en-tête collant et aux barres posées sur une photo (voir la règle du verre utile dans `DESIGN.md`). À élargir seulement si Boss le demande.
+- **Verre liquide :** élargi par Boss le 2026-10-15 (choix « Épuré + verre ») aux tiroirs et aux cartes posées sur une photo, en plus de l'en-tête. Toujours selon la règle du verre utile de `DESIGN.md`, jamais dans la page panier ni le paiement.
 - **Club de membres :** demandé, mais ses avantages et ses conditions ne sont pas définis. Ne rien construire ni inventer avant sa décision.

@@ -58,7 +58,10 @@ export function LignePanier({ ligne, compacte = false }: { ligne: Ligne; compact
         href={`/montres/${ligne.slug}`}
         tabIndex={-1}
         aria-hidden
-        className={cn("relative shrink-0 bg-blanc", compacte ? "size-20" : "size-24 md:size-32")}
+        className={cn(
+          "relative shrink-0 overflow-hidden rounded-controle bg-blanc",
+          compacte ? "size-20" : "size-24 md:size-32",
+        )}
       >
         {ligne.image && (
           <Image
@@ -66,7 +69,7 @@ export function LignePanier({ ligne, compacte = false }: { ligne: Ligne; compact
             alt=""
             fill
             sizes={compacte ? "80px" : "128px"}
-            className="object-contain p-(--marge-photo)"
+            className="object-cover"
           />
         )}
       </Link>
@@ -99,7 +102,7 @@ export function LignePanier({ ligne, compacte = false }: { ligne: Ligne; compact
                 value={ligne.quantite}
                 aria-disabled={enCours}
                 onChange={(e) => executer(() => changerQuantite(ligne.id, Number(e.target.value)))}
-                className="chiffres h-11 rounded-xs border border-filet-fort bg-blanc px-3 text-base"
+                className="chiffres h-11 rounded-full border border-filet-fort bg-blanc px-4 text-base"
               >
                 {Array.from({ length: ligne.quantiteMax }, (_, i) => i + 1).map((n) => (
                   <option key={n} value={n}>

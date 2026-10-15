@@ -47,7 +47,7 @@ export function ProductCard({
             sizes={tailles}
             priority={prioritaire}
             className={cn(
-              "object-contain p-(--marge-photo) transition-[opacity,transform] duration-(--duree-longue) ease-maison",
+              "object-cover transition-[opacity,transform] duration-(--duree-longue) ease-maison",
               produit.imageSurvol ? "md:group-hover:opacity-0" : "md:group-hover:scale-[1.03]",
               produit.stock <= 0 && "opacity-60",
             )}
@@ -59,7 +59,7 @@ export function ProductCard({
             alt=""
             fill
             sizes={tailles}
-            className="hidden object-contain p-(--marge-photo-serree) opacity-0 transition-opacity duration-(--duree-longue) ease-maison md:block md:group-hover:opacity-100"
+            className="hidden object-cover opacity-0 transition-opacity duration-(--duree-longue) ease-maison md:block md:group-hover:opacity-100"
           />
         )}
         {badge && (

@@ -5,6 +5,7 @@ import { GrilleProduits } from "@/components/catalogue/product-card";
 import { ReassuranceBar } from "@/components/layout/reassurance-bar";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { Price } from "@/components/ui/price";
 import { RangeeDefilante } from "@/components/ui/rangee-defilante";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { TextLink } from "@/components/ui/text-link";
@@ -58,6 +59,8 @@ export default async function Accueil() {
     index.filter((p) => p.stock > 0 && !dejaMontrees.has(p.id)),
     "nouveautes",
   ).slice(0, 4);
+  // La montre du hero : sa photo au poignet montre l'échelle mieux qu'une vue de face.
+  const vedette = index.find((p) => p.slug === "hamilton-khaki-field-officer-auto-44mm-noir");
   const parMouvement = new Map<string, number>();
   for (const p of index) parMouvement.set(p.mouvement, (parMouvement.get(p.mouvement) ?? 0) + 1);
 
@@ -92,13 +95,32 @@ export default async function Accueil() {
           </div>
           <div className="relative order-first aspect-4/3 w-full overflow-hidden rounded-cadre bg-blanc md:order-none md:aspect-square">
             <Image
-              src="/images/montres/hero.svg"
-              alt="Montre à cadran bleu"
+              src="/images/montres/hamilton-khaki-field-officer-auto-44mm-noir-poignet.jpg"
+              alt="Hamilton Khaki Field Officer Auto portée au poignet"
               fill
               priority
               sizes="(min-width: 768px) 45vw, 100vw"
-              className="object-contain p-(--marge-photo-large)"
+              className="object-cover"
             />
+            {vedette && (
+              // Verre utile : la carte reste lisible quelle que soit la photo qu'elle recouvre.
+              <Link
+                href={`/montres/${vedette.slug}`}
+                className="group absolute inset-x-3 bottom-3 flex items-center justify-between gap-4 rounded-controle bg-acier/90 px-4 py-3 text-encre backdrop-blur-verre transition-colors duration-(--duree-courte) ease-maison hover:bg-acier md:inset-x-4 md:bottom-4 transparence-reduite:bg-acier"
+              >
+                <span className="min-w-0">
+                  <span className="block truncate font-serif text-lg leading-snug">
+                    <span className="text-graphite">{vedette.marqueNom}</span> {vedette.nom}
+                  </span>
+                  <Price centimes={vedette.prixCentimes} className="text-sm" />
+                </span>
+                <ArrowRight
+                  aria-hidden
+                  className="size-5 shrink-0 transition-transform duration-(--duree-moyenne) ease-maison group-hover:translate-x-1"
+                  strokeWidth={1.5}
+                />
+              </Link>
+            )}
           </div>
         </Container>
       </section>
@@ -159,31 +181,29 @@ export default async function Accueil() {
                   href={`/collections/${c.slug}`}
                   className="group flex h-full flex-col rounded-cadre"
                 >
-                  {c.image && (
-                    <div className="relative aspect-4/5 overflow-hidden rounded-cadre bg-blanc">
+                  <div className="relative aspect-4/5 overflow-hidden rounded-cadre bg-blanc">
+                    {c.image && (
                       <Image
                         src={c.image.url}
                         alt=""
                         fill
                         sizes="(min-width: 768px) 30vw, 75vw"
-                        className="object-contain p-(--marge-photo) transition-transform duration-(--duree-longue) ease-maison md:group-hover:scale-[1.03]"
+                        className="object-cover transition-transform duration-(--duree-longue) ease-maison md:group-hover:scale-[1.03]"
+                      />
+                    )}
+                    {/* Verre utile : le nom de la collection posé sur la photo, lisible sur tous les fonds. */}
+                    <div className="absolute inset-x-3 bottom-3 flex items-center justify-between gap-4 rounded-controle bg-acier/90 px-4 py-3 backdrop-blur-verre md:inset-x-4 md:bottom-4 transparence-reduite:bg-acier">
+                      <h3 className="text-2xl transition-colors group-hover:text-cadran">
+                        {c.name}
+                      </h3>
+                      <ArrowRight
+                        aria-hidden
+                        className="size-5 shrink-0 transition-transform duration-(--duree-moyenne) ease-maison group-hover:translate-x-1"
+                        strokeWidth={1.5}
                       />
                     </div>
-                  )}
-                  <h3 className="mt-6 text-3xl transition-colors group-hover:text-cadran">
-                    {c.name}
-                  </h3>
-                  <p className="mt-3 flex-1 text-sm leading-relaxed text-graphite">
-                    {c.description}
-                  </p>
-                  <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium">
-                    Découvrir
-                    <ArrowRight
-                      aria-hidden
-                      className="size-4 transition-transform duration-(--duree-moyenne) ease-maison group-hover:translate-x-1"
-                      strokeWidth={1.5}
-                    />
-                  </span>
+                  </div>
+                  <p className="mt-4 text-sm leading-relaxed text-graphite">{c.description}</p>
                 </Link>
               </li>
             ))}

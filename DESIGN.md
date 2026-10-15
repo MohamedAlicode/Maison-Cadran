@@ -116,7 +116,7 @@ Un plan de travail en acier, une lumière franche, et la montre posée au centre
 
 La densité est faible et l'espace généreux, parce qu'un premier acheteur doit pouvoir regarder une montre sans être pressé. La hiérarchie de chaque produit est toujours la même : marque puis modèle dans un même titre serif (la marque en graphite), puis prix en chiffres tabulaires.
 
-Le verre dépoli existe, mais seulement là où il a une fonction : l'en-tête collant et les barres posées sur une photo. Jamais en carte décorative.
+Le verre dépoli existe là où il a une fonction : l'en-tête collant, les tiroirs (menu, filtres, mini-panier), et les cartes ou barres posées sur une photo (hero, collections, galerie, barre d'achat mobile). Jamais en carte décorative sur un fond uni, ni dans la page panier et le paiement.
 
 **Key Characteristics:**
 
@@ -184,7 +184,7 @@ Une palette froide et retenue : des neutres teintés vers le bleu, un accent uni
 
 Conteneur de 1440px au plus (`max-w-site`), gouttières de 24px en mobile (16px dans l'en-tête) et 48px dès 1024px. Toutes les marges suivent un pas de 4px. Les grilles produit passent de 2 colonnes (mobile) à 3 (tablette) puis 4 (desktop), ou 3 à côté de la colonne de filtres. Les sections alternent fond acier et fond blanc, sans filet entre elles, avec 64 à 112px de respiration verticale. Les vérifications se font à 375, 768, 1024 et 1440px.
 
-Les photos gardent une marge intérieure en pourcentage pour que la montre respire de la même façon à toutes les tailles : 10% sur les vignettes et la galerie, 12% dans le cadre du hero, 4% pour la seconde vue au survol.
+Les photos sont de vraies prises de vue carrées : elles remplissent leur cadre (`object-cover`), sans marge intérieure. Seul le plein écran de la galerie les montre entières (`object-contain`).
 
 ## Elevation & Depth
 
@@ -196,7 +196,7 @@ Système plat. La profondeur vient de l'alternance acier et blanc et des filets,
 
 ### Named Rules
 
-**La règle du verre utile.** Le flou d'arrière-plan (16px) sert uniquement à garder lisible un élément collant ou posé sur une photo. Il a toujours un fond assez opaque (85% au moins) pour que le texte garde 4.5:1, et jamais de reflet ni de lueur.
+**La règle du verre utile.** Le flou d'arrière-plan (16px) sert uniquement à garder lisible un élément collant ou posé sur une photo. Il a toujours un fond assez opaque (85% au moins, 90% quand il porte du texte graphite sur une photo ou un tiroir) pour que le texte garde 4.5:1, et jamais de reflet ni de lueur.
 
 ## Shapes
 
