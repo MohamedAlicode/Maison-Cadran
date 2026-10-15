@@ -30,11 +30,11 @@ export function ProductCard({
   niveauTitre: Titre = "h3",
 }: Proprietes) {
   const badge = badgeProduit(produit);
-  const tailles = "(min-width: 1024px) 22vw, (min-width: 768px) 30vw, 46vw";
+  const tailles = "(min-width: 1024px) 22vw, (min-width: 768px) 30vw, 72vw";
 
   return (
     <article className="group relative">
-      <div className="relative aspect-square overflow-hidden bg-blanc">
+      <div className="relative aspect-square overflow-hidden rounded-cadre bg-blanc">
         {produit.image && (
           <Image
             src={produit.image.url}
@@ -90,10 +90,13 @@ export function GrilleProduits({
   produits,
   colonnes = 4,
   niveauTitre,
+  rail = false,
 }: {
   produits: ProduitIndexe[];
   colonnes?: 3 | 4;
   niveauTitre?: "h2" | "h3";
+  /** Sous 768 px, les cartes défilent sur une ligne au lieu de s'empiler : la page reste courte. */
+  rail?: boolean;
 }) {
   return (
     <ul
@@ -101,10 +104,15 @@ export function GrilleProduits({
         "grid grid-cols-2 gap-x-4 gap-y-12 md:gap-x-6",
         // Une grille de 4 passe directement à 4 colonnes : en 3, la quatrième carte resterait seule.
         colonnes === 4 ? "md:grid-cols-4" : "md:grid-cols-3",
+        rail &&
+          "max-md:-mx-6 max-md:flex max-md:snap-x max-md:snap-mandatory max-md:scroll-px-6 max-md:[scrollbar-width:none] max-md:overflow-x-auto max-md:px-6 max-md:pb-2",
       )}
     >
       {produits.map((produit, i) => (
-        <li key={produit.id}>
+        <li
+          key={produit.id}
+          className={cn(rail && "max-md:w-[72%] max-md:shrink-0 max-md:snap-start")}
+        >
           <ProductCard produit={produit} prioritaire={i < 4} niveauTitre={niveauTitre} />
         </li>
       ))}

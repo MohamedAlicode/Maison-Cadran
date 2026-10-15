@@ -3,11 +3,11 @@ import { cva, type VariantProps } from "class-variance-authority";
 import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
-// Bouton de la charte : capitales espacées, coins quasi droits, filet clair au survol.
+// Bouton de la charte : forme pilule, libellé en minuscules, le fond s'assombrit au survol.
 const variantesBouton = cva(
   [
-    "group/bouton relative inline-flex items-center justify-center gap-2 rounded-xs",
-    "text-libelle font-medium tracking-surtitre uppercase whitespace-nowrap",
+    "inline-flex items-center justify-center gap-2 rounded-full",
+    "text-sm font-medium whitespace-nowrap",
     "transition-colors duration-(--duree-courte) ease-maison",
     "disabled:pointer-events-none disabled:opacity-50",
   ],
@@ -21,8 +21,8 @@ const variantesBouton = cva(
       },
       taille: {
         sm: "h-10 px-4",
-        md: "h-12 px-7",
-        lg: "h-14 px-9",
+        md: "h-12 px-6",
+        lg: "h-14 px-8",
         icone: "size-11",
       },
       pleineLargeur: {
@@ -52,26 +52,13 @@ export function Button({
   ...props
 }: ProprietesBouton) {
   const Composant = asChild ? Slot : "button";
-  const avecFilet = variante === "principal" || variante === undefined || variante === null;
 
   return (
     <Composant
       className={cn(variantesBouton({ variante, taille, pleineLargeur }), className)}
       {...props}
     >
-      {asChild ? (
-        children
-      ) : (
-        <>
-          {children}
-          {avecFilet && (
-            <span
-              aria-hidden
-              className="absolute inset-x-7 bottom-3 h-px origin-left scale-x-0 bg-cadran-clair transition-transform duration-(--duree-moyenne) ease-maison group-hover/bouton:scale-x-100"
-            />
-          )}
-        </>
-      )}
+      {children}
     </Composant>
   );
 }

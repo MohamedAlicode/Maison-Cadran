@@ -132,7 +132,7 @@ export function Encadre({ children, className }: { children: ReactNode; classNam
   return (
     <aside
       className={cn(
-        "flex gap-3 rounded-xs border border-filet bg-blanc p-5 text-sm leading-relaxed text-graphite",
+        "flex gap-3 rounded-controle border border-filet bg-blanc p-5 text-sm leading-relaxed text-graphite",
         className,
       )}
     >

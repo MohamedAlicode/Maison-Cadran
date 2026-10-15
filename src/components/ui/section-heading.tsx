@@ -12,7 +12,7 @@ type Proprietes = {
   as?: "h1" | "h2" | "h3";
 };
 
-/** En-tête de section : sur-titre, titre serif et filet bleu cadran. */
+/** En-tête de section : grand titre serif, la taille suffit à le détacher. */
 export function SectionHeading({
   surtitre,
   titre,
@@ -24,9 +24,10 @@ export function SectionHeading({
   return (
     <div className={cn("max-w-2xl", centre && "mx-auto text-center", className)}>
       {surtitre && <Eyebrow className="mb-3">{surtitre}</Eyebrow>}
-      <Titre className="text-3xl leading-titre md:text-5xl">{titre}</Titre>
-      <span aria-hidden className={cn("mt-5 block h-px w-12 bg-cadran", centre && "mx-auto")} />
-      {description && <p className="mt-5 leading-relaxed text-graphite">{description}</p>}
+      <Titre className="text-4xl leading-titre text-balance md:text-6xl">{titre}</Titre>
+      {description && (
+        <p className="mt-5 text-lg leading-relaxed text-pretty text-graphite">{description}</p>
+      )}
     </div>
   );
 }

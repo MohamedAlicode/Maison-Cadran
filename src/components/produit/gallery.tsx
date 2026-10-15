@@ -71,7 +71,7 @@ export function Gallery({
               aria-label={`Afficher : ${image.alt}`}
               aria-current={i === active}
               className={cn(
-                "relative block aspect-square w-full bg-blanc ring-1 transition",
+                "relative block aspect-square w-full overflow-hidden rounded-controle bg-blanc ring-1 transition",
                 i === active ? "ring-encre" : "ring-filet hover:ring-filet-fort",
               )}
             >
@@ -95,7 +95,7 @@ export function Gallery({
               const el = e.currentTarget;
               setActive(Math.round(el.scrollLeft / el.clientWidth));
             }}
-            className="flex snap-x snap-mandatory [scrollbar-width:none] overflow-x-auto overscroll-x-contain [&::-webkit-scrollbar]:hidden"
+            className="flex snap-x snap-mandatory [scrollbar-width:none] overflow-x-auto overscroll-x-contain rounded-cadre [&::-webkit-scrollbar]:hidden"
           >
             {images.map((image, i) => (
               <button
@@ -144,7 +144,7 @@ export function Gallery({
               />
               <span
                 aria-live="polite"
-                className="chiffres pointer-events-none absolute bottom-3 left-3 rounded-xs bg-acier/85 px-2 py-1 text-xs text-encre backdrop-blur-verre transparence-reduite:bg-acier"
+                className="chiffres pointer-events-none absolute bottom-3 left-3 rounded-full bg-acier/85 px-2 py-1 text-xs text-encre backdrop-blur-verre transparence-reduite:bg-acier"
               >
                 {active + 1} / {images.length}
               </span>
@@ -191,7 +191,7 @@ export function Gallery({
                 {active + 1} / {images.length}
               </span>
               <DialogPrimitive.Close
-                className="grid size-11 place-items-center rounded-xs hover:bg-filet/40"
+                className="grid size-11 place-items-center rounded-full hover:bg-filet/40"
                 aria-label="Fermer"
               >
                 <X className="size-5" strokeWidth={1.5} />
@@ -220,7 +220,7 @@ export function Gallery({
                     onClick={() => allerA(active - 1)}
                     disabled={active === 0}
                     aria-label="Vue précédente"
-                    className="absolute top-1/2 left-2 grid size-12 -translate-y-1/2 place-items-center rounded-xs bg-blanc/80 hover:bg-blanc disabled:pointer-events-none disabled:opacity-0 md:left-8"
+                    className="absolute top-1/2 left-2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-blanc/80 hover:bg-blanc disabled:pointer-events-none disabled:opacity-0 md:left-8"
                   >
                     <ChevronLeft className="size-6" strokeWidth={1.25} />
                   </button>
@@ -229,7 +229,7 @@ export function Gallery({
                     onClick={() => allerA(active + 1)}
                     disabled={active === images.length - 1}
                     aria-label="Vue suivante"
-                    className="absolute top-1/2 right-2 grid size-12 -translate-y-1/2 place-items-center rounded-xs bg-blanc/80 hover:bg-blanc disabled:pointer-events-none disabled:opacity-0 md:right-8"
+                    className="absolute top-1/2 right-2 grid size-12 -translate-y-1/2 place-items-center rounded-full bg-blanc/80 hover:bg-blanc disabled:pointer-events-none disabled:opacity-0 md:right-8"
                   >
                     <ChevronRight className="size-6" strokeWidth={1.25} />
                   </button>
@@ -261,7 +261,7 @@ function BoutonVue({
       disabled={disabled}
       aria-label={sens === "precedent" ? "Photo précédente" : "Photo suivante"}
       className={cn(
-        "absolute top-1/2 hidden size-11 -translate-y-1/2 place-items-center rounded-xs bg-acier/85 text-encre backdrop-blur-verre transition-opacity duration-(--duree-courte) ease-maison md:grid transparence-reduite:bg-acier",
+        "absolute top-1/2 hidden size-11 -translate-y-1/2 place-items-center rounded-full bg-acier/85 text-encre backdrop-blur-verre transition-opacity duration-(--duree-courte) ease-maison md:grid transparence-reduite:bg-acier",
         "hover:bg-acier disabled:pointer-events-none disabled:opacity-0",
         sens === "precedent" ? "left-3" : "right-3",
       )}

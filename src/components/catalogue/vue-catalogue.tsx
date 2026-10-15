@@ -145,7 +145,7 @@ function PucesFiltres({
             href={p.href}
             scroll={false}
             // Le pseudo-élément porte la zone tactile à 44 px sans grossir la puce.
-            className="relative inline-flex h-8 items-center gap-2 rounded-xs border border-filet bg-blanc px-3 text-xs text-encre transition-colors after:absolute after:inset-x-0 after:-inset-y-1.5 hover:border-encre"
+            className="relative inline-flex h-8 items-center gap-2 rounded-full border border-filet bg-blanc px-3 text-xs text-encre transition-colors after:absolute after:inset-x-0 after:-inset-y-1.5 hover:border-encre"
           >
             {p.libelle}
             <X aria-hidden className="size-3.5 text-graphite" />
@@ -185,7 +185,7 @@ function Pagination({
           href={chemin + versQueryString({ ...filtres, page: n })}
           aria-current={n === page ? "page" : undefined}
           className={cn(
-            "chiffres grid size-11 place-items-center rounded-xs border text-sm",
+            "chiffres grid size-11 place-items-center rounded-full border text-sm",
             n === page ? "border-encre bg-encre text-acier" : "border-filet hover:border-encre",
           )}
         >

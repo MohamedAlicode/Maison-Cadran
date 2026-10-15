@@ -37,7 +37,7 @@ export function Header() {
               <Search className="size-5" strokeWidth={1.5} />
             </Link>
             <nav aria-label="Navigation principale" className="hidden xl:block">
-              <ul className="flex gap-8 text-libelle font-medium tracking-surtitre uppercase">
+              <ul className="flex gap-8 text-sm font-medium">
                 {navigationPrincipale.slice(0, 3).map((lien) => (
                   <li key={lien.href}>
                     <LienNavigation href={lien.href} className="inline-block py-3">
@@ -53,7 +53,7 @@ export function Header() {
 
           <div className="flex items-center justify-end gap-1 xl:gap-6">
             <nav aria-label="Navigation secondaire" className="hidden xl:block">
-              <ul className="flex gap-8 text-libelle font-medium tracking-surtitre uppercase">
+              <ul className="flex gap-8 text-sm font-medium">
                 {navigationPrincipale.slice(3).map((lien) => (
                   <li key={lien.href}>
                     <LienNavigation href={lien.href} className="inline-block py-3">

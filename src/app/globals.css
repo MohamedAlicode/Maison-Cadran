@@ -61,6 +61,8 @@
   --text-6xl--line-height: 1;
   --text-7xl: 4.5rem;
   --text-7xl--line-height: 1;
+  --text-8xl: 6rem;
+  --text-8xl--line-height: 1;
 
   /* Interlignage des grands titres */
   --leading-affiche: 1.05;
@@ -74,8 +76,11 @@
   /* Espacements : pas de 4 px, toutes les marges et tailles en sont des multiples */
   --spacing: 0.25rem;
 
-  /* Coins quasi droits, esprit boîtier usiné */
+  /* Coins : quasi droits pour les cases et surlignages, adoucis pour les champs, ronds pour les cadres photo.
+     Boutons, badges et pastilles prennent la forme pilule (rounded-full). */
   --radius-xs: 2px;
+  --radius-controle: 10px;
+  --radius-cadre: 16px;
 
   /* Ombre teintée nuit, jamais noire : réservée aux panneaux qui passent au-dessus de la page */
   --shadow-tiroir: 0 24px 48px -12px rgb(17 27 41 / 0.28);

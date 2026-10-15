@@ -7,7 +7,7 @@ export function Input({ className, "aria-invalid": invalide, ...props }: Compone
     <input
       aria-invalid={invalide}
       className={cn(
-        "h-12 w-full rounded-xs border border-filet bg-blanc px-4 text-base text-encre",
+        "h-12 w-full rounded-controle border border-filet bg-blanc px-4 text-base text-encre",
         "transition-colors duration-(--duree-courte) placeholder:text-graphite/70",
         "focus-visible:border-encre focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-cadran",
         "aria-invalid:border-bordeaux",

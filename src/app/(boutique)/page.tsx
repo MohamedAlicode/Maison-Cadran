@@ -64,15 +64,15 @@ export default async function Accueil() {
     <>
       {/* Hero sombre */}
       <section className="bg-nuit text-acier">
-        <Container className="grid items-center gap-12 py-20 md:grid-cols-2 md:py-28 lg:py-32">
+        <Container className="grid items-center gap-10 py-10 md:grid-cols-[1.2fr_1fr] md:gap-12 md:py-20">
           <div className="animate-fondu">
-            <h1 className="text-5xl leading-affiche md:text-6xl lg:text-7xl">
+            <h1 className="text-6xl leading-affiche tracking-titre md:text-7xl lg:text-8xl">
               Le temps,
               <br />
               <span className="text-cadran-clair">bien choisi.</span>
             </h1>
-            <p className="mt-6 max-w-md leading-relaxed text-acier/75">
-              Des montres de caractère, de 100 à 2 000 €, sélectionnées pièce par pièce.
+            <p className="mt-6 max-w-md text-lg leading-relaxed text-acier/75">
+              Des montres de caractère, de 100 à 2 000 €, sélectionnées pièce par pièce.
               Authenticité garantie, livraison assurée, retours gratuits sous 14 jours.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
@@ -89,13 +89,13 @@ export default async function Accueil() {
               </Button>
             </div>
           </div>
-          <div className="relative order-first mx-auto aspect-square w-full max-w-60 overflow-hidden rounded-full bg-blanc sm:max-w-sm md:order-none md:max-w-md">
+          <div className="relative order-first aspect-4/3 w-full overflow-hidden rounded-cadre bg-blanc md:order-none md:aspect-square">
             <Image
               src="/images/montres/hero.svg"
               alt="Montre à cadran bleu"
               fill
               priority
-              sizes="(min-width: 768px) 28rem, 24rem"
+              sizes="(min-width: 768px) 45vw, 100vw"
               className="object-contain p-(--marge-photo-large)"
             />
           </div>
@@ -111,12 +111,12 @@ export default async function Accueil() {
               Voir toutes les nouveautés
             </TextLink>
           </div>
-          <GrilleProduits produits={nouveautes} />
+          <GrilleProduits produits={nouveautes} rail />
         </Container>
       </section>
 
       {/* Récit : comprendre le mouvement avant de choisir */}
-      <section className="border-y border-filet bg-blanc py-20 md:py-28">
+      <section className="bg-blanc py-20 md:py-28">
         <Container className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-20">
           <SectionHeading
             titre="Ce qui fait battre une montre"
@@ -151,29 +151,29 @@ export default async function Accueil() {
       <section className="py-20 md:py-28">
         <Container>
           <SectionHeading titre="Choisir par envie" className="mb-12" />
-          <ul className="grid gap-px bg-filet md:grid-cols-3">
+          {/* Sous 768 px, les collections défilent sur une ligne, comme les grilles de montres. */}
+          <ul className="grid gap-6 max-md:-mx-6 max-md:flex max-md:snap-x max-md:snap-mandatory max-md:scroll-px-6 max-md:[scrollbar-width:none] max-md:overflow-x-auto max-md:px-6 max-md:pb-2 md:grid-cols-3">
             {collections.map((c) => (
-              <li key={c.id} className="bg-acier">
-                <Link
-                  href={`/collections/${c.slug}`}
-                  className="group flex h-full flex-col p-8 transition-colors hover:bg-blanc"
-                >
+              <li key={c.id} className="max-md:w-[80%] max-md:shrink-0 max-md:snap-start">
+                <Link href={`/collections/${c.slug}`} className="group flex h-full flex-col">
                   {c.image && (
-                    <div className="relative mb-8 aspect-4/3 bg-blanc">
+                    <div className="relative aspect-4/5 overflow-hidden rounded-cadre bg-blanc">
                       <Image
                         src={c.image.url}
                         alt=""
                         fill
-                        sizes="(min-width: 768px) 30vw, 90vw"
-                        className="object-contain p-(--marge-photo)"
+                        sizes="(min-width: 768px) 30vw, 80vw"
+                        className="object-contain p-(--marge-photo) transition-transform duration-(--duree-longue) ease-maison md:group-hover:scale-[1.03]"
                       />
                     </div>
                   )}
-                  <h3 className="text-3xl transition-colors group-hover:text-cadran">{c.name}</h3>
-                  <p className="mt-4 flex-1 text-sm leading-relaxed text-graphite">
+                  <h3 className="mt-6 text-3xl transition-colors group-hover:text-cadran">
+                    {c.name}
+                  </h3>
+                  <p className="mt-3 flex-1 text-sm leading-relaxed text-graphite">
                     {c.description}
                   </p>
-                  <span className="mt-8 inline-flex items-center gap-2 text-libelle font-medium tracking-surtitre uppercase">
+                  <span className="mt-5 inline-flex items-center gap-2 text-sm font-medium">
                     Découvrir
                     <ArrowRight
                       aria-hidden
@@ -189,7 +189,7 @@ export default async function Accueil() {
       </section>
 
       {/* Récit : les maisons, présentées comme un registre */}
-      <section className="border-y border-filet bg-blanc py-20 md:py-28">
+      <section className="bg-blanc py-20 md:py-28">
         <Container>
           <SectionHeading
             titre={`${marques.length} maisons, deux écoles`}
@@ -227,13 +227,13 @@ export default async function Accueil() {
               description="Les montres qui recueillent les meilleures notes."
               className="mb-12"
             />
-            <GrilleProduits produits={appreciees} />
+            <GrilleProduits produits={appreciees} rail />
           </Container>
         </section>
       )}
 
       {/* Réassurance */}
-      <section className="border-t border-filet bg-blanc py-20 md:py-28">
+      <section className="bg-blanc py-20 md:py-28">
         <Container>
           <SectionHeading
             centre

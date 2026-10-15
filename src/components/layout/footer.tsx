@@ -47,9 +47,7 @@ export function Footer() {
           <Logo clair className="items-start" />
           <p className="mt-6 max-w-sm text-sm leading-relaxed text-acier/70">{boutique.slogan}.</p>
           <div className="mt-8 text-sm text-acier/80">
-            <p className="text-xs font-medium tracking-surtitre text-cadran-clair uppercase">
-              Une question ?
-            </p>
+            <p className="font-medium text-cadran-clair">Une question ?</p>
             <p className="mt-3">
               <a
                 href={`mailto:${boutique.contact.email}`}
@@ -71,9 +69,7 @@ export function Footer() {
         </div>
         {colonnes.map((colonne) => (
           <nav key={colonne.titre} aria-label={colonne.titre}>
-            <h2 className="font-sans text-xs font-medium tracking-surtitre text-cadran-clair uppercase">
-              {colonne.titre}
-            </h2>
+            <h2 className="font-sans text-sm font-medium text-cadran-clair">{colonne.titre}</h2>
             <ul className="mt-3.5 text-sm text-acier/80">
               {colonne.liens.map((lien) => (
                 <li key={lien.href}>

@@ -30,7 +30,7 @@ Généré au départ par `ui-ux-pro-max/scripts/search.py`, puis réécrit pour 
 
 - **Titres :** Instrument Serif, graisse 400 uniquement (`font-normal`).
 - **Texte, prix, boutons :** Hanken Grotesk.
-- **Échelle :** `text-xs` (12) · `text-libelle` (13, capitales) · `text-sm` (14) · `text-base` (16) · `text-lg` … `text-7xl`.
+- **Échelle :** `text-xs` (12) · `text-libelle` (13) · `text-sm` (14) · `text-base` (16) · `text-lg` … `text-8xl` (96, hero de l'accueil).
 - **Interlignes de titres :** `leading-affiche` (1,05) et `leading-titre` (1,1).
 - **Approches :** `tracking-surtitre` (capitales), `tracking-titre`, `tracking-logo`.
 - Prix et caractéristiques en chiffres tabulaires (classe `chiffres`).
@@ -39,7 +39,7 @@ Généré au départ par `ui-ux-pro-max/scripts/search.py`, puis réécrit pour 
 
 - Pas de 4 px (`--spacing`). Aucune marge arbitraire en px.
 - Marge des photos : `p-(--marge-photo)` (10 %), `-serree` (4 %), `-large` (12 %).
-- Coins : `rounded-xs` (2 px). Cercle uniquement pour ce qui est rond en vrai.
+- Coins : `rounded-xs` (2 px) pour cases et surlignages, `rounded-controle` (10 px) pour les champs, `rounded-cadre` (16 px) pour les cadres photo, `rounded-full` pour boutons, badges et pastilles.
 - Une seule ombre : `shadow-tiroir`, pour les panneaux au-dessus de la page.
 - Verre : `backdrop-blur-verre` sur fond acier à 85 % au moins, en-tête collant et barres posées sur une photo seulement.
 - Durées : `duration-(--duree-courte)` 180 ms, `-moyenne` 300 ms, `-longue` 500 ms. Courbe unique `ease-maison`.

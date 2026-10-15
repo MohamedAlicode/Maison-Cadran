@@ -56,6 +56,8 @@ typography:
     fontFeature: "tnum, lnum"
 rounded:
   xs: "2px"
+  controle: "10px"
+  cadre: "16px"
   full: "9999px"
 spacing:
   unit: "4px"
@@ -121,7 +123,7 @@ Le verre dépoli existe, mais seulement là où il a une fonction : l'en-tête c
 - Fond acier, photos sur blanc pur : la montre flotte, sans cadre.
 - Un seul accent, le bleu cadran, réservé aux actions, aux liens et au focus.
 - Serif étroit pour nommer, grotesque net pour informer.
-- Coins quasi droits (2px), filets fins plutôt que des ombres.
+- Formes adoucies (cadres photo de 16px, boutons pilule), peu de filets et aucune ombre décorative.
 
 ## Colors
 
@@ -164,11 +166,11 @@ Une palette froide et retenue : des neutres teintés vers le bleu, un accent uni
 
 ### Hierarchy
 
-- **Display** (400, 3rem à 4.5rem, interligne 1.05) : titre du hero et nom du modèle sur la fiche produit.
-- **Headline** (400, 1.875rem à 3rem, interligne 1.1) : titres de section.
+- **Display** (400, 3rem à 6rem, interligne 1.05) : titre du hero et nom du modèle sur la fiche produit.
+- **Headline** (400, 2.25rem à 3.75rem, interligne 1.1) : titres de section, sans filet dessous : la taille suffit.
 - **Title** (400, 1.25rem) : nom du modèle sur une carte produit.
 - **Body** (400, 1rem, interligne 1.5) : texte courant, 65 caractères de large au plus.
-- **Label** (500, 0.8125rem, approche 0.14em, capitales) : boutons et navigation.
+- **Label** (500, 0.875rem, minuscules) : boutons et navigation. Les capitales espacées sont abandonnées depuis la passe « plus moderne » de Boss (2026-10-15).
 - **Eyebrow** (500, 0.75rem, approche 0.14em, capitales, graphite) : libellés et intitulés de colonnes. Jamais au-dessus d'un titre.
 - **Price** (500, 1rem, chiffres tabulaires) : prix partout.
 
@@ -182,7 +184,7 @@ Une palette froide et retenue : des neutres teintés vers le bleu, un accent uni
 
 Conteneur de 1440px au plus (`max-w-site`), gouttières de 24px en mobile (16px dans l'en-tête) et 48px dès 1024px. Toutes les marges suivent un pas de 4px. Les grilles produit passent de 2 colonnes (mobile) à 3 (tablette) puis 4 (desktop), ou 3 à côté de la colonne de filtres. Les sections alternent fond acier et fond blanc, séparées par un filet, avec 64 à 112px de respiration verticale. Les vérifications se font à 375, 768, 1024 et 1440px.
 
-Les photos gardent une marge intérieure en pourcentage pour que la montre respire de la même façon à toutes les tailles : 10% sur les vignettes et la galerie, 12% dans le médaillon du hero, 4% pour la seconde vue au survol.
+Les photos gardent une marge intérieure en pourcentage pour que la montre respire de la même façon à toutes les tailles : 10% sur les vignettes et la galerie, 12% dans le cadre du hero, 4% pour la seconde vue au survol.
 
 ## Elevation & Depth
 
@@ -198,37 +200,37 @@ Système plat. La profondeur vient de l'alternance acier et blanc et des filets,
 
 ## Shapes
 
-Coins quasi droits (2px) sur les boutons, champs, badges et tiroirs, comme un boîtier usiné. Le cercle (rayon plein) est réservé aux formes qui sont rondes en vrai : médaillon du hero, pastilles de couleur de cadran, points d'état.
+Trois rayons, du plus petit au plus grand objet : 2px pour les cases à cocher et les surlignages, 10px pour les champs, listes déroulantes et encadrés, 16px pour les cadres photo (cartes produit, galerie, hero, collections). Boutons, badges, pastilles de filtre et flèches posées sur une photo prennent la forme pilule.
 
 ## Components
 
 ### Buttons
 
-- **Shape:** coins quasi droits (2px), hauteur 40, 48 ou 56px.
-- **Primary:** fond bleu cadran, texte blanc, capitales espacées. Un filet clair se déploie de gauche à droite sous le libellé au survol.
+- **Shape:** pilule, hauteur 40, 48 ou 56px.
+- **Primary:** fond bleu cadran, texte blanc, libellé 14px en minuscules.
 - **Hover / Focus:** passage au bleu profond (180ms, `ease-maison`), anneau de focus bleu cadran décalé de 2px.
 - **Secondary:** contour encre qui se remplit d'encre au survol. **Clair :** fond acier, pour les fonds nuit. **Fantôme :** texte seul, voile filet au survol.
 
 ### Chips (Badges)
 
-- **Style:** capitales 12px sur fond plein, coins de 2px. « Nouveau » en encre, « Dernière pièce » sur ambre pâle, « Offre » sur bleu cadran pâle, « En stock » sur sauge pâle, chacun avec son texte dans la teinte pleine.
+- **Style:** pilule, texte 12px en minuscules sur fond plein. « Nouveau » en encre, « Dernière pièce » sur ambre pâle, « Offre » sur bleu cadran pâle, « En stock » sur sauge pâle, chacun avec son texte dans la teinte pleine.
 
 ### Cards / Containers
 
-- **Corner Style:** aucun arrondi sur les cartes produit.
+- **Corner Style:** cadre photo arrondi à 16px ; le texte sous la photo reste sans cadre.
 - **Background:** photo sur blanc, texte directement sur le fond de la section.
 - **Shadow Strategy:** aucune (voir Elevation & Depth).
 - **Border:** aucune. La carte est un lien entier, avec le focus dessiné autour.
 
 ### Inputs / Fields
 
-- **Style:** fond blanc, filet de 1px, coins de 2px, texte 16px (empêche le zoom automatique sur iPhone).
+- **Style:** fond blanc, filet de 1px, coins de 10px, texte 16px (empêche le zoom automatique sur iPhone).
 - **Focus:** bordure encre et anneau bleu cadran.
 - **Error / Disabled:** message en bordeaux sous le champ ; désactivé à 60% d'opacité.
 
 ### Navigation
 
-- **Style:** en-tête collant en verre (acier à 85%, flou 16px), logo centré en serif capitales, liens en libellés capitales qui passent au bleu cadran au survol. Icônes Lucide de 20px, trait 1.5, dans des zones de 44px. En dessous de 1280px, le menu passe dans un tiroir : les cinq liens et les quatre icônes ne tiennent pas autour du logo plus tôt.
+- **Style:** en-tête collant en verre (acier à 85%, flou 16px), logo centré en serif capitales, liens de 14px en minuscules qui passent au bleu cadran au survol. Icônes Lucide de 20px, trait 1.5, dans des zones de 44px. En dessous de 1280px, le menu passe dans un tiroir : les cinq liens et les quatre icônes ne tiennent pas autour du logo plus tôt.
 
 ## Do's and Don'ts
 
