@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { GrilleProduits } from "@/components/catalogue/product-card";
+import { BoutonFavori } from "@/components/favoris/bouton-favori";
 import { engagements } from "@/components/layout/reassurance-bar";
 import { AjouterAuPanier } from "@/components/panier/ajouter-au-panier";
 import { BarreAchatMobile } from "@/components/produit/barre-achat-mobile";
@@ -237,8 +238,16 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
             <div className="mt-8 space-y-8">
               <Declinaisons produit={produit} />
 
-              <div id="achat-principal">
-                <AjouterAuPanier produitId={produit.id} disponible={disponible} />
+              <div>
+                <div id="achat-principal">
+                  <AjouterAuPanier produitId={produit.id} disponible={disponible} />
+                </div>
+                <BoutonFavori
+                  variante="fiche"
+                  produitId={produit.id}
+                  nom={`${produit.brand.name} ${produit.name}`}
+                  className="mt-2"
+                />
               </div>
               <BarreAchatMobile
                 idCible="achat-principal"
