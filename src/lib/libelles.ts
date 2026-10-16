@@ -1,5 +1,11 @@
 // Libellés français des valeurs stockées en base (enums et couleurs normalisées).
-import type { CaseMaterial, Gender, Movement, StrapType } from "@/generated/prisma/enums";
+import type {
+  CaseMaterial,
+  Gender,
+  Movement,
+  OrderStatus,
+  StrapType,
+} from "@/generated/prisma/enums";
 
 export const libellesGenre: Record<Gender, string> = {
   HOMME: "Homme",
@@ -51,3 +57,14 @@ export const libellesCouleur: Record<string, string> = {
 export function libelleCouleur(cle: string) {
   return libellesCouleur[cle] ?? cle.charAt(0).toUpperCase() + cle.slice(1);
 }
+
+/** Statut d'une commande tel que le client le lit dans son espace. */
+export const libellesStatutCommande: Record<OrderStatus, string> = {
+  PENDING: "Paiement en attente",
+  PAID: "Payée",
+  PREPARING: "En préparation",
+  SHIPPED: "Expédiée",
+  DELIVERED: "Livrée",
+  REFUNDED: "Remboursée",
+  CANCELLED: "Annulée",
+};

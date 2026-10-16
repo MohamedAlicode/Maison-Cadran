@@ -1,10 +1,12 @@
 // Lecture d'une commande complète (lignes, facture, adresses validées), partagée par
-// la page de confirmation, les e-mails et la facture PDF.
+// la page de confirmation, l'espace client, les e-mails et la facture PDF.
 import "server-only";
 import { db } from "@/lib/db";
 import { lireAdresse } from "./adresse";
 
-export async function chargerCommande(ou: { id: string } | { stripeCheckoutSessionId: string }) {
+export async function chargerCommande(
+  ou: { id: string } | { number: string } | { stripeCheckoutSessionId: string },
+) {
   const commande = await db.order.findUnique({
     where: ou,
     include: { items: true, invoice: true },

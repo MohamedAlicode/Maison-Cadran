@@ -9,7 +9,10 @@ const schemaEnv = z.object({
   // Clés des phases suivantes : optionnelles tant que la fonctionnalité n'existe pas.
   STRIPE_SECRET_KEY: z.string().startsWith("sk_").optional(),
   STRIPE_WEBHOOK_SECRET: z.string().startsWith("whsec_").optional(),
-  AUTH_SECRET: z.string().min(32).optional(),
+  /** Signe les jetons des liens de connexion. Générer avec `openssl rand -base64 33`. */
+  AUTH_SECRET: z.string().min(32),
+  AUTH_GOOGLE_ID: z.string().optional(),
+  AUTH_GOOGLE_SECRET: z.string().optional(),
   RESEND_API_KEY: z.string().startsWith("re_").optional(),
   /** Expéditeur des e-mails, sur un domaine vérifié chez Resend. */
   EMAIL_EXPEDITEUR: z.string().optional(),
