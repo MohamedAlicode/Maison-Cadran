@@ -1,10 +1,11 @@
-// Remplit la base avec le jeu de données de test (marques, montres, collections, avis).
+// Remplit la base avec le jeu de données de test (marques, montres, collections).
+// Aucun avis : ils sont déposés depuis la fiche produit, jamais inventés.
 // Usage : npm run db:seed (ou automatiquement après `prisma migrate reset`).
 // Le script vide d'abord le catalogue : il refuse donc de tourner en production.
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client";
-import { avisTest, clientsTest, collections, marques, montres } from "./donnees-test";
+import { collections, marques, montres } from "./donnees-test";
 import { photosMontres } from "../src/lib/photos-montres";
 
 if (process.env.NODE_ENV === "production") {
@@ -42,12 +43,11 @@ async function main() {
     idsCollections.set(collection.slug, creee.id);
   }
 
-  const idsProduits = new Map<string, string>();
   for (const montre of montres) {
     const { marque, collections: slugsCollections = [], ancienneteJours, ...champs } = montre;
     const infosMarque = idsMarques.get(marque)!;
     const date = new Date(maintenant - ancienneteJours * JOUR);
-    const produit = await db.product.create({
+    await db.product.create({
       data: {
         ...champs,
         status: "PUBLISHED",
@@ -73,35 +73,10 @@ async function main() {
         },
       },
     });
-    idsProduits.set(montre.slug, produit.id);
-  }
-
-  const idsClients = new Map<string, string>();
-  for (const client of clientsTest) {
-    const utilisateur = await db.user.upsert({
-      where: { email: client.email },
-      update: { name: client.name },
-      create: client,
-    });
-    idsClients.set(client.email, utilisateur.id);
-  }
-
-  for (const avis of avisTest) {
-    await db.review.create({
-      data: {
-        productId: idsProduits.get(avis.produit)!,
-        userId: idsClients.get(avis.client)!,
-        rating: avis.rating,
-        title: avis.title,
-        body: avis.body,
-        status: "APPROVED",
-        createdAt: new Date(maintenant - avis.ancienneteJours * JOUR),
-      },
-    });
   }
 
   console.log(
-    `Seed terminé : ${marques.length} marques, ${montres.length} montres, ${collections.length} collections, ${avisTest.length} avis.`,
+    `Seed terminé : ${marques.length} marques, ${montres.length} montres, ${collections.length} collections.`,
   );
 }
 

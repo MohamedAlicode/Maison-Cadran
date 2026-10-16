@@ -35,7 +35,7 @@ Le site lui-même est la raison d'acheter ici : une expérience qui attire et s�
 
 ## Evidence on Hand
 
-- 19 montres de test (`prisma/donnees-test.ts`), avec quelques avis de test : ce ne sont pas de vrais clients.
+- 19 montres de test (`prisma/donnees-test.ts`), sans avis : les avis sont déposés depuis la fiche produit, jamais inventés.
 - Visuels : illustrations SVG générées (`public/images/montres/`), à remplacer par de vraies photos.
 - Aucun témoignage réel, aucun chiffre de membres, aucune presse. Ne rien inventer de tel.
 
