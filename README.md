@@ -28,7 +28,7 @@ Boutique en ligne de montres de « luxe accessible » (100 € à 2 000 €), co
 | 3 | Panier et paiement Stripe (mode test), webhooks, e-mails, facture PDF | Fait ([#7](https://github.com/MohamedAlicode/Maison-Cadran/pull/7)) |
 | 4 | Comptes clients (lien magique), favoris | Fait ([#9](https://github.com/MohamedAlicode/Maison-Cadran/pull/9)) |
 | 5 | Back-office : produits, stock, commandes, codes promo, avis, guide | Fait ([#10](https://github.com/MohamedAlicode/Maison-Cadran/pull/10)) |
-| 6 | SEO, performances, démo en ligne | À venir |
+| 6 | SEO, accessibilité, performances, pages juridiques | Fait ([#11](https://github.com/MohamedAlicode/Maison-Cadran/pull/11)) |
 
 ## Stack
 
@@ -115,12 +115,23 @@ Puis ouvrir :
 | `npm run format` | Formatage Prettier |
 | `npm run db:migrate` | Créer et appliquer une migration (développement) |
 | `npm run db:deploy` | Appliquer les migrations (production, CI) |
-| `npm run db:seed` | Recharger le jeu de données de test (vide d'abord le catalogue) |
+| `npm run db:seed` | Recharger le jeu de données de test (vide d'abord le catalogue ; `npx tsx prisma/seed.ts --si-vide` ne remplit qu'une base neuve) |
 | `npm run db:studio` | Explorer la base dans le navigateur |
 | `npm run admin:promouvoir -- e-mail` | Donner le rôle admin à un compte (`--retirer` pour l'enlever) |
 | `npm run visuels` | Régénérer les illustrations SVG des montres de test |
 
 La CI rejoue ces étapes à chaque pull request : formatage, lint, types, tests, puis migrations, données de test et build sur un PostgreSQL 16.
+
+## Démo en ligne (Vercel + Neon)
+
+1. Créer une base gratuite sur [neon.tech](https://neon.tech) et copier sa chaîne de connexion **directe** (option « Connection pooling » désactivée) : les migrations ne passent pas par le pooler.
+2. Sur [vercel.com](https://vercel.com), importer ce dépôt et renseigner trois variables avant le premier déploiement :
+   - `DATABASE_URL` : la chaîne de Neon ;
+   - `AUTH_SECRET` : 32 caractères aléatoires ou plus (`openssl rand -base64 33`) ;
+   - `NEXT_PUBLIC_SITE_URL` : l'adresse que Vercel donnera au site, par exemple `https://maison-cadran.vercel.app`.
+3. Déployer. `vercel.json` applique les migrations et remplit le catalogue de test si la base est vide, puis lance le build.
+
+Sans clés Stripe, le bouton « Commander » explique que le paiement est désactivé. Sans clé Resend, aucun lien de connexion n'est envoyé. Les deux s'ajoutent ensuite comme variables (voir `.env.example`).
 
 ## Notes de versions
 
