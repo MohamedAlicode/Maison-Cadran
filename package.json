@@ -15,7 +15,8 @@
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
     "db:seed": "prisma db seed",
-    "visuels": "tsx scripts/generer-visuels.ts"
+    "visuels": "tsx scripts/generer-visuels.ts",
+    "admin:promouvoir": "tsx scripts/promouvoir-admin.ts"
   },
   "dependencies": {
     "@auth/prisma-adapter": "2.11.3",
