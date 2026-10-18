@@ -135,8 +135,7 @@ export default function PageRetours() {
         </Rubrique>
       ))}
       <Encadre>
-        Texte provisoire, à faire relire par un juriste avant l&apos;ouverture. Les conditions
-        détaillées figurent dans nos{" "}
+        Les conditions détaillées figurent dans nos{" "}
         <Link href="/cgv#retractation" className="text-cadran underline underline-offset-4">
           conditions générales de vente
         </Link>

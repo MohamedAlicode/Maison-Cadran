@@ -11,10 +11,14 @@ import { envoyerEmail } from "@/lib/email";
 import { env } from "@/lib/env";
 import { EmailLienConnexion } from "@/emails/lien-connexion";
 
+/** Durée de validité d'un lien de connexion (celle d'Auth.js par défaut, écrite pour la limite d'envoi). */
+export const validiteLienSecondes = 24 * 60 * 60;
+
 export const googleConfigure = Boolean(env.AUTH_GOOGLE_ID && env.AUTH_GOOGLE_SECRET);
 
 const fournisseurs: Provider[] = [
   Resend({
+    maxAge: validiteLienSecondes,
     // L'envoi passe par envoyerEmail : sans clé Resend, le lien est écrit dans .emails/.
     sendVerificationRequest: ({ identifier, url }) =>
       envoyerEmail({

@@ -9,7 +9,9 @@ export default function LayoutBoutique({ children }: { children: React.ReactNode
     <EtatMiniPanierProvider>
       <EtatFavorisProvider>
         <Header />
-        <main id="contenu" className="flex-1">
+        {/* Au moins un écran de haut : le pied de page n'apparaît pas dans le premier écran
+            pendant que la page arrive, puis ne saute pas vers le bas (décalage mesuré : 0,13 à 0,39). */}
+        <main id="contenu" className="min-h-svh flex-1">
           {children}
         </main>
         <Footer />

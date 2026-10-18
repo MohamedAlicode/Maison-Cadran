@@ -150,8 +150,19 @@ export function Encadre({ children, className }: { children: ReactNode; classNam
   );
 }
 
-/** Valeur légale : un « [à compléter] » est surligné pour être repéré avant l'ouverture. */
+/** Valeur légale : un « [fictif] » est marqué, pour qu'aucun lecteur ne le prenne pour vrai. */
 export function ValeurLegale({ valeur }: { valeur: string }) {
   if (!valeur.startsWith("[")) return <>{valeur}</>;
-  return <mark className="rounded-xs bg-ambre/5 px-1 text-ambre">{valeur}</mark>;
+  return <mark className="rounded-xs bg-filet/60 px-1 text-graphite">{valeur}</mark>;
+}
+
+/** En tête des pages juridiques : le site est une démonstration, rien n'y est vendu. */
+export function MentionDemo({ className }: { className?: string }) {
+  return (
+    <Encadre className={className}>
+      Maison Cadran est un site de démonstration réalisé pour un portfolio : aucune société
+      n&apos;existe derrière, aucune vente réelle n&apos;a lieu et les paiements passent par Stripe
+      en mode test. Les informations sur la société sont donc marquées « fictif ».
+    </Encadre>
+  );
 }

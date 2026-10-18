@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
-  Encadre,
+  MentionDemo,
   PageEditoriale,
   Rubrique,
   ValeurLegale,
@@ -211,10 +211,7 @@ export default function PageCgv() {
       rubriques={rubriques}
       miseAJour="12 octobre 2026"
     >
-      <Encadre className="mb-12">
-        Texte provisoire, à faire relire par un juriste avant l&apos;ouverture de la boutique. Les
-        mentions surlignées restent à compléter.
-      </Encadre>
+      <MentionDemo className="mb-12" />
       {rubriques.map(({ contenu, ...r }) => (
         <Rubrique key={r.id} {...r}>
           {contenu}

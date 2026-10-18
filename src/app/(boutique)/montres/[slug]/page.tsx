@@ -285,7 +285,7 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
 
               <Accordion type="multiple" className="-mt-2">
                 <AccordionItem value="livraison">
-                  <AccordionTrigger>Livraison et retours</AccordionTrigger>
+                  <AccordionTrigger niveau={2}>Livraison et retours</AccordionTrigger>
                   <AccordionContent>
                     Expédition en {boutique.livraison.transporteur.toLowerCase()}, assurée pour la
                     valeur de la montre. Livraison offerte dès{" "}
@@ -296,7 +296,7 @@ async function FicheProduitContenu({ params }: { params: Promise<{ slug: string 
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="garantie">
-                  <AccordionTrigger>Garantie</AccordionTrigger>
+                  <AccordionTrigger niveau={2}>Garantie</AccordionTrigger>
                   <AccordionContent>
                     Chaque montre est neuve et garantie {produit.warrantyMonths / 12} ans, en plus
                     de la garantie légale de conformité.

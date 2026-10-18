@@ -1,8 +1,10 @@
 import { ArrowRight } from "lucide-react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { GrilleProduits } from "@/components/catalogue/product-card";
 import { ReassuranceBar } from "@/components/layout/reassurance-bar";
+import { JsonLd } from "@/components/seo/json-ld";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Price } from "@/components/ui/price";
@@ -15,6 +17,7 @@ import {
   listeMarques,
   produitsPlusApprecies,
 } from "@/lib/catalogue";
+import { boutique } from "@/config/boutique";
 import { trier } from "@/lib/filtres";
 
 // Les quatre familles de mouvements du catalogue, expliquées pour un premier achat.
@@ -45,6 +48,8 @@ const mouvements = [
   },
 ] as const;
 
+export const metadata: Metadata = { alternates: { canonical: "/" } };
+
 // Page d'accueil : hero, nouveautés, comprendre les mouvements, collections, maisons, avis, réassurance.
 export default async function Accueil() {
   const [index, appreciees, collections, marques] = await Promise.all([
@@ -64,8 +69,20 @@ export default async function Accueil() {
   const parMouvement = new Map<string, number>();
   for (const p of index) parMouvement.set(p.mouvement, (parMouvement.get(p.mouvement) ?? 0) + 1);
 
+  const site = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
+
   return (
     <>
+      <JsonLd
+        donnees={{
+          "@context": "https://schema.org",
+          "@type": "OnlineStore",
+          name: boutique.nom,
+          url: site,
+          email: boutique.contact.email,
+          areaServed: "FR",
+        }}
+      />
       {/* Hero sombre */}
       <section className="bg-nuit text-acier">
         <Container className="grid items-center gap-10 py-10 md:grid-cols-[1.2fr_1fr] md:gap-12 md:py-20">

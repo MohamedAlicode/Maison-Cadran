@@ -32,18 +32,18 @@ export const boutique = {
     horaires: "du lundi au vendredi, de 10 h à 18 h",
   },
 
-  /** Informations légales de l'éditeur : à compléter avant l'ouverture (phase 6). */
+  /** Projet de démonstration (portfolio) : aucune société n'existe, ces champs restent fictifs. */
   societe: {
-    raisonSociale: "[à compléter]",
-    formeJuridique: "[à compléter]",
-    capital: "[à compléter]",
-    siege: "[à compléter]",
-    rcs: "[à compléter]",
-    siret: "[à compléter]",
-    tvaIntracom: "[à compléter]",
-    directeurPublication: "[à compléter]",
-    hebergeur: "[à compléter]",
-    mediateur: "[à compléter]",
+    raisonSociale: "[fictif]",
+    formeJuridique: "[fictif]",
+    capital: "[fictif]",
+    siege: "[fictif]",
+    rcs: "[fictif]",
+    siret: "[fictif]",
+    tvaIntracom: "[fictif]",
+    directeurPublication: "[fictif]",
+    hebergeur: "[fictif]",
+    mediateur: "[fictif]",
   },
 } as const;
 
