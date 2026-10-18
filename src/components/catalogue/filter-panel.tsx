@@ -35,27 +35,31 @@ export function FilterPanel({ facettes, filtres, chemin, idPrefixe }: Proprietes
 
   const visibles = facettes.filter((f) => f.options.length > 0);
   const ouvertes = visibles
-    .filter((f, i) => i < 3 || f.options.some((o) => o.actif))
+    // Le mouvement compte parmi les premiers critères d'un débutant : ouvert comme les trois premiers.
+    .filter((f, i) => i < 3 || f.cle === "mouvement" || f.options.some((o) => o.actif))
     .map((f) => f.cle);
 
   return (
-    <Accordion type="multiple" defaultValue={ouvertes} className="border-t border-sable">
+    <Accordion
+      type="multiple"
+      defaultValue={ouvertes}
+      // Dans le tiroir, l'en-tête porte déjà un filet : pas de second trait juste en dessous.
+      className={idPrefixe === "mobile" ? undefined : "border-t border-filet"}
+    >
       {visibles.map((facette) => (
         <AccordionItem key={facette.cle} value={facette.cle}>
           <AccordionTrigger>
             <span>
               {facette.titre}
               {filtres[facette.cle].length > 0 && (
-                <span className="chiffres ml-2 text-laiton-fonce">
-                  ({filtres[facette.cle].length})
-                </span>
+                <span className="chiffres ml-2 text-cadran">({filtres[facette.cle].length})</span>
               )}
             </span>
           </AccordionTrigger>
           <AccordionContent>
             <fieldset>
               <legend className="sr-only">{facette.titre}</legend>
-              <ul className="space-y-3">
+              <ul>
                 {facette.options.map((option) => {
                   const id = `${idPrefixe}-${facette.cle}-${option.valeur}`;
                   return (
@@ -67,11 +71,11 @@ export function FilterPanel({ facettes, filtres, chemin, idPrefixe }: Proprietes
                       />
                       <Label
                         htmlFor={id}
-                        className="mb-0 flex-1 cursor-pointer font-normal text-encre"
+                        className="mb-0 flex-1 cursor-pointer py-3 font-normal text-encre"
                       >
                         {option.libelle}
                       </Label>
-                      <span className="chiffres text-xs text-graphite">{option.compte}</span>
+                      <span className="chiffres text-xs text-cadran">{option.compte}</span>
                     </li>
                   );
                 })}

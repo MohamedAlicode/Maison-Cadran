@@ -31,6 +31,20 @@ export const boutique = {
     telephone: "01 00 00 00 00", // provisoire
     horaires: "du lundi au vendredi, de 10 h à 18 h",
   },
+
+  /** Informations légales de l'éditeur : à compléter avant l'ouverture (phase 6). */
+  societe: {
+    raisonSociale: "[à compléter]",
+    formeJuridique: "[à compléter]",
+    capital: "[à compléter]",
+    siege: "[à compléter]",
+    rcs: "[à compléter]",
+    siret: "[à compléter]",
+    tvaIntracom: "[à compléter]",
+    directeurPublication: "[à compléter]",
+    hebergeur: "[à compléter]",
+    mediateur: "[à compléter]",
+  },
 } as const;
 
 export type ConfigBoutique = typeof boutique;

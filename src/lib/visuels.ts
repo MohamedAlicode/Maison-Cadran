@@ -1,7 +1,7 @@
-// Illustrations vectorielles de montres, utilisées tant que les vraies photos ne sont pas en ligne.
-// Chaque produit de test reçoit trois vues (face, détail du cadran, profil) générées
-// à partir de ses caractéristiques réelles : couleur du cadran, matière du boîtier, bracelet.
-// Les fichiers sont produits par `npm run visuels` dans public/images/montres.
+// Illustrations vectorielles de montres. Les produits ont désormais de vraies photos
+// (prisma/photos-montres.ts) ; ce dessin ne sert plus qu'au visuel de l'accueil, produit par
+// `npm run visuels` dans public/images/montres. Les teintes de cadran servent aussi aux pastilles
+// de couleur de la fiche produit.
 
 export type VueMontre = "face" | "detail" | "profil";
 
@@ -157,10 +157,3 @@ export function svgMontre(a: ApparenceMontre, vue: VueMontre, label: string) {
   const contenu = vue === "profil" ? vueProfil(a) : vueFace(a);
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" width="800" height="800" role="img" aria-label="${label}"><rect x="-10" y="-10" width="220" height="220" fill="#ffffff"/>${contenu}</svg>\n`;
 }
-
-/** Chemin public d'une illustration générée. */
-export function cheminVisuel(slug: string, vue: VueMontre) {
-  return `/images/montres/${slug}-${vue}.svg`;
-}
-
-export const vuesMontre: VueMontre[] = ["face", "detail", "profil"];

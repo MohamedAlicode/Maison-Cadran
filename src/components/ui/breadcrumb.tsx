@@ -10,7 +10,7 @@ export function Breadcrumb({ miettes }: { miettes: Miette[] }) {
       <ol className="flex flex-wrap items-center gap-1.5">
         {miettes.map((m, i) => (
           <li key={m.libelle} className="flex items-center gap-1.5">
-            {i > 0 && <ChevronRight aria-hidden className="size-3 text-sable-fonce" />}
+            {i > 0 && <ChevronRight aria-hidden className="size-3 text-filet-fort" />}
             {m.href ? (
               <Link href={m.href} className="transition-colors hover:text-encre">
                 {m.libelle}

@@ -19,7 +19,7 @@ export function MobileFilters({ facettes, filtres, chemin, total, nombreActifs }
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Button variante="secondaire" taille="sm" className="lg:hidden">
+        <Button variante="secondaire" taille="sm" className="h-11 lg:hidden">
           <SlidersHorizontal aria-hidden className="size-4" strokeWidth={1.5} />
           Filtrer{nombreActifs > 0 && <span className="chiffres">({nombreActifs})</span>}
         </Button>

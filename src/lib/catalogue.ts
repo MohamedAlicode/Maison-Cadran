@@ -4,7 +4,12 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/lib/db";
 import type { ProduitIndexe } from "@/lib/filtres";
-import { libellesBracelet, libellesMatiere, libellesMouvement } from "@/lib/libelles";
+import {
+  libellesBracelet,
+  libellesCouleur,
+  libellesMatiere,
+  libellesMouvement,
+} from "@/lib/libelles";
 
 const JOURS_NOUVEAUTE = 30;
 const JOUR = 24 * 60 * 60 * 1000;
@@ -46,7 +51,7 @@ export async function indexCatalogue(): Promise<ProduitIndexe[]> {
       marqueSlug: p.brand.slug,
       marqueNom: p.brand.name,
       nom: p.name,
-      detail: `${libellesMouvement[p.movement]}, ${formatMm(diametre)}, ${libellesMatiere[p.caseMaterial].toLowerCase()}${matiere}`,
+      detail: `${libellesMouvement[p.movement]}, ${formatMm(diametre)}, ${libellesMatiere[p.caseMaterial].toLowerCase()}${matiere}, cadran ${(libellesCouleur[p.dialColor] ?? p.dialColor).toLowerCase()}`,
       prixCentimes: p.priceCents,
       prixBarreCentimes: p.compareAtCents,
       genre: p.gender,
@@ -185,11 +190,32 @@ export async function collectionParSlug(slug: string) {
   return { ...reste, slugsProduits: products.map((p) => p.product.slug) };
 }
 
+/** Collections, chacune avec la photo de sa première montre publiée pour l'illustrer. */
 export async function listeCollections() {
   "use cache";
   cacheLife("hours");
   cacheTag("catalogue");
-  return db.collection.findMany({ orderBy: { sortOrder: "asc" } });
+  const collections = await db.collection.findMany({
+    orderBy: { sortOrder: "asc" },
+    include: {
+      products: {
+        where: { product: { status: "PUBLISHED" } },
+        orderBy: { position: "asc" },
+        take: 1,
+        select: {
+          product: {
+            select: {
+              images: { orderBy: { position: "asc" }, take: 1, select: { url: true, alt: true } },
+            },
+          },
+        },
+      },
+    },
+  });
+  return collections.map(({ products, ...c }) => ({
+    ...c,
+    image: products[0]?.product.images[0] ?? null,
+  }));
 }
 
 /** Montres les mieux notées par les clients (en attendant assez de ventes pour un vrai classement). */

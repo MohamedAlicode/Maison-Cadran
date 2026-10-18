@@ -3,15 +3,15 @@ import type { ComponentProps } from "react";
 import { cn } from "@/lib/utils";
 
 const variantesBadge = cva(
-  "inline-flex items-center gap-1.5 rounded-xs px-2 py-1 text-[11px] font-medium tracking-surtitre uppercase",
+  "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium",
   {
     variants: {
       variante: {
-        neutre: "bg-ivoire text-encre ring-1 ring-sable",
-        nouveau: "bg-encre text-creme",
-        laiton: "bg-laiton/15 text-laiton-fonce",
-        alerte: "bg-ambre/10 text-ambre",
-        succes: "bg-sauge/10 text-sauge",
+        neutre: "bg-blanc text-encre ring-1 ring-filet",
+        nouveau: "bg-encre text-acier",
+        cadran: "bg-cadran-pale text-cadran",
+        alerte: "bg-ambre-pale text-ambre",
+        succes: "bg-sauge-pale text-sauge",
       },
     },
     defaultVariants: { variante: "neutre" },

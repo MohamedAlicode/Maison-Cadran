@@ -30,7 +30,10 @@ export function ZoneResultats({ children }: { children: ReactNode }) {
   return (
     <div
       aria-busy={enCours}
-      className={cn("transition-opacity duration-200", enCours && "pointer-events-none opacity-50")}
+      className={cn(
+        "transition-opacity duration-(--duree-courte)",
+        enCours && "pointer-events-none opacity-50",
+      )}
     >
       {children}
     </div>
