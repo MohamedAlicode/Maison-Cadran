@@ -6,6 +6,7 @@
 import { redirect } from "next/navigation";
 import { creerCommandeEnAttente } from "@/lib/commandes/creation";
 import { parametresSessionStripe } from "@/lib/commandes/session-stripe";
+import { clientConnecte } from "@/lib/compte/serveur";
 import { db } from "@/lib/db";
 import { env } from "@/lib/env";
 import { detaillerPanier, enregistrerContenuPanier, lireContenuPanier } from "@/lib/panier/serveur";
@@ -35,7 +36,8 @@ export async function passerCommande(): Promise<EtatCommande> {
     };
   }
 
-  const commande = await creerCommandeEnAttente(panier);
+  const client = await clientConnecte();
+  const commande = await creerCommandeEnAttente(panier, client?.id);
 
   let url: string | null;
   try {
@@ -46,6 +48,7 @@ export async function passerCommande(): Promise<EtatCommande> {
         montants: panier,
         urlSite: env.NEXT_PUBLIC_SITE_URL,
         maintenantS: Math.floor(Date.now() / 1000),
+        emailClient: client?.email,
       }),
       { idempotencyKey: `commande-${commande.id}` },
     );

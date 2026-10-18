@@ -1,7 +1,8 @@
 "use client";
 
-import { Heart, Menu, User } from "lucide-react";
+import { Menu, User } from "lucide-react";
 import Link from "next/link";
+import { CoeurFavoris } from "@/components/favoris/coeur-favoris";
 import { variantesBouton } from "@/components/ui/button";
 import { Drawer, DrawerClose, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 import { cn } from "@/lib/utils";
@@ -9,8 +10,12 @@ import { LienNavigation } from "./lien-navigation";
 import { navigationPrincipale } from "./navigation";
 
 const liensCompte = [
-  { libelle: "Mon compte", href: "/compte", icone: User },
-  { libelle: "Mes favoris", href: "/compte/favoris", icone: Heart },
+  {
+    libelle: "Mon compte",
+    href: "/compte",
+    icone: <User aria-hidden className="size-5" strokeWidth={1.5} />,
+  },
+  { libelle: "Mes favoris", href: "/compte/favoris", icone: <CoeurFavoris /> },
 ] as const;
 
 /** Menu en tiroir, affiché sous 1 280 px : en dessous, les cinq liens et les quatre icônes ne tiennent pas autour du logo. */
@@ -30,11 +35,11 @@ export function MobileMenu() {
         pied={
           // Compte et favoris n'ont pas de place dans l'en-tête sous 640 px : ils sont repris ici.
           <ul className="space-y-4 text-sm">
-            {liensCompte.map(({ libelle, href, icone: Icone }) => (
+            {liensCompte.map(({ libelle, href, icone }) => (
               <li key={href}>
                 <DrawerClose asChild>
-                  <Link href={href} className="inline-flex items-center gap-3 hover:text-cadran">
-                    <Icone aria-hidden className="size-5" strokeWidth={1.5} />
+                  <Link href={href} className="inline-flex items-center gap-4 hover:text-cadran">
+                    {icone}
                     {libelle}
                   </Link>
                 </DrawerClose>

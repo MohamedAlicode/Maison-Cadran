@@ -113,18 +113,7 @@ export function EmailCommandeConfirmee({
           Votre facture {commande.invoice.number} est jointe à cet e-mail.
         </Text>
       )}
-      <Button
-        href={urlCommande}
-        style={{
-          backgroundColor: c.cadran,
-          color: c.blanc,
-          fontSize: "13px",
-          letterSpacing: "0.14em",
-          textTransform: "uppercase",
-          padding: "16px 28px",
-          borderRadius: "2px",
-        }}
-      >
+      <Button href={urlCommande} style={styles.bouton}>
         Voir ma commande
       </Button>
     </GabaritEmail>
