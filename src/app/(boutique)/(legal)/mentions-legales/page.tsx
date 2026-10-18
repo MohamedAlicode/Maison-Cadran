@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import {
-  Encadre,
+  MentionDemo,
   PageEditoriale,
   Reperes,
   Rubrique,
@@ -124,9 +124,7 @@ export default function PageMentionsLegales() {
       rubriques={rubriques}
       miseAJour="12 octobre 2026"
     >
-      <Encadre className="mb-12">
-        Les mentions surlignées seront complétées avant l&apos;ouverture de la boutique.
-      </Encadre>
+      <MentionDemo className="mb-12" />
       {rubriques.map(({ contenu, ...r }) => (
         <Rubrique key={r.id} {...r}>
           {contenu}
