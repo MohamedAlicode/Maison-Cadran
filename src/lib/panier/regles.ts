@@ -67,6 +67,8 @@ export function changerQuantiteLigne(
 
 export type MontantsPanier = {
   sousTotalCentimes: number;
+  /** Remise du code promo, déduite avant la livraison. */
+  remiseCentimes: number;
   livraisonCentimes: number;
   totalCentimes: number;
   /** TVA incluse dans le total, calculée par ligne puis sommée (livraison comprise). */
@@ -75,22 +77,30 @@ export type MontantsPanier = {
   nombreArticles: number;
 };
 
-/** Montants du panier à partir de lignes dont le prix a été relu en base. */
+/**
+ * Montants du panier à partir de lignes dont le prix a été relu en base. La livraison offerte
+ * se juge après remise : un code ne doit pas faire franchir le seuil à un panier qui ne l'atteint pas.
+ */
 export function calculerMontants(
   lignes: { prixCentimes: number; tauxTvaPb: number; quantite: number }[],
+  remiseDemandeeCentimes = 0,
 ): MontantsPanier {
   const sousTotalCentimes = lignes.reduce((s, l) => s + l.prixCentimes * l.quantite, 0);
-  const livraisonCentimes = fraisLivraison(sousTotalCentimes);
+  const remiseCentimes = Math.min(remiseDemandeeCentimes, sousTotalCentimes);
+  const apresRemise = sousTotalCentimes - remiseCentimes;
+  const livraisonCentimes = fraisLivraison(apresRemise);
   const tvaCentimes =
-    lignes.reduce((s, l) => s + tvaIncluse(l.prixCentimes * l.quantite, l.tauxTvaPb), 0) +
+    lignes.reduce((s, l) => s + tvaIncluse(l.prixCentimes * l.quantite, l.tauxTvaPb), 0) -
+    tvaIncluse(remiseCentimes) +
     tvaIncluse(livraisonCentimes);
   return {
     sousTotalCentimes,
+    remiseCentimes,
     livraisonCentimes,
-    totalCentimes: sousTotalCentimes + livraisonCentimes,
+    totalCentimes: apresRemise + livraisonCentimes,
     tvaCentimes,
     resteAvantLivraisonOfferteCentimes:
-      sousTotalCentimes > 0 ? resteAvantLivraisonOfferte(sousTotalCentimes) : 0,
+      apresRemise > 0 ? resteAvantLivraisonOfferte(apresRemise) : 0,
     nombreArticles: lignes.reduce((s, l) => s + l.quantite, 0),
   };
 }

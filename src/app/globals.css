@@ -150,7 +150,7 @@
   --duree-courte: 180ms;
   --duree-moyenne: 300ms;
   --duree-longue: 500ms;
-  /* Un tour complet de la banderole du haut de page */
+  /* Un tour complet de la banderole du haut de page, pour ses cinq messages permanents */
   --duree-banderole: 60s;
 }
 
@@ -238,7 +238,7 @@
 @layer components {
   @media (prefers-reduced-motion: reduce) {
     .banderole-continue {
-      animation-duration: var(--duree-banderole) !important;
+      animation-duration: var(--duree-rouleau, var(--duree-banderole)) !important;
       animation-iteration-count: infinite !important;
     }
   }

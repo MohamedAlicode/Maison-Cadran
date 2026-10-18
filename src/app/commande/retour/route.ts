@@ -1,6 +1,8 @@
-// Retour de Stripe Checkout après un paiement : on vide le panier (un cookie ne peut être
-// modifié que dans un Route Handler ou une Server Action), puis on affiche la confirmation.
+// Retour de Stripe Checkout après un paiement : on vide le panier et son code promo (un cookie
+// ne peut être modifié que dans un Route Handler ou une Server Action), puis on affiche la
+// confirmation.
 import { NextResponse, type NextRequest } from "next/server";
+import { COOKIE_CODE_PROMO } from "@/lib/panier/codes-promo";
 import { COOKIE_PANIER } from "@/lib/panier/regles";
 
 export function GET(requete: NextRequest) {
@@ -10,5 +12,6 @@ export function GET(requete: NextRequest) {
 
   const reponse = NextResponse.redirect(destination, 303);
   reponse.cookies.delete(COOKIE_PANIER);
+  reponse.cookies.delete(COOKIE_CODE_PROMO);
   return reponse;
 }

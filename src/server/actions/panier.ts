@@ -6,7 +6,12 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { db } from "@/lib/db";
 import { ajouterUn, changerQuantiteLigne, quantiteMax } from "@/lib/panier/regles";
-import { enregistrerContenuPanier, lireContenuPanier } from "@/lib/panier/serveur";
+import {
+  detaillerPanier,
+  enregistrerCodePromo,
+  enregistrerContenuPanier,
+  lireContenuPanier,
+} from "@/lib/panier/serveur";
 
 export type ResultatPanier = { ok: true } | { ok: false; message: string };
 
@@ -89,4 +94,23 @@ export async function reprendreSelection(sessionId: string) {
     await enregistrerContenuPanier(contenu);
   }
   redirect("/panier");
+}
+
+export type EtatCodePromo = { message: string } | null;
+
+/** Le code n'est gardé que s'il s'applique au panier tel qu'il est maintenant. */
+export async function appliquerCodePromo(
+  _etat: EtatCodePromo,
+  formulaire: FormData,
+): Promise<EtatCodePromo> {
+  const saisie = z.string().max(40).safeParse(formulaire.get("code"));
+  if (!saisie.success || !saisie.data.trim()) return { message: "Saisissez un code." };
+  const panier = await detaillerPanier(await lireContenuPanier(), saisie.data);
+  if (panier.codeRefuse) return { message: panier.codeRefuse.raison };
+  await enregistrerCodePromo(panier.codePromo?.code ?? null);
+  return null;
+}
+
+export async function retirerCodePromo() {
+  await enregistrerCodePromo(null);
 }

@@ -263,7 +263,9 @@ export function FormulaireProduit({
           <ul className="grid gap-3 sm:grid-cols-2">
             {collections.map((c) => (
               <li key={c.valeur} className="flex items-center gap-3">
+                {/* Recréée après une erreur, sinon Radix revient à l'état initial de la case. */}
                 <Checkbox
+                  key={String(cochees.includes(c.valeur))}
                   id={`collection-${c.valeur}`}
                   name="collections"
                   value={c.valeur}

@@ -83,7 +83,12 @@ async function confirmerPaiement(
 
       const commande = await tx.order.findUnique({
         where: { id: commandeId },
-        select: { id: true, status: true, items: { select: { productId: true, quantity: true } } },
+        select: {
+          id: true,
+          status: true,
+          discountCodeId: true,
+          items: { select: { productId: true, quantity: true } },
+        },
       });
       if (!commande) return { type: "ignore", raison: "commande introuvable" } as const;
       if (commande.status !== "PENDING") {
@@ -99,6 +104,13 @@ async function confirmerPaiement(
           data: { stock: { decrement: quantity } },
         });
         if (count === 0) throw new RuptureDeStock();
+      }
+
+      if (commande.discountCodeId) {
+        await tx.discountCode.update({
+          where: { id: commande.discountCodeId },
+          data: { usesCount: { increment: 1 } },
+        });
       }
 
       // Numéro de facture continu : le verrou empêche deux paiements simultanés de prendre

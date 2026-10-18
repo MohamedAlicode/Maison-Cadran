@@ -26,16 +26,16 @@ export default function LayoutAdmin({ children }: { children: React.ReactNode })
       <header className="border-b border-filet bg-blanc">
         <Container className="flex h-16 items-center justify-between gap-4">
           <div className="flex items-baseline gap-3">
-            <Logo />
-            <span className="text-xs font-medium tracking-surtitre text-graphite uppercase">
+            <Logo className="whitespace-nowrap" />
+            <span className="text-xs font-medium tracking-surtitre whitespace-nowrap text-graphite uppercase max-sm:sr-only">
               Back-office
             </span>
           </div>
           <Link
             href="/"
-            className="inline-flex h-11 items-center gap-1.5 text-sm font-medium hover:text-cadran"
+            className="inline-flex h-11 items-center gap-1.5 text-sm font-medium whitespace-nowrap hover:text-cadran"
           >
-            Voir la boutique
+            <span className="max-sm:sr-only">Voir la boutique</span>
             <ArrowUpRight aria-hidden className="size-4" strokeWidth={1.5} />
           </Link>
         </Container>

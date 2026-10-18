@@ -2,6 +2,7 @@
 import { z } from "zod";
 import {
   CaseMaterial,
+  DiscountType,
   Gender,
   Movement,
   type OrderStatus,
@@ -275,3 +276,91 @@ export const schemaExpedition = z.object({
     .refine((v) => !v || /^https:\/\/\S+$/.test(v), "Lien attendu : https://…")
     .transform((v) => v || null),
 });
+
+/** Minuit à Paris pour un jour « 2026-10-18 », quelle que soit l'heure d'été. */
+export function minuitParis(jour: string) {
+  const midiUtc = new Date(`${jour}T12:00:00Z`);
+  const decalage =
+    new Intl.DateTimeFormat("en", { timeZone: "Europe/Paris", timeZoneName: "longOffset" })
+      .formatToParts(midiUtc)
+      .find((p) => p.type === "timeZoneName")
+      ?.value.replace("GMT", "") || "+00:00";
+  return new Date(`${jour}T00:00:00${decalage}`);
+}
+
+function lendemain(jour: string) {
+  const midi = new Date(`${jour}T12:00:00Z`);
+  midi.setUTCDate(midi.getUTCDate() + 1);
+  return midi.toISOString().slice(0, 10);
+}
+
+/** Jour à Paris au format des champs date : « 2026-10-18 ». */
+export function jourParis(date: Date) {
+  return new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Paris" }).format(date);
+}
+
+const jour = z
+  .string()
+  .trim()
+  .refine((v) => !v || /^\d{4}-\d{2}-\d{2}$/.test(v), "Date attendue : jj/mm/aaaa.");
+
+export const schemaCodePromo = z
+  .object({
+    code: z
+      .string()
+      .transform((v) => v.replace(/\s+/g, "").toUpperCase())
+      .pipe(
+        z
+          .string()
+          .min(3, "3 caractères au moins.")
+          .max(30, "30 caractères au plus.")
+          .regex(/^[A-Z0-9_-]+$/, "Lettres, chiffres, tirets seulement."),
+      ),
+    type: z.enum(DiscountType, { error: "Choisissez le type de réduction." }),
+    valeur: z.string().trim(),
+    montantMinimum: montantFacultatif("Indiquez un montant en euros, ou laissez vide."),
+    utilisationsMax: entierFacultatif("Indiquez un nombre entier, ou laissez vide.", 1_000_000),
+    parClient: entierFacultatif("Indiquez un nombre entier, ou laissez vide.", 100),
+    debut: jour,
+    fin: jour,
+    actif: z.string().optional(),
+    banderole: z.string().optional(),
+  })
+  .transform((c, ctx) => {
+    const valeur =
+      c.type === "PERCENT"
+        ? Number.isInteger(Number(c.valeur)) && Number(c.valeur) >= 1 && Number(c.valeur) <= 90
+          ? Number(c.valeur)
+          : null
+        : lireMontant(c.valeur);
+    if (valeur === null) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["valeur"],
+        message:
+          c.type === "PERCENT"
+            ? "Indiquez un pourcentage entier entre 1 et 90."
+            : "Indiquez un montant en euros, par exemple 50.",
+      });
+      return z.NEVER;
+    }
+    // Le dernier jour compte en entier : la fin tombe à minuit le lendemain.
+    const startsAt = c.debut ? minuitParis(c.debut) : null;
+    const endsAt = c.fin ? minuitParis(lendemain(c.fin)) : null;
+    if (startsAt && endsAt && endsAt <= startsAt) {
+      ctx.addIssue({ code: "custom", path: ["fin"], message: "La fin doit suivre le début." });
+      return z.NEVER;
+    }
+    return {
+      code: c.code,
+      type: c.type,
+      value: valeur,
+      minOrderCents: c.montantMinimum,
+      maxUses: c.utilisationsMax,
+      perCustomerMax: c.parClient,
+      startsAt,
+      endsAt,
+      isActive: c.actif === "on",
+      showInBanner: c.banderole === "on",
+    };
+  });
