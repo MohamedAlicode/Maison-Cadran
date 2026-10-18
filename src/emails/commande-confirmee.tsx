@@ -61,6 +61,18 @@ export function EmailCommandeConfirmee({
             <Text style={styles.discret}>{formatPrix(commande.subtotalCents)}</Text>
           </Column>
         </Row>
+        {commande.discountCents > 0 && (
+          <Row>
+            <Column>
+              <Text style={styles.discret}>
+                Remise{commande.discountCode && ` (${commande.discountCode})`}
+              </Text>
+            </Column>
+            <Column align="right">
+              <Text style={styles.discret}>−{formatPrix(commande.discountCents)}</Text>
+            </Column>
+          </Row>
+        )}
         <Row>
           <Column>
             <Text style={styles.discret}>Livraison</Text>
@@ -113,18 +125,7 @@ export function EmailCommandeConfirmee({
           Votre facture {commande.invoice.number} est jointe à cet e-mail.
         </Text>
       )}
-      <Button
-        href={urlCommande}
-        style={{
-          backgroundColor: c.cadran,
-          color: c.blanc,
-          fontSize: "13px",
-          letterSpacing: "0.14em",
-          textTransform: "uppercase",
-          padding: "16px 28px",
-          borderRadius: "2px",
-        }}
-      >
+      <Button href={urlCommande} style={styles.bouton}>
         Voir ma commande
       </Button>
     </GabaritEmail>

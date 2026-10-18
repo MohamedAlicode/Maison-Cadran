@@ -24,7 +24,7 @@ export function ProgressionLivraison({ montants }: { montants: MontantsPanier })
       {reste > 0 && (
         <Progress
           className="mt-3"
-          valeur={montants.sousTotalCentimes}
+          valeur={montants.sousTotalCentimes - montants.remiseCentimes}
           max={boutique.livraison.seuilGratuitCentimes}
           label="Progression vers la livraison offerte"
         />
@@ -42,6 +42,12 @@ export function Montants({ montants }: { montants: MontantsPanier }) {
           <dt>Sous-total</dt>
           <dd>{formatPrix(montants.sousTotalCentimes)}</dd>
         </div>
+        {montants.remiseCentimes > 0 && (
+          <div className="flex justify-between gap-4">
+            <dt>Remise</dt>
+            <dd>−{formatPrix(montants.remiseCentimes)}</dd>
+          </div>
+        )}
         <div className="flex justify-between gap-4">
           <dt>
             Livraison

@@ -4,11 +4,18 @@
 // « en attente » est créée, puis le client est redirigé vers Stripe Checkout.
 // Le stock ne baisse qu'à la confirmation du paiement (webhook), jamais ici.
 import { redirect } from "next/navigation";
+import { boutique } from "@/config/boutique";
 import { creerCommandeEnAttente } from "@/lib/commandes/creation";
 import { parametresSessionStripe } from "@/lib/commandes/session-stripe";
+import { clientConnecte } from "@/lib/compte/serveur";
 import { db } from "@/lib/db";
 import { env } from "@/lib/env";
-import { detaillerPanier, enregistrerContenuPanier, lireContenuPanier } from "@/lib/panier/serveur";
+import {
+  detaillerPanier,
+  enregistrerContenuPanier,
+  lireCodePromo,
+  lireContenuPanier,
+} from "@/lib/panier/serveur";
 import { paiementConfigure, stripe } from "@/lib/stripe";
 
 export type EtatCommande = { message: string } | null;
@@ -22,8 +29,14 @@ export async function passerCommande(): Promise<EtatCommande> {
   }
 
   const contenu = await lireContenuPanier();
-  const panier = await detaillerPanier(contenu);
+  const panier = await detaillerPanier(contenu, await lireCodePromo());
   if (panier.lignes.length === 0) return { message: "Votre panier est vide." };
+  // Le panier affiche déjà le refus : on ne fait pas payer plus que prévu sans prévenir.
+  if (panier.codeRefuse) {
+    return {
+      message: `Le code ${panier.codeRefuse.code} ne s'applique plus : retirez-le pour continuer.`,
+    };
+  }
 
   // Le stock a pu bouger depuis l'affichage : on enregistre le panier corrigé et on le montre
   // au client avant de lui faire payer quoi que ce soit.
@@ -35,10 +48,25 @@ export async function passerCommande(): Promise<EtatCommande> {
     };
   }
 
-  const commande = await creerCommandeEnAttente(panier);
+  const client = await clientConnecte();
+  const commande = await creerCommandeEnAttente(panier, client?.id);
 
   let url: string | null;
   try {
+    // Le coupon porte le montant exact calculé ici : Stripe n'applique aucune règle à notre place.
+    const coupon =
+      panier.codePromo && panier.remiseCentimes > 0
+        ? await stripe().coupons.create(
+            {
+              amount_off: panier.remiseCentimes,
+              currency: boutique.devise.toLowerCase(),
+              duration: "once",
+              max_redemptions: 1,
+              name: `Code ${panier.codePromo.code}`,
+            },
+            { idempotencyKey: `coupon-${commande.id}` },
+          )
+        : null;
     const session = await stripe().checkout.sessions.create(
       parametresSessionStripe({
         commande: { id: commande.id, numero: commande.number },
@@ -46,6 +74,8 @@ export async function passerCommande(): Promise<EtatCommande> {
         montants: panier,
         urlSite: env.NEXT_PUBLIC_SITE_URL,
         maintenantS: Math.floor(Date.now() / 1000),
+        emailClient: client?.email,
+        couponId: coupon?.id,
       }),
       { idempotencyKey: `commande-${commande.id}` },
     );

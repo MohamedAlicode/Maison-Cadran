@@ -103,6 +103,8 @@
   --animate-fondu: fondu var(--duree-longue) var(--ease-maison) both;
   --animate-glisse-droite: glisse-droite var(--duree-moyenne) var(--ease-maison) both;
   --animate-glisse-gauche: glisse-gauche var(--duree-moyenne) var(--ease-maison) both;
+  /* Défilement continu : vitesse constante, sans courbe, pour qu'on puisse lire en marche. */
+  --animate-banderole: banderole var(--duree-banderole) linear infinite;
 
   @keyframes fondu {
     from {
@@ -124,6 +126,12 @@
     }
   }
 
+  @keyframes banderole {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
   @keyframes glisse-gauche {
     from {
       transform: translateX(-100%);
@@ -142,6 +150,8 @@
   --duree-courte: 180ms;
   --duree-moyenne: 300ms;
   --duree-longue: 500ms;
+  /* Un tour complet de la banderole du haut de page, pour ses cinq messages permanents */
+  --duree-banderole: 60s;
 }
 
 @layer base {
@@ -218,6 +228,19 @@
   /* Chiffres tabulaires pour les prix et caractéristiques */
   .chiffres {
     font-variant-numeric: tabular-nums lining-nums;
+  }
+}
+
+/*
+ * Le rouleau de la banderole tourne aussi en mouvement réduit (choix de Boss, 2026-10-18).
+ * Règle en couche, donc prioritaire sur la coupure générale ci-dessous.
+ */
+@layer components {
+  @media (prefers-reduced-motion: reduce) {
+    .banderole-continue {
+      animation-duration: var(--duree-rouleau, var(--duree-banderole)) !important;
+      animation-iteration-count: infinite !important;
+    }
   }
 }
 

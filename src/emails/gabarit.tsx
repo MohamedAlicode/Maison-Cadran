@@ -37,6 +37,15 @@ export const styles = {
     margin: "0 0 8px",
   },
   filet: { borderColor: c.filet, margin: "24px 0" },
+  bouton: {
+    backgroundColor: c.cadran,
+    color: c.blanc,
+    fontSize: "13px",
+    letterSpacing: "0.14em",
+    textTransform: "uppercase",
+    padding: "16px 28px",
+    borderRadius: "2px",
+  },
 } satisfies Record<string, CSSProperties>;
 
 /** `rappels` : garantie et livraison, retirés quand la commande ne sera pas livrée. */

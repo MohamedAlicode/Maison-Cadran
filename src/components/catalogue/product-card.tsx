@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { BoutonFavori } from "@/components/favoris/bouton-favori";
 import { Badge } from "@/components/ui/badge";
 import { Price } from "@/components/ui/price";
 import { RangeeDefilante } from "@/components/ui/rangee-defilante";
@@ -67,6 +68,12 @@ export function ProductCard({
             {badge.libelle}
           </Badge>
         )}
+        {/* Au-dessus du lien étendu à toute la carte, sinon le clic ouvrirait la fiche. */}
+        <BoutonFavori
+          produitId={produit.id}
+          nom={`${produit.marqueNom} ${produit.nom}`}
+          className="absolute top-2 right-2 z-10"
+        />
       </div>
       <div className="pt-4">
         {/* La marque ouvre le titre, en gris, plutôt qu'en sur-titre au-dessus (déconseillé). */}

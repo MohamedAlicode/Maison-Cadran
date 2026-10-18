@@ -14,12 +14,18 @@ export function parametresSessionStripe({
   montants,
   urlSite,
   maintenantS,
+  emailClient,
+  couponId,
 }: {
   commande: { id: string; numero: string };
   lignes: Pick<LignePanier, "id" | "nom" | "marque" | "reference" | "prixCentimes" | "quantite">[];
   montants: Pick<MontantsPanier, "livraisonCentimes">;
   urlSite: string;
   maintenantS: number;
+  /** E-mail du client connecté, prérempli sur la page de paiement. */
+  emailClient?: string;
+  /** Coupon Stripe créé pour la remise exacte du code promo, déjà calculée ici. */
+  couponId?: string;
 }): Stripe.Checkout.SessionCreateParams {
   const devise = boutique.devise.toLowerCase();
   return {
@@ -27,6 +33,7 @@ export function parametresSessionStripe({
     locale: "fr",
     currency: devise,
     client_reference_id: commande.id,
+    customer_email: emailClient,
     metadata: { commandeId: commande.id, numero: commande.numero },
     payment_intent_data: { metadata: { commandeId: commande.id, numero: commande.numero } },
     line_items: lignes.map((l) => ({
@@ -41,6 +48,7 @@ export function parametresSessionStripe({
         },
       },
     })),
+    ...(couponId && { discounts: [{ coupon: couponId }] }),
     shipping_address_collection: { allowed_countries: [boutique.pays] },
     shipping_options: [
       {

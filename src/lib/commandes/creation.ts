@@ -6,7 +6,8 @@ import { db } from "@/lib/db";
 import type { Panier } from "@/lib/panier/serveur";
 import { numeroCommande } from "./numeros";
 
-export async function creerCommandeEnAttente(panier: Panier) {
+/** `clientId` : rattache la commande au compte du client connecté. */
+export async function creerCommandeEnAttente(panier: Panier, clientId?: string) {
   const [{ sequence }] = await db.$queryRaw<{ sequence: bigint }[]>`
     SELECT nextval('commande_numero_seq') AS sequence
   `;
@@ -14,7 +15,11 @@ export async function creerCommandeEnAttente(panier: Panier) {
   return db.order.create({
     data: {
       number: numeroCommande(new Date().getFullYear(), Number(sequence)),
+      userId: clientId,
       subtotalCents: panier.sousTotalCentimes,
+      discountCents: panier.remiseCentimes,
+      discountCodeId: panier.codePromo?.id,
+      discountCode: panier.codePromo?.code,
       shippingCents: panier.livraisonCentimes,
       totalCents: panier.totalCentimes,
       vatCents: panier.tvaCentimes,

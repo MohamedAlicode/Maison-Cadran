@@ -3,7 +3,9 @@
 // montrer ce qui sera réellement facturé.
 import "server-only";
 import { cookies } from "next/headers";
+import { clientConnecte } from "@/lib/compte/serveur";
 import { db } from "@/lib/db";
+import { COOKIE_CODE_PROMO, montantRemise, normaliserCode, refusCode } from "./codes-promo";
 import {
   COOKIE_PANIER,
   DUREE_COOKIE_PANIER_S,
@@ -34,6 +36,10 @@ export type Panier = MontantsPanier & {
   lignes: LignePanier[];
   /** Nombre de montres retirées parce qu'elles ne sont plus disponibles. */
   retirees: number;
+  /** Code promo appliqué, avec son identifiant pour la commande. */
+  codePromo: { id: string; code: string } | null;
+  /** Code saisi qui ne s'applique pas (ou plus), et pourquoi. */
+  codeRefuse: { code: string; raison: string } | null;
 };
 
 export async function lireContenuPanier(): Promise<LigneCookie[]> {
@@ -57,8 +63,55 @@ export async function enregistrerContenuPanier(lignes: LigneCookie[]) {
   });
 }
 
+export async function lireCodePromo(): Promise<string | undefined> {
+  return (await cookies()).get(COOKIE_CODE_PROMO)?.value;
+}
+
+/** À appeler uniquement depuis une Server Action. Sans code, le cookie est effacé. */
+export async function enregistrerCodePromo(code: string | null) {
+  const magasin = await cookies();
+  if (!code) {
+    magasin.delete(COOKIE_CODE_PROMO);
+    return;
+  }
+  magasin.set(COOKIE_CODE_PROMO, code, {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: DUREE_COOKIE_PANIER_S,
+  });
+}
+
+/** Vérifie un code pour un sous-total : remise accordée, ou raison du refus. */
+export async function verifierCodePromo(saisie: string, sousTotalCentimes: number) {
+  const code = normaliserCode(saisie);
+  const trouve = code ? await db.discountCode.findUnique({ where: { code } }) : null;
+  const client = trouve?.perCustomerMax != null ? await clientConnecte() : null;
+  const usagesClient = client
+    ? await db.order.count({
+        where: {
+          userId: client.id,
+          discountCodeId: trouve!.id,
+          status: { in: ["PAID", "PREPARING", "SHIPPED", "DELIVERED"] },
+        },
+      })
+    : 0;
+  const raison = refusCode(trouve, { sousTotalCentimes, maintenant: new Date(), usagesClient });
+  if (raison || !trouve) return { ok: false as const, code, raison: raison! };
+  return {
+    ok: true as const,
+    id: trouve.id,
+    code,
+    remiseCentimes: montantRemise(trouve, sousTotalCentimes),
+  };
+}
+
 /** Relit en base les montres d'un contenu de panier et calcule les montants. */
-export async function detaillerPanier(contenu: LigneCookie[]): Promise<Panier> {
+export async function detaillerPanier(
+  contenu: LigneCookie[],
+  saisieCode?: string,
+): Promise<Panier> {
   const produits =
     contenu.length === 0
       ? []
@@ -97,13 +150,20 @@ export async function detaillerPanier(contenu: LigneCookie[]): Promise<Panier> {
     });
   }
 
+  const sousTotal = calculerMontants(lignes).sousTotalCentimes;
+  const verification =
+    saisieCode && lignes.length > 0 ? await verifierCodePromo(saisieCode, sousTotal) : null;
   return {
     lignes,
     retirees: contenu.length - lignes.length,
-    ...calculerMontants(lignes),
+    ...calculerMontants(lignes, verification?.ok ? verification.remiseCentimes : 0),
+    codePromo: verification?.ok ? { id: verification.id, code: verification.code } : null,
+    codeRefuse:
+      verification?.ok === false ? { code: verification.code, raison: verification.raison } : null,
   };
 }
 
 export async function lirePanier(): Promise<Panier> {
-  return detaillerPanier(await lireContenuPanier());
+  const [contenu, code] = await Promise.all([lireContenuPanier(), lireCodePromo()]);
+  return detaillerPanier(contenu, code);
 }

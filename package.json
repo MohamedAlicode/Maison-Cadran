@@ -15,9 +15,11 @@
     "db:studio": "prisma studio",
     "postinstall": "prisma generate",
     "db:seed": "prisma db seed",
-    "visuels": "tsx scripts/generer-visuels.ts"
+    "visuels": "tsx scripts/generer-visuels.ts",
+    "admin:promouvoir": "tsx scripts/promouvoir-admin.ts"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "2.11.3",
     "@prisma/adapter-pg": "7.10.0",
     "@prisma/client": "7.10.0",
     "@radix-ui/react-accordion": "1.3.0",
@@ -31,6 +33,7 @@
     "clsx": "2.1.1",
     "lucide-react": "1.55.0",
     "next": "16.4.0",
+    "next-auth": "5.0.0-beta.32",
     "pg": "8.23.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",

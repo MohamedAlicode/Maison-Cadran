@@ -31,7 +31,7 @@ const schemaAvis = z.object({
 });
 
 /**
- * Dépôt d'un avis, publié aussitôt : la modération arrivera avec l'espace d'administration.
+ * Dépôt d'un avis, publié aussitôt (choix de Boss) : le back-office peut ensuite le masquer.
  * Sans comptes clients, l'e-mail identifie l'auteur : un seul avis par montre et par adresse,
  * rattaché au compte que cette adresse ouvrira plus tard.
  */
