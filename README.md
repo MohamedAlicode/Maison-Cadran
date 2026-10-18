@@ -12,6 +12,7 @@ Boutique en ligne de montres de « luxe accessible » (100 € à 2 000 €), co
 - **Des fiches produit complètes** : galerie avec zoom, autres coloris, stock et délai, caractéristiques par rubrique, avis, montres similaires.
 - **Le rendu moderne de Next.js 16** : pages prérendues au build (Partial Prerendering), lectures en base mises en cache et invalidables par étiquette.
 - **Un SEO soigné** : métadonnées par page, données structurées `Product` et `BreadcrumbList`, URL canonique pour les combinaisons de filtres.
+- **Un parcours d'achat complet** : panier, codes promo, paiement Stripe Checkout (mode test), webhook idempotent, facture PDF numérotée, comptes clients par lien magique et back-office sous `/admin`.
 - **Un modèle de données pensé pour la suite** : commandes, factures, codes promo, avis et événements Stripe sont dans le schéma Prisma dès le départ.
 - **De la rigueur sur l'argent** : tous les prix sont des entiers en centimes TTC, la TVA est recalculée et jamais stockée en flottant.
 - **De la qualité vérifiée** : TypeScript strict, variables d'environnement validées par Zod, tests Vitest sur la logique de prix et de filtres, CI GitHub Actions.
@@ -23,10 +24,10 @@ Boutique en ligne de montres de « luxe accessible » (100 € à 2 000 €), co
 | 0 | Cadrage : arborescence, schéma de base de données, charte | Fait ([docs/etape-0.md](docs/etape-0.md)) |
 | 1 | Setup du projet et design system | Fait ([#1](https://github.com/MohamedAlicode/Maison-Cadran/pull/1)) |
 | 2 | Catalogue, filtres et fiche produit | Fait ([#2](https://github.com/MohamedAlicode/Maison-Cadran/pull/2)) |
-| Refonte | Direction visuelle « Acier et cadran bleu » | En cours ([#4](https://github.com/MohamedAlicode/Maison-Cadran/pull/4)) |
-| 3 | Panier et paiement Stripe (mode test), webhooks, e-mails, facture PDF | En cours |
-| 4 | Comptes clients (lien magique), favoris | À venir |
-| 5 | Back-office : produits, stock, commandes, codes promo | À venir |
+| Refonte | Direction visuelle « Acier et cadran bleu », style « Épuré + verre » | Fait ([#4](https://github.com/MohamedAlicode/Maison-Cadran/pull/4)) |
+| 3 | Panier et paiement Stripe (mode test), webhooks, e-mails, facture PDF | Fait ([#7](https://github.com/MohamedAlicode/Maison-Cadran/pull/7)) |
+| 4 | Comptes clients (lien magique), favoris | Fait ([#9](https://github.com/MohamedAlicode/Maison-Cadran/pull/9)) |
+| 5 | Back-office : produits, stock, commandes, codes promo, avis, guide | Fait ([#10](https://github.com/MohamedAlicode/Maison-Cadran/pull/10)) |
 | 6 | SEO, performances, démo en ligne | À venir |
 
 ## Stack
@@ -116,16 +117,17 @@ Puis ouvrir :
 | `npm run db:deploy` | Appliquer les migrations (production, CI) |
 | `npm run db:seed` | Recharger le jeu de données de test (vide d'abord le catalogue) |
 | `npm run db:studio` | Explorer la base dans le navigateur |
+| `npm run admin:promouvoir -- e-mail` | Donner le rôle admin à un compte (`--retirer` pour l'enlever) |
 | `npm run visuels` | Régénérer les illustrations SVG des montres de test |
 
 La CI rejoue ces étapes à chaque pull request : formatage, lint, types, tests, puis migrations, données de test et build sur un PostgreSQL 16.
 
 ## Notes de versions
 
-- **Next.js 16** : `middleware.ts` s'appelle désormais `proxy.ts` (il arrivera en phase 4). Les « Cache Components » sont activés : une valeur variable (date, requête) doit être mise en cache ou lue à la demande.
+- **Next.js 16** : `middleware.ts` s'appelle désormais `proxy.ts` (il protège `/compte` et `/admin`). Les « Cache Components » sont activés : une valeur variable (date, requête) doit être mise en cache ou lue à la demande.
 - **Tailwind CSS 4** : plus de `tailwind.config.ts`, la charte est déclarée dans `src/app/globals.css` (bloc `@theme`).
 - **Prisma 7** : l'URL de la base est dans `prisma.config.ts`, le client est généré dans `src/generated/prisma` et se connecte via l'adaptateur `pg`.
 
 ## Images
 
-Chaque montre de test a trois illustrations SVG (face, détail, profil), générées depuis ses caractéristiques réelles : couleur du cadran, bracelet, guichet de date, lunette. Elles seront remplacées par des photos libres de droits, avec leurs crédits. Aucune photo issue des sites des marques n'est utilisée.
+Les montres de test sont illustrées par des photos libres de droits (Wikimedia Commons en priorité), avec leurs auteurs et licences dans [docs/credits-photos.md](docs/credits-photos.md). Aucune photo issue des sites des marques n'est utilisée.

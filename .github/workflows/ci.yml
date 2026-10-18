@@ -33,6 +33,8 @@ jobs:
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/maison_cadran
       NEXT_PUBLIC_SITE_URL: http://localhost:3000
+      # Valeur de test, sans rien de secret : Auth.js l'exige pour construire le site.
+      AUTH_SECRET: ci-valeur-de-test-sans-importance-0123456789
 
     steps:
       - uses: actions/checkout@v4
