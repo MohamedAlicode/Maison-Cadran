@@ -152,6 +152,8 @@
   --duree-longue: 500ms;
   /* Un tour complet de la banderole du haut de page */
   --duree-banderole: 60s;
+  /* Temps d'affichage de chaque message quand le mouvement est réduit */
+  --duree-message-banderole: 4s;
 }
 
 @layer base {
@@ -228,6 +230,28 @@
   /* Chiffres tabulaires pour les prix et caractéristiques */
   .chiffres {
     font-variant-numeric: tabular-nums lining-nums;
+  }
+}
+
+/*
+ * Mouvement réduit : la banderole ne glisse plus, elle passe d'un message au suivant par sauts.
+ * Règle en couche, donc prioritaire sur la coupure générale ci-dessous ; --messages est posé
+ * sur la banderole, d'où une règle ici plutôt qu'un token d'animation résolu sur :root.
+ */
+@keyframes banderole-pas {
+  to {
+    transform: translateY(-100%);
+  }
+}
+
+@layer components {
+  @media (prefers-reduced-motion: reduce) {
+    .banderole-pas {
+      animation-name: banderole-pas !important;
+      animation-duration: calc(var(--messages) * var(--duree-message-banderole)) !important;
+      animation-timing-function: steps(var(--messages)) !important;
+      animation-iteration-count: infinite !important;
+    }
   }
 }
 

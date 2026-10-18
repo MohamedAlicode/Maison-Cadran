@@ -1,7 +1,7 @@
 "use client";
 
 import { Award, CalendarClock, Pause, Play, RotateCcw, ShieldCheck, Truck } from "lucide-react";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { boutique } from "@/config/boutique";
 import { formatPrixCourt } from "@/lib/prix";
 import { cn } from "@/lib/utils";
@@ -25,7 +25,7 @@ function Messages({ copie = false }: { copie?: boolean }) {
     <ul
       aria-hidden={copie || undefined}
       className={cn(
-        "flex shrink-0 items-center gap-12 py-2.5 pr-12 text-xs text-graphite",
+        "flex shrink-0 items-center gap-12 py-2.5 pr-12 text-xs text-graphite motion-reduce:flex-col motion-reduce:gap-0 motion-reduce:p-0",
         copie && "motion-reduce:hidden",
       )}
     >
@@ -34,7 +34,7 @@ function Messages({ copie = false }: { copie?: boolean }) {
           key={i}
           aria-hidden={i >= messages.length || undefined}
           className={cn(
-            "flex shrink-0 items-center gap-2",
+            "flex shrink-0 items-center gap-2 motion-reduce:h-9 motion-reduce:justify-center",
             i >= messages.length && "motion-reduce:hidden",
           )}
         >
@@ -47,9 +47,9 @@ function Messages({ copie = false }: { copie?: boolean }) {
 }
 
 /**
- * Banderole du haut de page : les messages défilent en boucle. Le défilement s'arrête au survol,
- * au focus et sur le bouton pause (un texte qui bouge plus de 5 s doit pouvoir être arrêté).
- * Avec le mouvement réduit, la bande ne bouge pas et se fait défiler à la main.
+ * Banderole du haut de page : les messages défilent en boucle. Le défilement s'arrête au focus
+ * et sur le bouton pause (un texte qui bouge plus de 5 s doit pouvoir être arrêté).
+ * Avec le mouvement réduit, rien ne glisse : les messages se remplacent un à un, sur place.
  */
 export function Banderole() {
   const [enPause, setEnPause] = useState(false);
@@ -58,10 +58,11 @@ export function Banderole() {
       role="region"
       aria-label="Offres de la boutique"
       data-pause={enPause || undefined}
+      style={{ "--messages": messages.length } as CSSProperties}
       className="group/banderole flex border-b border-filet bg-blanc"
     >
-      <div className="min-w-0 flex-1 overflow-hidden motion-reduce:[scrollbar-width:none] motion-reduce:overflow-x-auto">
-        <div className="flex w-max animate-banderole group-focus-within/banderole:[animation-play-state:paused] group-hover/banderole:[animation-play-state:paused] group-data-pause/banderole:[animation-play-state:paused] motion-reduce:animate-none motion-reduce:pl-6">
+      <div className="min-w-0 flex-1 overflow-hidden motion-reduce:h-9">
+        <div className="banderole-pas flex w-max animate-banderole group-focus-within/banderole:[animation-play-state:paused] group-data-pause/banderole:[animation-play-state:paused] motion-reduce:w-full">
           <Messages />
           <Messages copie />
         </div>
@@ -71,7 +72,7 @@ export function Banderole() {
         onClick={() => setEnPause(!enPause)}
         aria-pressed={enPause}
         aria-label="Mettre la banderole en pause"
-        className="grid w-11 shrink-0 place-items-center border-l border-filet bg-blanc text-graphite transition-colors duration-(--duree-courte) ease-maison hover:text-encre focus-visible:-outline-offset-2 motion-reduce:hidden"
+        className="grid w-11 shrink-0 place-items-center border-l border-filet bg-blanc text-graphite transition-colors duration-(--duree-courte) ease-maison hover:text-encre focus-visible:-outline-offset-2"
       >
         <Pause aria-hidden className="size-4 group-data-pause/banderole:hidden" strokeWidth={1.5} />
         <Play
