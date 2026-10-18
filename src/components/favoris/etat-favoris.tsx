@@ -6,6 +6,8 @@ import { basculerFavori } from "@/server/actions/compte";
 
 type EtatFavoris = {
   estFavori: (produitId: string) => boolean;
+  /** Nombre de montres gardées, affiché sur le cœur de l'en-tête. */
+  nombre: number;
   basculer: (produitId: string) => Promise<void>;
   /** À appeler à la déconnexion : les cœurs se vident sans recharger la page. */
   oublier: () => void;
@@ -47,7 +49,12 @@ export function EtatFavorisProvider({ children }: { children: ReactNode }) {
 
   return (
     <Contexte
-      value={{ estFavori: (id) => ids.has(id), basculer, oublier: () => changerIds(new Set()) }}
+      value={{
+        estFavori: (id) => ids.has(id),
+        nombre: ids.size,
+        basculer,
+        oublier: () => changerIds(new Set()),
+      }}
     >
       {children}
     </Contexte>

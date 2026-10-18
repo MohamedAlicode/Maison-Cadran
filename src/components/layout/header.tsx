@@ -1,6 +1,7 @@
-import { Heart, Search, User } from "lucide-react";
+import { Search, User } from "lucide-react";
 import Link from "next/link";
 import { Logo } from "@/components/brand/logo";
+import { LienFavoris } from "@/components/favoris/coeur-favoris";
 import { BoutonPanier } from "@/components/panier/bouton-panier";
 import { variantesBouton } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -79,13 +80,7 @@ export function Header() {
               >
                 <User className="size-5" strokeWidth={1.5} />
               </Link>
-              <Link
-                href="/compte/favoris"
-                className={cn(classeIcone, "hidden sm:inline-flex")}
-                aria-label="Mes favoris"
-              >
-                <Heart className="size-5" strokeWidth={1.5} />
-              </Link>
+              <LienFavoris className={cn(classeIcone, "hidden sm:inline-flex")} />
               <BoutonPanier />
             </div>
           </div>
