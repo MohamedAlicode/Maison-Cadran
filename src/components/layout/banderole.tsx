@@ -1,10 +1,9 @@
 "use client";
 
 import { Award, CalendarClock, Pause, Play, RotateCcw, ShieldCheck, Truck } from "lucide-react";
-import { useState, type CSSProperties } from "react";
+import { useState } from "react";
 import { boutique } from "@/config/boutique";
 import { formatPrixCourt } from "@/lib/prix";
-import { cn } from "@/lib/utils";
 
 // Uniquement des offres que la boutique applique vraiment : une ligne ajoutée ici apparaît partout.
 const messages = [
@@ -24,19 +23,13 @@ function Messages({ copie = false }: { copie?: boolean }) {
   return (
     <ul
       aria-hidden={copie || undefined}
-      className={cn(
-        "flex shrink-0 items-center gap-12 py-2.5 pr-12 text-xs text-graphite motion-reduce:flex-col motion-reduce:gap-0 motion-reduce:p-0",
-        copie && "motion-reduce:hidden",
-      )}
+      className="flex shrink-0 items-center gap-12 py-2.5 pr-12 text-xs text-graphite"
     >
       {tour.map(({ icone: Icone, texte }, i) => (
         <li
           key={i}
           aria-hidden={i >= messages.length || undefined}
-          className={cn(
-            "flex shrink-0 items-center gap-2 motion-reduce:h-9 motion-reduce:justify-center",
-            i >= messages.length && "motion-reduce:hidden",
-          )}
+          className="flex shrink-0 items-center gap-2"
         >
           <Icone aria-hidden className="size-4 text-cadran" strokeWidth={1.5} />
           {texte}
@@ -49,7 +42,7 @@ function Messages({ copie = false }: { copie?: boolean }) {
 /**
  * Banderole du haut de page : les messages défilent en boucle. Le défilement s'arrête au focus
  * et sur le bouton pause (un texte qui bouge plus de 5 s doit pouvoir être arrêté).
- * Avec le mouvement réduit, rien ne glisse : les messages se remplacent un à un, sur place.
+ * Le rouleau tourne aussi en mouvement réduit, à la demande de Boss : le bouton pause reste là.
  */
 export function Banderole() {
   const [enPause, setEnPause] = useState(false);
@@ -58,11 +51,10 @@ export function Banderole() {
       role="region"
       aria-label="Offres de la boutique"
       data-pause={enPause || undefined}
-      style={{ "--messages": messages.length } as CSSProperties}
       className="group/banderole flex border-b border-filet bg-blanc"
     >
-      <div className="min-w-0 flex-1 overflow-hidden motion-reduce:h-9">
-        <div className="banderole-pas flex w-max animate-banderole group-focus-within/banderole:[animation-play-state:paused] group-data-pause/banderole:[animation-play-state:paused] motion-reduce:w-full">
+      <div className="min-w-0 flex-1 overflow-hidden">
+        <div className="banderole-continue flex w-max animate-banderole group-focus-within/banderole:[animation-play-state:paused] group-data-pause/banderole:[animation-play-state:paused]">
           <Messages />
           <Messages copie />
         </div>

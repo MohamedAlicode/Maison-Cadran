@@ -152,8 +152,6 @@
   --duree-longue: 500ms;
   /* Un tour complet de la banderole du haut de page */
   --duree-banderole: 60s;
-  /* Temps d'affichage de chaque message quand le mouvement est réduit */
-  --duree-message-banderole: 4s;
 }
 
 @layer base {
@@ -234,22 +232,14 @@
 }
 
 /*
- * Mouvement réduit : la banderole ne glisse plus, elle passe d'un message au suivant par sauts.
- * Règle en couche, donc prioritaire sur la coupure générale ci-dessous ; --messages est posé
- * sur la banderole, d'où une règle ici plutôt qu'un token d'animation résolu sur :root.
+ * Le rouleau de la banderole tourne aussi en mouvement réduit (choix de Boss, 2026-10-18), avec son
+ * bouton pause. Règle en couche, donc prioritaire sur la coupure générale ci-dessous ; seules la
+ * durée et la répétition sont rétablies, pour que la pause continue de marcher.
  */
-@keyframes banderole-pas {
-  to {
-    transform: translateY(-100%);
-  }
-}
-
 @layer components {
   @media (prefers-reduced-motion: reduce) {
-    .banderole-pas {
-      animation-name: banderole-pas !important;
-      animation-duration: calc(var(--messages) * var(--duree-message-banderole)) !important;
-      animation-timing-function: steps(var(--messages)) !important;
+    .banderole-continue {
+      animation-duration: var(--duree-banderole) !important;
       animation-iteration-count: infinite !important;
     }
   }
