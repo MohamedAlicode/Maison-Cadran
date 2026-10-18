@@ -4,8 +4,15 @@ import type {
   Gender,
   Movement,
   OrderStatus,
+  ProductStatus,
   StrapType,
 } from "@/generated/prisma/enums";
+
+export const libellesStatutProduit: Record<ProductStatus, string> = {
+  PUBLISHED: "Publié",
+  DRAFT: "Brouillon",
+  ARCHIVED: "Archivé",
+};
 
 export const libellesGenre: Record<Gender, string> = {
   HOMME: "Homme",
