@@ -21,6 +21,8 @@ export function lignesFacture(commande: {
     vatRate: number;
     quantity: number;
   }[];
+  discountCents: number;
+  discountCode: string | null;
   shippingCents: number;
 }) {
   const lignes: LigneFacture[] = commande.items.map((item) => {
@@ -35,6 +37,20 @@ export function lignesFacture(commande: {
       totalTtcCentimes: totalTtc,
     };
   });
+
+  // La remise porte sur des montres toutes au taux normal : une ligne négative à ce taux.
+  if (commande.discountCents > 0) {
+    const tva = tvaIncluse(commande.discountCents);
+    lignes.push({
+      designation: `Remise${commande.discountCode ? ` (code ${commande.discountCode})` : ""}`,
+      reference: null,
+      quantite: 1,
+      prixUnitaireHtCentimes: -(commande.discountCents - tva),
+      tauxTvaPb: boutique.tauxTvaPb,
+      totalHtCentimes: -(commande.discountCents - tva),
+      totalTtcCentimes: -commande.discountCents,
+    });
+  }
 
   if (commande.shippingCents > 0) {
     const tva = tvaIncluse(commande.shippingCents);

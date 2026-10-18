@@ -424,6 +424,7 @@ model DiscountCode {
   startsAt       DateTime?
   endsAt         DateTime?
   isActive       Boolean      @default(true)
+  showInBanner   Boolean      @default(false) // Annoncé dans la banderole du haut
   createdAt      DateTime     @default(now())
 
   orders Order[]

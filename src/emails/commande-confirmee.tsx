@@ -61,6 +61,18 @@ export function EmailCommandeConfirmee({
             <Text style={styles.discret}>{formatPrix(commande.subtotalCents)}</Text>
           </Column>
         </Row>
+        {commande.discountCents > 0 && (
+          <Row>
+            <Column>
+              <Text style={styles.discret}>
+                Remise{commande.discountCode && ` (${commande.discountCode})`}
+              </Text>
+            </Column>
+            <Column align="right">
+              <Text style={styles.discret}>−{formatPrix(commande.discountCents)}</Text>
+            </Column>
+          </Row>
+        )}
         <Row>
           <Column>
             <Text style={styles.discret}>Livraison</Text>

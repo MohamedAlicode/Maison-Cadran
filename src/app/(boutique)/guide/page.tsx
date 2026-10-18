@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { PageEditoriale, Reperes, Rubrique } from "@/components/editorial/page-editoriale";
 import { TextLink } from "@/components/ui/text-link";
 import { boutique } from "@/config/boutique";
+import { articlesPublies } from "@/lib/articles/lecture";
 import { indexCatalogue } from "@/lib/catalogue";
 import {
   type ProduitIndexe,
@@ -57,7 +58,7 @@ function ListeLiens({ children }: { children: ReactNode }) {
 }
 
 export default async function PageGuide() {
-  const produits = await indexCatalogue();
+  const [produits, articles] = await Promise.all([indexCatalogue(), articlesPublies()]);
   const compter = (test: (p: ProduitIndexe) => boolean) => produits.filter(test).length;
   const dansTranche = (valeur: number, t: { min: number; max: number }) =>
     valeur >= t.min && valeur <= t.max;
@@ -343,6 +344,24 @@ export default async function PageGuide() {
           <Link href="/faq#garantie">En savoir plus</Link>.
         </p>
       </Rubrique>
+
+      {articles.length > 0 && (
+        <section aria-labelledby="titre-articles" className="border-t border-filet pt-10">
+          <h2 id="titre-articles" className="text-2xl leading-titre md:text-3xl">
+            Pour aller plus loin
+          </h2>
+          <ul className="mt-6 divide-y divide-filet">
+            {articles.map((a) => (
+              <li key={a.slug} className="py-5">
+                <Link href={`/guide/${a.slug}`} className="font-serif text-xl hover:text-cadran">
+                  {a.title}
+                </Link>
+                <p className="mt-1 text-graphite">{a.excerpt}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
     </PageEditoriale>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { CodePromo } from "@/components/panier/code-promo";
 import { FormulaireCommander } from "@/components/panier/formulaire-commander";
 import { LignePanier } from "@/components/panier/ligne-panier";
 import {
@@ -79,6 +80,7 @@ async function ContenuPanier({ searchParams }: Pick<PageProps<"/panier">, "searc
             Récapitulatif
           </h2>
           <ProgressionLivraison montants={panier} />
+          <CodePromo panier={panier} />
           <Montants montants={panier} />
           <FormulaireCommander />
           <ReassurancePaiement />

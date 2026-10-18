@@ -61,6 +61,22 @@ describe("parametresSessionStripe", () => {
   });
 });
 
+describe("parametresSessionStripe avec un code promo", () => {
+  it("passe le coupon de la remise, et rien sans code", () => {
+    const base = {
+      commande: { id: "cmd1", numero: "MC-2026-000001" },
+      lignes: [],
+      montants: { livraisonCentimes: 0 },
+      urlSite: "https://exemple.fr",
+      maintenantS: 0,
+    };
+    expect(parametresSessionStripe({ ...base, couponId: "co_1" }).discounts).toEqual([
+      { coupon: "co_1" },
+    ]);
+    expect(parametresSessionStripe(base).discounts).toBeUndefined();
+  });
+});
+
 describe("lignesFacture", () => {
   it("retombe sur le total TTC de la commande, livraison comprise", () => {
     const facture = lignesFacture({
@@ -82,6 +98,8 @@ describe("lignesFacture", () => {
           quantity: 2,
         },
       ],
+      discountCents: 0,
+      discountCode: null,
       shippingCents: 990,
     });
     expect(facture.lignes).toHaveLength(3);
@@ -89,5 +107,29 @@ describe("lignesFacture", () => {
     expect(facture.totalHtCentimes + facture.totalTvaCentimes).toBe(facture.totalTtcCentimes);
     expect(facture.lignes[1].prixUnitaireHtCentimes).toBe(10_000);
     expect(facture.lignes[2].designation).toMatch(/^Livraison/);
+  });
+});
+
+describe("lignesFacture avec un code promo", () => {
+  it("déduit la remise en ligne négative et retombe sur le total payé", () => {
+    const facture = lignesFacture({
+      items: [
+        {
+          brandName: "Tissot",
+          productName: "PRX",
+          reference: "T137",
+          unitPriceCents: 72_500,
+          vatRate: 2000,
+          quantity: 1,
+        },
+      ],
+      discountCents: 7_250,
+      discountCode: "BIENVENUE10",
+      shippingCents: 0,
+    });
+    expect(facture.lignes[1].designation).toBe("Remise (code BIENVENUE10)");
+    expect(facture.totalTtcCentimes).toBe(65_250);
+    expect(facture.totalHtCentimes + facture.totalTvaCentimes).toBe(65_250);
+    expect(facture.totalTvaCentimes).toBe(10_875);
   });
 });

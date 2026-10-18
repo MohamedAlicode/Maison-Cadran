@@ -1,11 +1,11 @@
-"use client";
-
-import { Award, CalendarClock, RotateCcw, ShieldCheck, Truck } from "lucide-react";
+import { Award, CalendarClock, RotateCcw, ShieldCheck, Tag, Truck } from "lucide-react";
+import type { CSSProperties } from "react";
 import { boutique } from "@/config/boutique";
+import { annoncesCodesPromo } from "@/lib/offres";
 import { formatPrixCourt } from "@/lib/prix";
 
 // Uniquement des offres que la boutique applique vraiment : une ligne ajoutée ici apparaît partout.
-const messages = [
+const permanents = [
   {
     icone: Truck,
     texte: `Livraison offerte dès ${formatPrixCourt(boutique.livraison.seuilGratuitCentimes)}`,
@@ -16,7 +16,9 @@ const messages = [
   { icone: Award, texte: "Authenticité garantie" },
 ];
 
-function Messages({ copie = false }: { copie?: boolean }) {
+type Message = (typeof permanents)[number];
+
+function Messages({ messages, copie = false }: { messages: Message[]; copie?: boolean }) {
   // Deux tours de messages par copie : la bande reste pleine sur les écrans les plus larges.
   const tour = [...messages, ...messages];
   return (
@@ -41,8 +43,15 @@ function Messages({ copie = false }: { copie?: boolean }) {
 /**
  * Banderole du haut de page : les messages défilent en boucle, sans arrêt.
  * Choix de Boss : le rouleau tourne aussi en mouvement réduit, et sans bouton pause.
+ * Les codes promo cochés « banderole » au back-office passent en tête.
  */
-export function Banderole() {
+export async function Banderole() {
+  const messages = [
+    ...(await annoncesCodesPromo()).map((texte) => ({ icone: Tag, texte })),
+    ...permanents,
+  ];
+  // Chaque message garde le même temps à l'écran, quel que soit le nombre de codes annoncés.
+  const duree = `calc(var(--duree-banderole) * ${messages.length} / ${permanents.length})`;
   return (
     <div
       role="region"
@@ -50,9 +59,12 @@ export function Banderole() {
       className="flex border-b border-filet bg-blanc"
     >
       <div className="min-w-0 flex-1 overflow-hidden">
-        <div className="banderole-continue flex w-max animate-banderole">
-          <Messages />
-          <Messages copie />
+        <div
+          className="banderole-continue flex w-max animate-banderole"
+          style={{ animationDuration: duree, "--duree-rouleau": duree } as CSSProperties}
+        >
+          <Messages messages={messages} />
+          <Messages messages={messages} copie />
         </div>
       </div>
     </div>

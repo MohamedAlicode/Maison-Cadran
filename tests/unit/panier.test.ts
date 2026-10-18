@@ -90,6 +90,25 @@ describe("calculerMontants", () => {
     expect(m.nombreArticles).toBe(2);
   });
 
+  it("déduit la remise avant de juger la livraison offerte", () => {
+    const m = calculerMontants([{ prixCentimes: 16_000, tauxTvaPb: 2000, quantite: 1 }], 2_000);
+    expect(m.remiseCentimes).toBe(2_000);
+    expect(m.livraisonCentimes).toBe(990);
+    expect(m.totalCentimes).toBe(14_990);
+    expect(m.tvaCentimes).toBe(2_667 - 333 + 165);
+    expect(m.resteAvantLivraisonOfferteCentimes).toBe(1_000);
+  });
+
+  it("ne remise jamais plus que le sous-total", () => {
+    expect(
+      calculerMontants([{ prixCentimes: 5_000, tauxTvaPb: 2000, quantite: 1 }], 9_000),
+    ).toMatchObject({
+      remiseCentimes: 5_000,
+      livraisonCentimes: 0,
+      totalCentimes: 0,
+    });
+  });
+
   it("vaut zéro pour un panier vide", () => {
     expect(calculerMontants([])).toMatchObject({
       totalCentimes: 0,

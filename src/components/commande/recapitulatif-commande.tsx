@@ -64,6 +64,12 @@ export function RecapitulatifCommande({ commande }: { commande: CommandeComplete
           <dt>Sous-total</dt>
           <dd>{formatPrix(commande.subtotalCents)}</dd>
         </div>
+        {commande.discountCents > 0 && (
+          <div className="flex justify-between">
+            <dt>Remise{commande.discountCode && ` (${commande.discountCode})`}</dt>
+            <dd>−{formatPrix(commande.discountCents)}</dd>
+          </div>
+        )}
         <div className="flex justify-between">
           <dt>Livraison</dt>
           <dd>{commande.shippingCents === 0 ? "Offerte" : formatPrix(commande.shippingCents)}</dd>
