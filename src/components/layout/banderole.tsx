@@ -1,7 +1,6 @@
 "use client";
 
-import { Award, CalendarClock, Pause, Play, RotateCcw, ShieldCheck, Truck } from "lucide-react";
-import { useState } from "react";
+import { Award, CalendarClock, RotateCcw, ShieldCheck, Truck } from "lucide-react";
 import { boutique } from "@/config/boutique";
 import { formatPrixCourt } from "@/lib/prix";
 
@@ -40,39 +39,22 @@ function Messages({ copie = false }: { copie?: boolean }) {
 }
 
 /**
- * Banderole du haut de page : les messages défilent en boucle. Le défilement s'arrête au focus
- * et sur le bouton pause (un texte qui bouge plus de 5 s doit pouvoir être arrêté).
- * Le rouleau tourne aussi en mouvement réduit, à la demande de Boss : le bouton pause reste là.
+ * Banderole du haut de page : les messages défilent en boucle, sans arrêt.
+ * Choix de Boss : le rouleau tourne aussi en mouvement réduit, et sans bouton pause.
  */
 export function Banderole() {
-  const [enPause, setEnPause] = useState(false);
   return (
     <div
       role="region"
       aria-label="Offres de la boutique"
-      data-pause={enPause || undefined}
-      className="group/banderole flex border-b border-filet bg-blanc"
+      className="flex border-b border-filet bg-blanc"
     >
       <div className="min-w-0 flex-1 overflow-hidden">
-        <div className="banderole-continue flex w-max animate-banderole group-focus-within/banderole:[animation-play-state:paused] group-data-pause/banderole:[animation-play-state:paused]">
+        <div className="banderole-continue flex w-max animate-banderole">
           <Messages />
           <Messages copie />
         </div>
       </div>
-      <button
-        type="button"
-        onClick={() => setEnPause(!enPause)}
-        aria-pressed={enPause}
-        aria-label="Mettre la banderole en pause"
-        className="grid w-11 shrink-0 place-items-center border-l border-filet bg-blanc text-graphite transition-colors duration-(--duree-courte) ease-maison hover:text-encre focus-visible:-outline-offset-2"
-      >
-        <Pause aria-hidden className="size-4 group-data-pause/banderole:hidden" strokeWidth={1.5} />
-        <Play
-          aria-hidden
-          className="hidden size-4 group-data-pause/banderole:block"
-          strokeWidth={1.5}
-        />
-      </button>
     </div>
   );
 }

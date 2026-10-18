@@ -232,9 +232,8 @@
 }
 
 /*
- * Le rouleau de la banderole tourne aussi en mouvement réduit (choix de Boss, 2026-10-18), avec son
- * bouton pause. Règle en couche, donc prioritaire sur la coupure générale ci-dessous ; seules la
- * durée et la répétition sont rétablies, pour que la pause continue de marcher.
+ * Le rouleau de la banderole tourne aussi en mouvement réduit (choix de Boss, 2026-10-18).
+ * Règle en couche, donc prioritaire sur la coupure générale ci-dessous.
  */
 @layer components {
   @media (prefers-reduced-motion: reduce) {
