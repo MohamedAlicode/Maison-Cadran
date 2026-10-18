@@ -2,13 +2,16 @@
 // Aucun avis : ils sont déposés depuis la fiche produit, jamais inventés.
 // Usage : npm run db:seed (ou automatiquement après `prisma migrate reset`).
 // Le script vide d'abord le catalogue : il refuse donc de tourner en production.
+// Avec --si-vide (déploiement de la démo), il ne vide rien et ne remplit qu'une base neuve.
 import "dotenv/config";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "../src/generated/prisma/client";
 import { collections, marques, montres } from "./donnees-test";
 import { photosMontres } from "../src/lib/photos-montres";
 
-if (process.env.NODE_ENV === "production") {
+const siVide = process.argv.includes("--si-vide");
+
+if (process.env.NODE_ENV === "production" && !siVide) {
   throw new Error("Le seed de test ne doit jamais être lancé en production.");
 }
 
@@ -20,6 +23,11 @@ const JOUR = 24 * 60 * 60 * 1000;
 const maintenant = Date.now();
 
 async function main() {
+  if (siVide && (await db.brand.count()) > 0) {
+    console.log("Catalogue déjà rempli : rien à faire.");
+    return;
+  }
+
   // Vidage dans l'ordre des dépendances
   await db.$transaction([
     db.review.deleteMany(),
