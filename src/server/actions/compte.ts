@@ -6,12 +6,26 @@ import { AuthError } from "next-auth";
 import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { signIn, signOut } from "@/lib/auth";
+import { signIn, signOut, validiteLienSecondes } from "@/lib/auth";
 import { cheminRetour, schemaAdresseCompte } from "@/lib/compte/regles";
 import { clientConnecte } from "@/lib/compte/serveur";
 import { db } from "@/lib/db";
 
 export type EtatConnexion = { message: string; email: string } | null;
+
+// Au plus 3 liens par adresse en 10 minutes, pour qu'on ne puisse pas inonder une boîte mail
+// depuis notre formulaire. Les jetons encore en base font le compte : un lien utilisé en sort.
+const LIENS_MAX = 3;
+const FENETRE_LIENS_MS = 10 * 60 * 1000;
+
+async function tropDeLiens(email: string) {
+  const emisApres = Date.now() + validiteLienSecondes * 1000 - FENETRE_LIENS_MS;
+  const recents = await db.verificationToken.count({
+    // Auth.js range l'adresse en minuscules, sans espaces.
+    where: { identifier: email.toLowerCase(), expires: { gt: new Date(emisApres) } },
+  });
+  return recents >= LIENS_MAX;
+}
 
 export async function demanderLien(
   _etat: EtatConnexion,
@@ -20,6 +34,13 @@ export async function demanderLien(
   const saisie = String(formulaire.get("email") ?? "");
   const email = z.email().safeParse(saisie.trim());
   if (!email.success) return { message: "Indiquez une adresse e-mail valide.", email: saisie };
+  if (await tropDeLiens(email.data)) {
+    return {
+      message:
+        "Plusieurs liens ont déjà été envoyés à cette adresse. Utilisez le plus récent, ou réessayez dans 10 minutes.",
+      email: saisie,
+    };
+  }
   try {
     // Sans redirection automatique : Auth.js passerait par sa propre route avant notre page.
     await signIn("resend", {
