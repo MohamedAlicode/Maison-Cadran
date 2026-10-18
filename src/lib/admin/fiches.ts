@@ -1,4 +1,4 @@
-// Marques et collections pour le back-office : listes, valeurs de formulaire, champs.
+// Marques, collections et articles pour le back-office : listes, valeurs de formulaire, champs.
 import "server-only";
 import type { ChampSimple } from "@/components/admin/formulaire-simple";
 import { db } from "@/lib/db";
@@ -75,6 +75,67 @@ export async function collectionPourEdition(id: string) {
       slug: c.slug,
       description: texte(c.description),
       ordre: texte(c.sortOrder),
+    },
+  };
+}
+
+export const champsArticle: ChampSimple[] = [
+  { nom: "titre", label: "Titre", requis: true },
+  {
+    nom: "slug",
+    label: "Adresse de la page",
+    aide: "Laissez vide pour la créer à partir du titre.",
+  },
+  { nom: "resume", label: "Chapeau", zone: true, lignes: 3, requis: true },
+  {
+    nom: "contenu",
+    label: "Texte",
+    zone: true,
+    lignes: 18,
+    requis: true,
+    aide: "Une ligne vide entre deux paragraphes. « ## » devant un intertitre, « - » devant chaque point d'une liste, **gras**, [lien](/montres).",
+  },
+  {
+    nom: "couverture",
+    label: "Photo de couverture (facultatif)",
+    aide: "Lien d'un fichier du site (/images/…) ou de Cloudinary.",
+  },
+  { nom: "descriptionCouverture", label: "Description de la photo" },
+  { nom: "titreSeo", label: "Titre pour Google (facultatif)" },
+  { nom: "descriptionSeo", label: "Description pour Google (facultatif)", zone: true, lignes: 2 },
+  {
+    nom: "publie",
+    label: "Publié",
+    caseACocher: true,
+    aide: "Décoché, l'article reste un brouillon visible seulement ici.",
+  },
+];
+
+export async function listeArticlesAdmin() {
+  return db.article.findMany({
+    orderBy: { updatedAt: "desc" },
+    select: { id: true, title: true, publishedAt: true },
+  });
+}
+
+export async function articlePourEdition(id: string) {
+  const a = await db.article.findUnique({ where: { id } });
+  if (!a) return null;
+  return {
+    titre: a.title,
+    slug: a.slug,
+    publie: a.publishedAt !== null,
+    valeurs: {
+      id: a.id,
+      titre: a.title,
+      slug: a.slug,
+      resume: a.excerpt,
+      contenu: a.content,
+      couverture: texte(a.coverUrl),
+      descriptionCouverture: texte(a.coverAlt),
+      titreSeo: texte(a.metaTitle),
+      descriptionSeo: texte(a.metaDescription),
+      publie: a.publishedAt ? "on" : "",
     },
   };
 }

@@ -364,3 +364,27 @@ export const schemaCodePromo = z
       showInBanner: c.banderole === "on",
     };
   });
+
+export const schemaArticle = z
+  .object({
+    titre: texte("Indiquez le titre.", 120),
+    slug: adresse,
+    resume: texte("Indiquez le chapeau de l'article.", 400),
+    contenu: texte("Écrivez le texte de l'article.", 50_000),
+    couverture: z
+      .string()
+      .trim()
+      .refine(
+        (v) => !v || motifPhoto.test(v),
+        "Lien attendu : /images/… ou https://res.cloudinary.com/…",
+      )
+      .transform((v) => v || null),
+    descriptionCouverture: facultatif(200),
+    publie: z.string().optional(),
+    titreSeo: facultatif(70),
+    descriptionSeo: facultatif(160),
+  })
+  .refine((a) => !a.couverture || a.descriptionCouverture, {
+    path: ["descriptionCouverture"],
+    message: "Décrivez la photo pour les lecteurs d'écran.",
+  });

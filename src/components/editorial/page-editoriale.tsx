@@ -13,6 +13,8 @@ type Proprietes = {
   rubriques?: EntreeSommaire[];
   /** Date de dernière mise à jour, affichée sous l'introduction (pages juridiques). */
   miseAJour?: string;
+  /** Page qui regroupe celle-ci dans le fil d'Ariane (le guide pour un article). */
+  parent?: { libelle: string; href: string };
   children: ReactNode;
 };
 
@@ -25,11 +27,18 @@ export function PageEditoriale({
   introduction,
   rubriques = [],
   miseAJour,
+  parent,
   children,
 }: Proprietes) {
   return (
     <Container className="pt-10 pb-20 md:pt-14 md:pb-28">
-      <Breadcrumb miettes={[{ libelle: "Accueil", href: "/" }, { libelle: titre }]} />
+      <Breadcrumb
+        miettes={[
+          { libelle: "Accueil", href: "/" },
+          ...(parent ? [parent] : []),
+          { libelle: titre },
+        ]}
+      />
       <header className="mt-8 max-w-3xl">
         <h1 className="text-4xl leading-affiche md:text-6xl">{titre}</h1>
         <div className="mt-6 text-lg leading-relaxed text-graphite">{introduction}</div>
