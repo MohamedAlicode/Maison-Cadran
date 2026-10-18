@@ -1,6 +1,13 @@
 // Règles pures du back-office : validation des formulaires, testée sans base ni session.
 import { z } from "zod";
-import { CaseMaterial, Gender, Movement, ProductStatus, StrapType } from "@/generated/prisma/enums";
+import {
+  CaseMaterial,
+  Gender,
+  Movement,
+  type OrderStatus,
+  ProductStatus,
+  StrapType,
+} from "@/generated/prisma/enums";
 
 /** « Tissot PRX Powermatic 80 » → « tissot-prx-powermatic-80 » (accents retirés). */
 export function slugifier(texte: string) {
@@ -241,4 +248,30 @@ export const schemaCollection = z.object({
   slug: adresse,
   description: facultatif(600),
   ordre,
+});
+
+/** Étape suivante d'une commande payée, dans l'ordre de l'atelier. */
+export const etapeSuivante: Partial<Record<OrderStatus, OrderStatus>> = {
+  PAID: "PREPARING",
+  PREPARING: "SHIPPED",
+  SHIPPED: "DELIVERED",
+};
+
+/**
+ * Une commande se rembourse dès qu'un paiement existe : payée, en cours, livrée (retour sous
+ * 14 jours) ou annulée pour rupture quand le remboursement automatique a échoué.
+ */
+export function estRemboursable(statut: OrderStatus, paymentIntentId: string | null) {
+  return Boolean(paymentIntentId) && statut !== "PENDING" && statut !== "REFUNDED";
+}
+
+export const schemaExpedition = z.object({
+  transporteur: texte("Indiquez le transporteur.", 60),
+  numeroSuivi: texte("Indiquez le numéro de suivi.", 60),
+  lienSuivi: z
+    .string()
+    .trim()
+    .max(500)
+    .refine((v) => !v || /^https:\/\/\S+$/.test(v), "Lien attendu : https://…")
+    .transform((v) => v || null),
 });

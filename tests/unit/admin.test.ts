@@ -2,8 +2,11 @@ import { describe, expect, it } from "vitest";
 import {
   centimesEnSaisie,
   erreursParChamp,
+  estRemboursable,
+  etapeSuivante,
   euroEnCentimes,
   lireFormulaireProduit,
+  schemaExpedition,
   schemaProduit,
   slugifier,
 } from "@/lib/admin/regles";
@@ -96,5 +99,28 @@ describe("schemaProduit", () => {
       schemaProduit.safeParse(lireFormulaireProduit(formulaire({ ...sansPhoto, statut: "DRAFT" })))
         .success,
     ).toBe(true);
+  });
+});
+
+describe("commandes", () => {
+  it("avance dans l'ordre de l'atelier, puis s'arrête", () => {
+    expect(etapeSuivante.PAID).toBe("PREPARING");
+    expect(etapeSuivante.SHIPPED).toBe("DELIVERED");
+    expect(etapeSuivante.DELIVERED).toBeUndefined();
+    expect(etapeSuivante.CANCELLED).toBeUndefined();
+  });
+
+  it("ne rembourse qu'un paiement existant et pas deux fois", () => {
+    expect(estRemboursable("DELIVERED", "pi_1")).toBe(true);
+    expect(estRemboursable("CANCELLED", "pi_1")).toBe(true);
+    expect(estRemboursable("CANCELLED", null)).toBe(false);
+    expect(estRemboursable("REFUNDED", "pi_1")).toBe(false);
+  });
+
+  it("exige un numéro de suivi et un lien en https", () => {
+    const base = { transporteur: "Colissimo", numeroSuivi: "6A123", lienSuivi: "" };
+    expect(schemaExpedition.parse(base).lienSuivi).toBeNull();
+    expect(schemaExpedition.safeParse({ ...base, numeroSuivi: " " }).success).toBe(false);
+    expect(schemaExpedition.safeParse({ ...base, lienSuivi: "http://x.fr" }).success).toBe(false);
   });
 });

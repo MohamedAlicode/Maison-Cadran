@@ -1,7 +1,9 @@
 // Téléchargement d'une facture PDF. L'accès se prouve avec l'identifiant de la session Stripe
-// de la commande, connu seulement de l'acheteur, ou en étant le client connecté de la commande.
+// de la commande, connu seulement de l'acheteur, en étant le client connecté de la commande,
+// ou en étant admin.
 import type { NextRequest } from "next/server";
 import { chargerCommande } from "@/lib/commandes/donnees";
+import { adminConnecte } from "@/lib/admin/serveur";
 import { clientConnecte } from "@/lib/compte/serveur";
 import { db } from "@/lib/db";
 import { genererFacturePdf } from "@/lib/facture/document";
@@ -21,7 +23,8 @@ export async function GET(
   const autorise =
     commande &&
     ((sessionId && commande.stripeCheckoutSessionId === sessionId) ||
-      (commande.userId && commande.userId === (await clientConnecte())?.id));
+      (commande.userId && commande.userId === (await clientConnecte())?.id) ||
+      (await adminConnecte()));
   if (!commande || !autorise) return new Response("Facture introuvable", { status: 404 });
 
   const pdf = await genererFacturePdf(commande);
