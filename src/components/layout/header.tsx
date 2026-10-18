@@ -5,7 +5,7 @@ import { LienFavoris } from "@/components/favoris/coeur-favoris";
 import { BoutonPanier } from "@/components/panier/bouton-panier";
 import { variantesBouton } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { ReassuranceBar } from "./reassurance-bar";
+import { Banderole } from "./banderole";
 import { LienNavigation } from "./lien-navigation";
 import { MobileMenu } from "./mobile-menu";
 import { navigationPrincipale } from "./navigation";
@@ -13,8 +13,8 @@ import { navigationPrincipale } from "./navigation";
 const classeIcone = variantesBouton({ variante: "fantome", taille: "icone" });
 
 /**
- * En-tête du site : réassurance, logo centré, navigation et accès rapides.
- * Le bandeau de réassurance défile avec la page ; seule la barre du logo reste collée,
+ * En-tête du site : banderole des offres, logo centré, navigation et accès rapides.
+ * La banderole remonte avec la page ; seule la barre du logo reste collée,
  * pour ne garder que 80 px d'en-tête sur mobile.
  */
 export function Header() {
@@ -26,7 +26,7 @@ export function Header() {
       >
         Aller au contenu
       </a>
-      <ReassuranceBar compacte />
+      <Banderole />
       <header className="sticky top-0 z-30 bg-acier/95 backdrop-blur-verre supports-[backdrop-filter]:bg-acier/85 transparence-reduite:bg-acier">
         <div className="mx-auto grid h-20 max-w-site grid-cols-[1fr_auto_1fr] items-center px-4 lg:px-12">
           <div className="flex items-center">

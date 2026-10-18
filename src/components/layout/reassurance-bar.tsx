@@ -3,7 +3,7 @@ import { boutique } from "@/config/boutique";
 import { formatPrixCourt } from "@/lib/prix";
 import { cn } from "@/lib/utils";
 
-// Les quatre engagements de la boutique, repris sous le header et sur chaque fiche produit.
+// Les quatre engagements de la boutique, repris sur l'accueil et sur chaque fiche produit.
 // Formulation volontairement neutre (« garantie 2 ans ») tant que le statut de revendeur
 // agréé n'est pas confirmé : la mention « garantie constructeur » est réservée au réseau officiel.
 export const engagements = [
@@ -25,32 +25,8 @@ export const engagements = [
   },
 ] as const;
 
-/** Bandeau de réassurance. Version « compacte » sur une ligne pour le haut de page. */
-export function ReassuranceBar({
-  compacte = false,
-  className,
-}: {
-  compacte?: boolean;
-  className?: string;
-}) {
-  if (compacte) {
-    return (
-      <div className={cn("border-b border-filet bg-blanc", className)}>
-        <ul className="mx-auto flex max-w-site items-center justify-center gap-8 overflow-x-auto px-6 py-2.5 text-xs text-graphite lg:justify-between lg:px-12">
-          {engagements.map(({ icone: Icone, titre }, i) => (
-            <li
-              key={titre}
-              className={cn("flex shrink-0 items-center gap-2", i > 0 && "hidden md:flex")}
-            >
-              <Icone aria-hidden className="size-4 text-cadran" strokeWidth={1.5} />
-              {titre}
-            </li>
-          ))}
-        </ul>
-      </div>
-    );
-  }
-
+/** Les quatre engagements en grille, sur l'accueil et le design system. */
+export function ReassuranceBar({ className }: { className?: string }) {
   return (
     <ul className={cn("grid grid-cols-2 gap-x-6 gap-y-10 lg:grid-cols-4", className)}>
       {engagements.map(({ icone: Icone, titre, detail }) => (

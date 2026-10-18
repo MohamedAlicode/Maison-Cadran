@@ -103,6 +103,8 @@
   --animate-fondu: fondu var(--duree-longue) var(--ease-maison) both;
   --animate-glisse-droite: glisse-droite var(--duree-moyenne) var(--ease-maison) both;
   --animate-glisse-gauche: glisse-gauche var(--duree-moyenne) var(--ease-maison) both;
+  /* Défilement continu : vitesse constante, sans courbe, pour qu'on puisse lire en marche. */
+  --animate-banderole: banderole var(--duree-banderole) linear infinite;
 
   @keyframes fondu {
     from {
@@ -124,6 +126,12 @@
     }
   }
 
+  @keyframes banderole {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
   @keyframes glisse-gauche {
     from {
       transform: translateX(-100%);
@@ -142,6 +150,8 @@
   --duree-courte: 180ms;
   --duree-moyenne: 300ms;
   --duree-longue: 500ms;
+  /* Un tour complet de la banderole du haut de page */
+  --duree-banderole: 60s;
 }
 
 @layer base {
