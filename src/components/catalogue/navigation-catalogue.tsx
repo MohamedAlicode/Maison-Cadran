@@ -6,7 +6,10 @@ import { cn } from "@/lib/utils";
 
 // Contexte partagé par les filtres, le tri et la grille : la navigation se fait dans une
 // transition React, ce qui permet d'atténuer la grille pendant le chargement des résultats.
-type ContexteNavigation = { naviguer: (url: string) => void; enCours: boolean };
+type ContexteNavigation = {
+  naviguer: (url: string, options?: { remplacer?: boolean }) => void;
+  enCours: boolean;
+};
 
 const Contexte = createContext<ContexteNavigation | null>(null);
 
@@ -20,7 +23,12 @@ export function useNavigationCatalogue() {
 export function NavigationCatalogue({ children }: { children: ReactNode }) {
   const router = useRouter();
   const [enCours, demarrer] = useTransition();
-  const naviguer = (url: string) => demarrer(() => router.push(url, { scroll: false }));
+  const naviguer: ContexteNavigation["naviguer"] = (url, options) =>
+    demarrer(() =>
+      options?.remplacer
+        ? router.replace(url, { scroll: false })
+        : router.push(url, { scroll: false }),
+    );
   return <Contexte value={{ naviguer, enCours }}>{children}</Contexte>;
 }
 
