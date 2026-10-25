@@ -1,4 +1,4 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "npm run db:deploy && npx tsx prisma/seed.ts --si-vide && npm run build"
+  "buildCommand": "PRISMA_SCHEMA_DISABLE_ADVISORY_LOCK=1 npm run db:deploy && npx tsx prisma/seed.ts --si-vide && npm run build"
 }
