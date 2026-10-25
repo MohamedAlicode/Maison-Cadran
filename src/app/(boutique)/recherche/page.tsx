@@ -2,11 +2,12 @@ import { Search } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { ChampRecherche } from "@/components/catalogue/champ-recherche";
+import { NavigationCatalogue, ZoneResultats } from "@/components/catalogue/navigation-catalogue";
 import { GrilleProduits } from "@/components/catalogue/product-card";
 import { Breadcrumb } from "@/components/ui/breadcrumb";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { Input } from "@/components/ui/input";
 import { indexCatalogue } from "@/lib/catalogue";
 import { trier } from "@/lib/filtres";
 
@@ -37,12 +38,12 @@ async function Resultats({ searchParams }: Pick<PageProps<"/recherche">, "search
   );
 
   return (
-    <>
+    <NavigationCatalogue>
       <form action="/recherche" role="search" className="mt-8 flex max-w-2xl gap-3">
         <label htmlFor="champ-recherche" className="sr-only">
           Marque, modèle ou caractéristique
         </label>
-        <Input
+        <ChampRecherche
           id="champ-recherche"
           type="search"
           name="q"
@@ -57,26 +58,28 @@ async function Resultats({ searchParams }: Pick<PageProps<"/recherche">, "search
         </Button>
       </form>
 
-      <p className="chiffres mt-8 mb-8 text-sm text-graphite">
+      <p aria-live="polite" className="chiffres mt-8 mb-8 text-sm text-graphite">
         {requete
           ? `${resultats.length} montre${resultats.length > 1 ? "s" : ""} pour « ${requete} »`
           : `${resultats.length} montres`}
       </p>
 
-      {resultats.length > 0 ? (
-        <GrilleProduits produits={resultats} niveauTitre="h2" />
-      ) : (
-        <div className="max-w-xl">
-          <p className="font-serif text-2xl">Aucune montre ne correspond à cette recherche.</p>
-          <p className="mt-3 text-graphite">
-            Essayez un nom de marque ou un mot plus court, ou parcourez tout le catalogue.
-          </p>
-          <Button asChild variante="secondaire" className="mt-6">
-            <Link href="/montres">Voir toutes les montres</Link>
-          </Button>
-        </div>
-      )}
-    </>
+      <ZoneResultats>
+        {resultats.length > 0 ? (
+          <GrilleProduits produits={resultats} niveauTitre="h2" />
+        ) : (
+          <div className="max-w-xl">
+            <p className="font-serif text-2xl">Aucune montre ne correspond à cette recherche.</p>
+            <p className="mt-3 text-graphite">
+              Essayez un nom de marque ou un mot plus court, ou parcourez tout le catalogue.
+            </p>
+            <Button asChild variante="secondaire" className="mt-6">
+              <Link href="/montres">Voir toutes les montres</Link>
+            </Button>
+          </div>
+        )}
+      </ZoneResultats>
+    </NavigationCatalogue>
   );
 }
 
