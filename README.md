@@ -4,6 +4,8 @@
 
 Boutique en ligne de montres de « luxe accessible » (100 € à 2 000 €), construite sur mesure, sans CMS, avec Next.js, TypeScript, Prisma et PostgreSQL.
 
+![Parcours sur le site : accueil, catalogue, fiche produit avec sa galerie, ajout au panier](docs/apercu-site.gif)
+
 > **Projet portfolio.** Maison Cadran est une boutique fictive : aucune montre n'est vendue. Les marques et les modèles servent de données de test, et le paiement fonctionnera uniquement en mode test Stripe.
 
 ## Ce que le projet montre
