@@ -24,15 +24,21 @@ function normaliser(texte: string) {
     .toLowerCase();
 }
 
+// « cer » doit trouver Certina, pas « Officer » : un mot cherché doit ouvrir un mot du texte.
+function commenceUnMot(texte: string, mot: string) {
+  const echappe = mot.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(^|[^\\p{L}\\p{N}])${echappe}`, "u").test(texte);
+}
+
 async function Resultats({ searchParams }: Pick<PageProps<"/recherche">, "searchParams">) {
   const [{ q }, index] = await Promise.all([searchParams, indexCatalogue()]);
   const requete = typeof q === "string" ? q.trim() : "";
-  // Chaque mot doit se retrouver dans la marque, le modèle ou le détail (mouvement, taille, matières).
+  // Chaque mot doit ouvrir un mot de la marque, du modèle ou du détail (mouvement, taille, matières).
   const mots = normaliser(requete).split(/\s+/).filter(Boolean);
   const resultats = trier(
     index.filter((p) => {
       const texte = normaliser(`${p.marqueNom} ${p.nom} ${p.detail}`);
-      return mots.every((mot) => texte.includes(mot));
+      return mots.every((mot) => commenceUnMot(texte, mot));
     }),
     "selection",
   );
