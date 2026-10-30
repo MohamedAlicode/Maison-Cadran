@@ -94,6 +94,9 @@ model User {
   image          String?
   role           Role      @default(CUSTOMER)
   marketingOptIn Boolean   @default(false)
+  passwordHash   String?
+  failedLogins   Int       @default(0)
+  lockedUntil    DateTime?
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
