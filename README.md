@@ -14,7 +14,7 @@ Boutique en ligne de montres de « luxe accessible » (100 € à 2 000 €), co
 - **Des fiches produit complètes** : galerie avec zoom, autres coloris, stock et délai, caractéristiques par rubrique, avis, montres similaires.
 - **Le rendu moderne de Next.js 16** : pages prérendues au build (Partial Prerendering), lectures en base mises en cache et invalidables par étiquette.
 - **Un SEO soigné** : métadonnées par page, données structurées `Product` et `BreadcrumbList`, URL canonique pour les combinaisons de filtres.
-- **Un parcours d'achat complet** : panier, codes promo, paiement Stripe Checkout (mode test), webhook idempotent, facture PDF numérotée, comptes clients par lien magique et back-office sous `/admin`.
+- **Un parcours d'achat complet** : panier, codes promo, paiement Stripe Checkout (mode test), webhook idempotent, facture PDF numérotée, comptes clients (e-mail et mot de passe, ou lien magique) et back-office sous `/admin`.
 - **Un modèle de données pensé pour la suite** : commandes, factures, codes promo, avis et événements Stripe sont dans le schéma Prisma dès le départ.
 - **De la rigueur sur l'argent** : tous les prix sont des entiers en centimes TTC, la TVA est recalculée et jamais stockée en flottant.
 - **De la qualité vérifiée** : TypeScript strict, variables d'environnement validées par Zod, tests Vitest sur la logique de prix et de filtres, CI GitHub Actions.
@@ -133,7 +133,7 @@ La CI rejoue ces étapes à chaque pull request : formatage, lint, types, tests,
    - `NEXT_PUBLIC_SITE_URL` : l'adresse que Vercel donnera au site, par exemple `https://maison-cadran.vercel.app`.
 3. Déployer. `vercel.json` applique les migrations et remplit le catalogue de test si la base est vide, puis lance le build.
 
-Sans clés Stripe, le bouton « Commander » explique que le paiement est désactivé. Sans clé Resend, aucun lien de connexion n'est envoyé. Les deux s'ajoutent ensuite comme variables (voir `.env.example`).
+Sans clés Stripe, le bouton « Commander » explique que le paiement est désactivé. Sans clé Resend, aucun lien de connexion n'est envoyé : la page de connexion ne propose alors que l'e-mail et le mot de passe. Les deux s'ajoutent ensuite comme variables (voir `.env.example`).
 
 ## Notes de versions
 

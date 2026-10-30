@@ -43,7 +43,7 @@ const rubriques = [
           {
             terme: "Votre compte",
             detail:
-              "E-mail, adresses enregistrées et montres mises en favori, pour vous éviter de tout ressaisir. Base légale : l'exécution du contrat.",
+              "E-mail, mot de passe (conservé uniquement sous forme chiffrée irréversible), adresses enregistrées et montres mises en favori, pour vous éviter de tout ressaisir. Base légale : l'exécution du contrat.",
           },
           {
             terme: "Le paiement",

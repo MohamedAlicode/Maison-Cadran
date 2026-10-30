@@ -1,4 +1,5 @@
 // Comptes clients avec Auth.js : lien magique par e-mail, et Google quand ses clés existent.
+// La connexion par mot de passe passe à côté (src/server/actions/compte.ts) et ouvre la même session.
 // Les sessions sont stockées en base : se déconnecter ou supprimer une session la coupe aussitôt.
 import "server-only";
 import { PrismaAdapter } from "@auth/prisma-adapter";
@@ -15,6 +16,11 @@ import { EmailLienConnexion } from "@/emails/lien-connexion";
 export const validiteLienSecondes = 24 * 60 * 60;
 
 export const googleConfigure = Boolean(env.AUTH_GOOGLE_ID && env.AUTH_GOOGLE_SECRET);
+
+// Sans clé Resend, la production n'envoie aucun lien : le formulaire est alors masqué. En
+// développement, le lien est écrit dans .emails/ et reste utilisable.
+export const lienMagiqueConfigure =
+  Boolean(env.RESEND_API_KEY) || process.env.NODE_ENV !== "production";
 
 const fournisseurs: Provider[] = [
   Resend({

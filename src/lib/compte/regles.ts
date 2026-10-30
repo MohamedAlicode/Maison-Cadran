@@ -53,3 +53,18 @@ export const schemaAdresseCompte = z.object({
 });
 
 export type AdresseCompte = z.infer<typeof schemaAdresseCompte>;
+
+/** 8 caractères au minimum, sans autre contrainte : la longueur protège mieux qu'un mélange imposé. */
+export const schemaMotDePasse = z
+  .string()
+  .min(8, "Choisissez un mot de passe d'au moins 8 caractères.")
+  .max(128, "128 caractères au maximum.");
+
+export const schemaIdentifiants = z.object({
+  email: z.email("Indiquez une adresse e-mail valide.").trim().toLowerCase(),
+  motDePasse: schemaMotDePasse,
+});
+
+/** Après 5 essais manqués, le compte refuse tout mot de passe pendant 15 minutes. */
+export const ESSAIS_MAX = 5;
+export const BLOCAGE_MS = 15 * 60 * 1000;

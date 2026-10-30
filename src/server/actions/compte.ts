@@ -7,8 +7,16 @@ import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { signIn, signOut, validiteLienSecondes } from "@/lib/auth";
-import { cheminRetour, schemaAdresseCompte } from "@/lib/compte/regles";
+import { hacherMotDePasse, empreinteLeurre, verifierMotDePasse } from "@/lib/compte/mot-de-passe";
+import {
+  BLOCAGE_MS,
+  ESSAIS_MAX,
+  cheminRetour,
+  schemaAdresseCompte,
+  schemaIdentifiants,
+} from "@/lib/compte/regles";
 import { clientConnecte } from "@/lib/compte/serveur";
+import { ouvrirSession } from "@/lib/compte/session";
 import { db } from "@/lib/db";
 
 export type EtatConnexion = { message: string; email: string } | null;
@@ -63,6 +71,118 @@ export async function demanderLien(
 
 export async function connexionGoogle(formulaire: FormData) {
   await signIn("google", { redirectTo: cheminRetour(formulaire.get("retour")) });
+}
+
+export type EtatIdentifiants = {
+  email: string;
+  erreurs: { email?: string; motDePasse?: string; formulaire?: string };
+} | null;
+
+function lireIdentifiants(formulaire: FormData) {
+  const email = String(formulaire.get("email") ?? "");
+  const resultat = schemaIdentifiants.safeParse({
+    email,
+    motDePasse: String(formulaire.get("motDePasse") ?? ""),
+  });
+  if (resultat.success) return { email, donnees: resultat.data } as const;
+  const { fieldErrors } = z.flattenError(resultat.error);
+  return {
+    email,
+    erreur: {
+      email,
+      erreurs: { email: fieldErrors.email?.[0], motDePasse: fieldErrors.motDePasse?.[0] },
+    },
+  } as const;
+}
+
+export async function inscrire(
+  _etat: EtatIdentifiants,
+  formulaire: FormData,
+): Promise<EtatIdentifiants> {
+  const saisie = lireIdentifiants(formulaire);
+  if (!saisie.donnees) return saisie.erreur;
+  const { email, motDePasse } = saisie.donnees;
+
+  // Une adresse déjà prouvée (lien, Google) ou dotée d'un mot de passe garde son propriétaire.
+  // Seule une fiche créée par un avis, jamais connectée, peut recevoir un mot de passe.
+  const existant = await db.user.findFirst({
+    where: { email: { equals: email, mode: "insensitive" } },
+    select: {
+      id: true,
+      passwordHash: true,
+      emailVerified: true,
+      _count: { select: { accounts: true } },
+    },
+  });
+  if (existant && (existant.passwordHash || existant.emailVerified || existant._count.accounts)) {
+    return {
+      email: saisie.email,
+      erreurs: { email: "Un compte existe déjà avec cette adresse. Connectez-vous." },
+    };
+  }
+
+  const passwordHash = await hacherMotDePasse(motDePasse);
+  const utilisateur = existant
+    ? await db.user.update({ where: { id: existant.id }, data: { passwordHash } })
+    : await db.user.create({ data: { email, passwordHash } });
+  // Les commandes passées en invité ne sont pas rattachées : l'adresse n'est pas prouvée.
+  await ouvrirSession(utilisateur.id);
+  redirect(cheminRetour(formulaire.get("retour")));
+}
+
+export async function connecterAvecMotDePasse(
+  _etat: EtatIdentifiants,
+  formulaire: FormData,
+): Promise<EtatIdentifiants> {
+  const saisie = lireIdentifiants(formulaire);
+  if (!saisie.donnees) return saisie.erreur;
+  const { email, motDePasse } = saisie.donnees;
+  // Même message que l'adresse soit inconnue ou le mot de passe faux : il ne dit pas qui est inscrit.
+  const refus = {
+    email: saisie.email,
+    erreurs: { formulaire: "Adresse ou mot de passe incorrect." },
+  };
+
+  const utilisateur = await db.user.findFirst({
+    where: { email: { equals: email, mode: "insensitive" } },
+    select: { id: true, passwordHash: true, lockedUntil: true },
+  });
+  if (utilisateur?.lockedUntil && utilisateur.lockedUntil > new Date()) {
+    return {
+      email: saisie.email,
+      erreurs: {
+        formulaire: "Trop d'essais manqués sur ce compte. Réessayez dans 15 minutes.",
+      },
+    };
+  }
+
+  const valide = await verifierMotDePasse(
+    motDePasse,
+    utilisateur?.passwordHash ?? (await empreinteLeurre()),
+  );
+  if (!utilisateur?.passwordHash || !valide) {
+    if (utilisateur?.passwordHash) {
+      const { failedLogins } = await db.user.update({
+        where: { id: utilisateur.id },
+        data: { failedLogins: { increment: 1 } },
+        select: { failedLogins: true },
+      });
+      if (failedLogins >= ESSAIS_MAX) {
+        await db.user.update({
+          where: { id: utilisateur.id },
+          data: { failedLogins: 0, lockedUntil: new Date(Date.now() + BLOCAGE_MS) },
+        });
+      }
+    }
+    return refus;
+  }
+
+  await db.user.update({
+    where: { id: utilisateur.id },
+    data: { failedLogins: 0, lockedUntil: null },
+  });
+  await ouvrirSession(utilisateur.id);
+  redirect(cheminRetour(formulaire.get("retour")));
 }
 
 export async function seDeconnecter() {
