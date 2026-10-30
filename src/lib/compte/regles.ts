@@ -54,15 +54,33 @@ export const schemaAdresseCompte = z.object({
 
 export type AdresseCompte = z.infer<typeof schemaAdresseCompte>;
 
-/** 8 caractères au minimum, sans autre contrainte : la longueur protège mieux qu'un mélange imposé. */
-export const schemaMotDePasse = z
-  .string()
-  .min(8, "Choisissez un mot de passe d'au moins 8 caractères.")
-  .max(128, "128 caractères au maximum.");
+/** Règles d'un nouveau mot de passe, affichées et cochées pendant la saisie de l'inscription. */
+export const reglesMotDePasse = [
+  { libelle: "12 caractères au minimum", respectee: (v: string) => v.length >= 12 },
+  { libelle: "Une majuscule", respectee: (v: string) => /\p{Lu}/u.test(v) },
+  // Tout ce qui n'est ni une lettre, ni un chiffre, ni une espace : ! ? @ # - _ …
+  {
+    libelle: "Un caractère spécial (! ? @ # …)",
+    respectee: (v: string) => /[^\p{L}\p{N}\s]/u.test(v),
+  },
+];
 
-export const schemaIdentifiants = z.object({
-  email: z.email("Indiquez une adresse e-mail valide.").trim().toLowerCase(),
-  motDePasse: schemaMotDePasse,
+const email = z.email("Indiquez une adresse e-mail valide.").trim().toLowerCase();
+
+export const schemaInscription = z.object({
+  email,
+  motDePasse: z
+    .string()
+    .max(128, "128 caractères au maximum.")
+    .refine((v) => reglesMotDePasse.every((regle) => regle.respectee(v)), {
+      message: "Le mot de passe ne respecte pas toutes les règles ci-dessus.",
+    }),
+});
+
+// À la connexion, aucune règle de forme : seul compte le mot de passe enregistré.
+export const schemaConnexion = z.object({
+  email,
+  motDePasse: z.string().min(1, "Indiquez votre mot de passe.").max(128),
 });
 
 /** Après 5 essais manqués, le compte refuse tout mot de passe pendant 15 minutes. */

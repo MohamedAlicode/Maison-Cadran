@@ -13,7 +13,8 @@ import {
   ESSAIS_MAX,
   cheminRetour,
   schemaAdresseCompte,
-  schemaIdentifiants,
+  schemaConnexion,
+  schemaInscription,
 } from "@/lib/compte/regles";
 import { clientConnecte } from "@/lib/compte/serveur";
 import { ouvrirSession } from "@/lib/compte/session";
@@ -78,9 +79,12 @@ export type EtatIdentifiants = {
   erreurs: { email?: string; motDePasse?: string; formulaire?: string };
 } | null;
 
-function lireIdentifiants(formulaire: FormData) {
+function lireIdentifiants(
+  formulaire: FormData,
+  schema: typeof schemaInscription | typeof schemaConnexion,
+) {
   const email = String(formulaire.get("email") ?? "");
-  const resultat = schemaIdentifiants.safeParse({
+  const resultat = schema.safeParse({
     email,
     motDePasse: String(formulaire.get("motDePasse") ?? ""),
   });
@@ -99,7 +103,7 @@ export async function inscrire(
   _etat: EtatIdentifiants,
   formulaire: FormData,
 ): Promise<EtatIdentifiants> {
-  const saisie = lireIdentifiants(formulaire);
+  const saisie = lireIdentifiants(formulaire, schemaInscription);
   if (!saisie.donnees) return saisie.erreur;
   const { email, motDePasse } = saisie.donnees;
 
@@ -134,7 +138,7 @@ export async function connecterAvecMotDePasse(
   _etat: EtatIdentifiants,
   formulaire: FormData,
 ): Promise<EtatIdentifiants> {
-  const saisie = lireIdentifiants(formulaire);
+  const saisie = lireIdentifiants(formulaire, schemaConnexion);
   if (!saisie.donnees) return saisie.erreur;
   const { email, motDePasse } = saisie.donnees;
   // Même message que l'adresse soit inconnue ou le mot de passe faux : il ne dit pas qui est inscrit.
