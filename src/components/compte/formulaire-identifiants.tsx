@@ -4,19 +4,16 @@ import { useActionState } from "react";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { connecterAvecMotDePasse, inscrire } from "@/server/actions/compte";
+import { ChampMotDePasse } from "./champ-mot-de-passe";
 
 const modes = {
   connexion: {
     action: connecterAvecMotDePasse,
-    autoComplete: "current-password",
-    aide: undefined,
     bouton: "Se connecter",
     enCours: "Connexion…",
   },
   inscription: {
     action: inscrire,
-    autoComplete: "new-password",
-    aide: "8 caractères au minimum. Une phrase courte est plus sûre qu'un mot compliqué.",
     bouton: "Créer mon compte",
     enCours: "Création du compte…",
   },
@@ -51,16 +48,9 @@ export function FormulaireIdentifiants({
         defaultValue={etat?.email}
         erreur={etat?.erreurs.email}
       />
-      <Field
+      <ChampMotDePasse
         id={`${mode}-mot-de-passe`}
-        name="motDePasse"
-        type="password"
-        label="Mot de passe"
-        autoComplete={reglages.autoComplete}
-        required
-        minLength={mode === "inscription" ? 8 : undefined}
-        maxLength={128}
-        aide={reglages.aide}
+        nouveau={mode === "inscription"}
         erreur={etat?.erreurs.motDePasse}
       />
       {/* Même choix que « Commander » : aria-disabled garde le focus sur le bouton. */}
